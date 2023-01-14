@@ -8,6 +8,7 @@ django = "*"
 psycopg2-binary = "*"
 whitenoise = "*"
 gunicorn = "*"
+django-environ = "*"
 
 [dev-packages]
 autopep8 = "*"

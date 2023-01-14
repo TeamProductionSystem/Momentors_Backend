@@ -13,17 +13,20 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import environ
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-environ.Env.read_env()
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     USE_S3=(bool, False),
-    RENDER=(bool, False)  # <--- add this
+    RENDER=(bool, False) 
 )
+
+
+environ.Env.read_env()
+
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
