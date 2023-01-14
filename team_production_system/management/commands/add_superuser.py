@@ -1,5 +1,5 @@
 import random
-from django.core.bass import BaseCommand
+from django.core.management.base import BaseCommand
 
 # Change this to reflect your app's name and name of your custom User model
 from team_production_system.models import User
