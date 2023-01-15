@@ -10,6 +10,7 @@ whitenoise = "*"
 gunicorn = "*"
 django-environ = "*"
 pillow = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 autopep8 = "*"

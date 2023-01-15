@@ -49,10 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "whitenoise.runserver_nostatic",
+    "corsheaders",
     "team_production_system",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -148,3 +150,10 @@ if env("RENDER"):
     DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
 
 AUTH_USER_MODEL = 'team_production_system.User'
+
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "https://teamproductionsystem.onrender.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:8000",
+]
