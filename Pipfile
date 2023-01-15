@@ -11,6 +11,9 @@ gunicorn = "*"
 django-environ = "*"
 pillow = "*"
 django-cors-headers = "*"
+djangorestframework = "*"
+djoser = "*"
+django-extensions = "*"
 
 [dev-packages]
 autopep8 = "*"
