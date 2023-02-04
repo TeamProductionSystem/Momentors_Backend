@@ -12,13 +12,14 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import environ
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     USE_S3=(bool, False),
-    RENDER=(bool, False) 
+    RENDER=(bool, False)
 )
 
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'django_extensions',
+    'storages',
     "team_production_system",
 ]
 
@@ -152,6 +154,16 @@ if env("RENDER"):
     DJANGO_SUPERUSER_PASSWORD = env(
         "DJANGO_SUPERUSER_PASSWORD")
     DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+    }
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AUTH_USER_MODEL = 'team_production_system.User'
 
@@ -160,6 +172,10 @@ CORS_ALLOWED_ORIGINS = [
     "https://teamproductionsystem.onrender.com",
     "http://localhost:8080",
     "http://127.0.0.1:8000",
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-disposition',
 ]
 
 REST_FRAMEWORK = {

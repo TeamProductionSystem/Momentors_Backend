@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2faa78333a05e0686f7e6d8ea8eb318a1e598977619268882fb2ebf40dd63dde"
+            "sha256": "26273379681a394297a88ddc26fcd4c1fc55d338e76eee8b42657691bf8dc8b9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -253,6 +253,14 @@
             "index": "pypi",
             "version": "==4.1.6"
         },
+        "django-appconf": {
+            "hashes": [
+                "sha256:ae9f864ee1958c815a965ed63b3fba4874eec13de10236ba063a788f9a17389d",
+                "sha256:be3db0be6c81fa84742000b89a81c016d70ae66a7ccb620cdef592b1f1a6aaa4"
+            ],
+            "markers": "python_version >= '3.1'",
+            "version": "==1.0.5"
+        },
         "django-cors-headers": {
             "hashes": [
                 "sha256:37e42883b5f1f2295df6b4bba96eb2417a14a03270cb24b2a07f021cd4487cf4",
@@ -276,6 +284,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.1"
+        },
+        "django-imagekit": {
+            "hashes": [
+                "sha256:87e36f8dc1d8745647881f4366ef4965225f048042dacebbee0dcb87425defef",
+                "sha256:e559aeaae43a33b34f87631a9fa5696455e4451ffa738a42635fde442fedac5c"
+            ],
+            "index": "pypi",
+            "version": "==4.1.0"
         },
         "django-phonenumber-field": {
             "hashes": [
@@ -418,6 +434,12 @@
             ],
             "index": "pypi",
             "version": "==8.13.5"
+        },
+        "pilkit": {
+            "hashes": [
+                "sha256:ddb30c2f0198a147e56b151476c3bb9fe045fbfd5b0a0fa2a3148dba62d1559f"
+            ],
+            "version": "==2.0"
         },
         "pillow": {
             "hashes": [
@@ -613,7 +635,7 @@
                 "sha256:64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa",
                 "sha256:98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4'",
+            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
             "version": "==2.28.2"
         },
         "requests-oauthlib": {
