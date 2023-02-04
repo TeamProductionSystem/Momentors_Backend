@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'djoser',
     'django_extensions',
     'storages',
+    'imagekit',
     "team_production_system",
 ]
 
