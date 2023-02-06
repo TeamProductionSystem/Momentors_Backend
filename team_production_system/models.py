@@ -5,7 +5,7 @@ import os.path
 from os.path import isfile
 from os.path import join as path_join
 from phonenumber_field.modelfields import PhoneNumberField
-import config.settings
+from django.conf import settings
 from os import listdir
 
 
@@ -34,7 +34,7 @@ class User(AbstractUser):
 
 def random_img():
     dir_path = os.path.join(
-        config.settings.BASE_DIR, 'static/profile_pictures')
+        settings.BASE_DIR, 'static/profile_pictures')
     files = [
         content for content in listdir(dir_path)
         if isfile(path_join(dir_path, content))]

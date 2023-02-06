@@ -16,6 +16,7 @@ djoser = "*"
 django-extensions = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
+django-imagekit = "*"
 
 [dev-packages]
 autopep8 = "*"
