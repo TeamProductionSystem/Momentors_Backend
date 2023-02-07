@@ -141,6 +141,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -160,7 +163,7 @@ if env("RENDER"):
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
+        'CacheControl': 'max-age=86400',
     }
 
 
@@ -190,3 +193,16 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ]
 }
+
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'USER_CREATE_PASSWORD_RETYPE': True,
+#     'SERIALIZERS': {
+#     'user_create': 'team_production_system.serializers.UserCreateSerializer',
+#     'user': 'team_production_system.serializers.UserSerializer',
+#     },
+#     'VIEWS': {
+#     'user_create': 'team_production_system.CustomUserCreateView',
+#     'user': 'team_production_system.UserViewSet',
+#     },
+# }
