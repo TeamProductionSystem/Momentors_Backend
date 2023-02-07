@@ -1,25 +1,11 @@
-from djoser.views import UserCreateView
-from rest_framework import generics
-from .models import User, Mentor, Mentee
-from .serializers import UserSerializer, MentorSerializer, MenteeSerializer
+from rest_framework import viewsets
+from djoser.serializers import UserCreateSerializer
+from team_production_system.serializers import UserSerializer
+from django.contrib.auth.models import User
 
-# class CustomUserCreateView(UserCreateView):
-#     serializer_class = UserSerializer
+class CustomUserCreateView(viewsets.GenericViewSet):
+    serializer_class = UserCreateSerializer
 
-#     def perform_create(self, serializer):
-#         user = serializer.save()
-#         is_mentor = self.request.data.get('is_mentor')
-#         is_mentee = self.request.data.get('is_mentee')
-
-#         if is_mentor:
-#             Mentor.objects.create(user=user)
-#         elif is_mentee:
-#             Mentee.objects.create(user=user)
-
-class MentorViewSet(generics.ListAPIView):
-    queryset = Mentor.objects.all()
-    serializer_class = MentorSerializer
-
-class MenteeViewSet(generics.ListAPIView):
-    queryset = Mentee.objects.all()
-    serializer_class = MenteeSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()

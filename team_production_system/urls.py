@@ -1,12 +1,10 @@
 from django.urls import path, include
-from .views import UserCreateView, MentorViewSet, MenteeViewSet
-from rest_framework import routers
-
-# router = routers.DefaultRouter()
-# router.register(r'mentors', MentorViewSet)
-# router.register(r'mentees', MenteeViewSet)
+from djoser import urls as djoser_urls
+from .views import CustomUserCreateView, UserViewSet
 
 urlpatterns = [
-    path('register/', UserCreateView.as_view(), name='register'),
-    # path('', include(router.urls)),
+    path('', include(djoser_urls)),
+    path('register/', CustomUserCreateView.as_view(), name='register'),
+    path('users/', UserViewSet.as_view({'get': 'list'}), name='user-list'),
+    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'}), name='user-detail'),
 ]

@@ -196,7 +196,6 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
     'SERIALIZERS': {
     'user_create': 'team_production_system.serializers.UserCreateSerializer',
     'user': 'team_production_system.serializers.UserSerializer',
