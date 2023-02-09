@@ -1,6 +1,10 @@
 from django.urls import path, include
-from team_production_system import views
+from djoser import urls as djoser_urls
+from .views import CustomUserCreateView, UserViewSet
 
 urlpatterns = [
-    path('api-auth/', include('rest_framework.urls',)),
+    path('', include(djoser_urls)),
+    path('register/', CustomUserCreateView.as_view(), name='register'),
+    path('users/', UserViewSet.as_view({'get': 'list'}), name='user-list'),
+    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'}), name='user-detail'),
 ]
