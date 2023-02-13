@@ -173,9 +173,11 @@ AUTH_USER_MODEL = 'team_production_system.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
     "https://example.com",
-    "https://teamproductionsystem.onrender.com",
+    "https://team-production-system.onrender.com",
     "http://localhost:8080",
     "http://127.0.0.1:8000",
+    "http://localhost:3000", 
+
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
