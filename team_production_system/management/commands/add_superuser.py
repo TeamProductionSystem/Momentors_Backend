@@ -3,7 +3,7 @@ import os
 from django.core.management.base import BaseCommand
 
 from team_production_system.models import CustomUser 
-from team_production_system import settings 
+from config import settings 
 
 
 # To run this management command:
