@@ -55,3 +55,11 @@ class Mentee(models.Model):
 
     def __str__(self):
         return self.first_name
+
+
+class SessionRequestForm(models.Model):
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='sessions')
+    project = models.CharField(max_length=500)
+    help_text = models.TextField(max_length=5000)
+    git_link = models.URLField(max_length=200)
