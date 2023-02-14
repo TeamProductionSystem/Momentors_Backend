@@ -1,6 +1,6 @@
-from .models import Mentor, Mentee
+from .models import Mentor, Mentee, SessionRequestForm
 from rest_framework import generics
-from .serializers import  MentorListSerializer, MenteeListSerializer
+from .serializers import MentorListSerializer, MenteeListSerializer, SessionRequestSerializer
 
 
 class MentorList(generics.ListCreateAPIView):
@@ -11,3 +11,8 @@ class MentorList(generics.ListCreateAPIView):
 class MenteeList(generics.ListCreateAPIView):
     queryset = Mentee.objects.all()
     serializer_class = MenteeListSerializer
+
+
+class SessionRequestForm(generics.ListCreateAPIView):
+    queryset = SessionRequestForm.objects.all()
+    serializer_class = SessionRequestSerializer
