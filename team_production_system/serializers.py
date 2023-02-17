@@ -1,8 +1,26 @@
 from rest_framework import serializers
-from .models import Mentor, Mentee, SessionRequestForm
+from .models import Mentor, Mentee, SessionRequestForm, CustomUser
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'pk',
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'phone_number',
+            'profile_photo',
+            'is_mentor',
+            'is_mentee',
+            'is_active',
+        ]
+
 
 class MentorListSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Mentor
         fields = ('first_name', 'last_name', 'email',
@@ -10,7 +28,7 @@ class MentorListSerializer(serializers.ModelSerializer):
 
 
 class MenteeListSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Mentee
         fields = ('first_name', 'last_name', 'email',
