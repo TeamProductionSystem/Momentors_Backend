@@ -139,3 +139,63 @@ No body returned for response
 
 ```
 ---
+
+## Edit User Profile (User Authentication **Required**)
+
+- Update the users profile information. 
+
+```http
+PATCH - https://team-production-system.onrender.com/user/<"pk">
+```
+
+| Body           | Type        | Description                 |
+| :------------- | :---------- | :-------------------------- |
+| `username`     | `string`    | Username                    |
+| `first_name`   | `string`    | User generated first name   |
+| `last_name`    | `string`    | User generated last name    |
+| `email`        | `string`    | User generated email        |
+| `phone_number` | `string`    | User generated phone number |
+| `profile_photo`| `form-data` | User submitted phone number |
+| `is_mentor`    | `boolean`   | Is mentor flag              |
+| `is_mentee`    | `boolean`   | Is mentee flag              |
+| `is_active`    | `boolean`   | Is active flag              |
+
+
+#### Request Sample:
+
+```
+PATCH /user/<"pk">
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"first_name": "testuserfirstname",
+	"last_name": "testuserlastname",
+	"phone_number": "+12345678987",
+	"profile_photo": null,
+	"is_mentor": true,
+	"is_mentee": true,
+	"is_active": true
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+{
+	"pk": 38,
+	"username": "test12",
+	"first_name": "test12",
+	"last_name": "testt12",
+	"email": "test@test21.com",
+	"phone_number": "+16514011234",
+	"profile_photo": null,
+	"is_mentor": true,
+	"is_mentee": true,
+	"is_active": true
+}
+
+```
+---
