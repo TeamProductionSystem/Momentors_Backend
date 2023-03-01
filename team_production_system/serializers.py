@@ -20,12 +20,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'is_active',
         ]
 
-    def update(self, instance, validated_data):
-        profile_photo = validated_data.get('profile_photo', None)
-        if profile_photo:
-            instance.profile_photo = profile_photo
-            instance.save()
-        return instance
+#     def update(self, instance, validated_data):
+#         profile_photo = validated_data.get('profile_photo', None)
+#         if profile_photo:
+#             instance.profile_photo = profile_photo
+#             instance.save()
+#         return instance
 
 
 class MentorListSerializer(serializers.ModelSerializer):
