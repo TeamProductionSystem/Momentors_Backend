@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'storages',
     'imagekit',
+    'multiselectfield',
     "team_production_system",
 ]
 
