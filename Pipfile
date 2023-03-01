@@ -18,6 +18,7 @@ django-phonenumber-field = "*"
 phonenumbers = "*"
 django-imagekit = "*"
 django-storages = "*"
+django-multiselectfield = "*"
 
 [dev-packages]
 autopep8 = "*"
