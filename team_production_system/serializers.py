@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Mentor, Mentee, SessionRequestForm, CustomUser
+from .models import Mentor, Mentee, SessionRequestForm, CustomUser, Availability, Session
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -47,4 +47,16 @@ class MenteeListSerializer(serializers.ModelSerializer):
 class SessionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SessionRequestForm
-        fields = ('project', 'help_text', 'git_link')
+        fields = ('project', 'help_text', 'git_link', 'confirmed')
+
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ('mentor', 'start_time', 'end_time')
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = ('mentor_availability', 'mentee', 'start_time', 'status', 'session_length' )
