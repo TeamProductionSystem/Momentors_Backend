@@ -7,5 +7,6 @@ urlpatterns = [
      path('mentee/', views.MenteeList.as_view(), name='mentee-list'),
      path('sessionrequestform/', views.SessionRequestForm.as_view(), name='request-form'),
      path('user/<int:pk>/', views.CustomUserView.as_view(), name='user'),
-     
+     path('availabilty/', views.AvailabilityView.as_view(), name='availabilty'),
+     path('session/', views.SessionView.as_view(), name='session'),
 ]
