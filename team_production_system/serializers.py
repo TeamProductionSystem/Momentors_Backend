@@ -51,12 +51,15 @@ class SessionRequestSerializer(serializers.ModelSerializer):
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Availability
-        fields = ('mentor', 'start_time', 'end_time')
+        fields = ('pk', 'mentor', 'start_time', 'end_time')
 
 
 class SessionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Session
-        fields = ('mentor_availability', 'mentee', 'start_time', 'status', 'session_length' )
+        fields = ('pk', 'mentor_availability', 'mentee',
+                  'start_time', 'status', 'session_length')

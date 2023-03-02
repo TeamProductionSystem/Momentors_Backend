@@ -46,12 +46,12 @@ class SessionRequestForm(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class AvailabilityView(generics.RetrieveUpdateDestroyAPIView):
+class AvailabilityView(generics.ListCreateAPIView):
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
 
 
-class SessionView(generics.RetrieveUpdateDestroyAPIView):
+class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
 
