@@ -62,4 +62,4 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_availability', 'mentee',
-                  'start_time', 'status', 'session_length')
+                  'start_time', 'status', 'session_length', 'end_time')
