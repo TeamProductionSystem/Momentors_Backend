@@ -23,9 +23,8 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+
 # The mentor model that allows the mentor to select skills they know and information about them
-
-
 class Mentor(models.Model):
 
     SKILLS_CHOICES = [
@@ -47,9 +46,8 @@ class Mentor(models.Model):
     def __str__(self):
         return self.user.username
 
+
 # Model for mentees to input thier team
-
-
 class Mentee(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, primary_key=True)
@@ -58,9 +56,8 @@ class Mentee(models.Model):
     def __str__(self):
         return self.user.username
 
+
 # Allow mentors to set their avaliabiltiy
-
-
 class Availability(models.Model):
     mentor = models.ForeignKey(
         Mentor, on_delete=models.CASCADE, related_name='mentor_availability')
@@ -89,10 +86,9 @@ class Availability(models.Model):
             start_time__lt=end_time, end_time__gt=start_time)
         return not sessions.exists()
 
+
 # A form for mentees to fill out information about what they need help with when setting up a session.
 # This information will be sent to the mentor that the mentee is scheduling a session with
-
-
 class SessionRequestForm(models.Model):
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='request')
@@ -103,6 +99,7 @@ class SessionRequestForm(models.Model):
     confirmed = models.BooleanField(default=False)
 
 
+# The session model allows the mentee to setup a session and allows both mentee and mentor see their sessions they have scheduled
 class Session(models.Model):
     mentor_availability = models.ForeignKey(
         Availability, on_delete=models.CASCADE, related_name='mentor_session')
@@ -115,6 +112,7 @@ class Session(models.Model):
         ('Canceled', 'Canceled'),
         ('Completed', 'Completed')
     ]
+    # The mentee will be able to schedule a 30 minute or 60 mintue session. 
     status = models.CharField(
         max_length=10, choices=status_choices, default='Pending')
     session_length_choices = [
@@ -126,9 +124,6 @@ class Session(models.Model):
 
     def end_time(self):
         return self.start_time + timedelta(minutes=self.session_length)
-
-    def __str__(self):
-        return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username}"
 
     def save(self, *args, **kwargs):
         if self.status == 'Confirmed':
@@ -147,7 +142,11 @@ class Session(models.Model):
                 # Slot is not available, raise an error
                 raise ValueError('Requested time slot is not available')
 
+    def __str__(self):
+        return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username}"
 
+
+# Notification model that will the mentor to be alerted when they have a session request. 
 class Notification(models.Model):
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='notifications')
