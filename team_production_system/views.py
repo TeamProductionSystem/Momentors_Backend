@@ -56,3 +56,9 @@ class SessionView(generics.ListCreateAPIView):
     serializer_class = SessionSerializer
 
 
+class UserProfile(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def get_object(self):
+        return self.request.user
