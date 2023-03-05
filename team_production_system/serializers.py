@@ -29,13 +29,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #         return instance
 
 
-# Serializer to show a list of all users flagged as a mentor
-class MentorListSerializer(serializers.ModelSerializer):
-
+class MentorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentor
-        fields = ('first_name', 'last_name', 'email',
-                  'about_me', 'skill', 'mentor_photo')
+        fields = ('about_me', 'skills')
+
+# Serializer to show a list of all users flagged as a mentor
+class MentorListSerializer(serializers.ModelSerializer):
+    mentor_profile = MentorProfileSerializer(read_only=True, source='mentor')
+    user = CustomUserSerializer(read_only=True, source='customuser')
+
+    class Meta:
+        model = CustomUser
+        fields = ('user', 'first_name', 'last_name', 'is_mentor', 'mentor_profile')
 
 
 # Serializer to show a list of all users flagged as a mentee

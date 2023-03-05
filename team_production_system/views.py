@@ -1,6 +1,6 @@
-from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session
+from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session, Mentor
 from rest_framework import generics, status
-from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer
+from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MentorProfileSerializer
 from django.db.models import Q
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -44,7 +44,6 @@ class CustomUserView(generics.RetrieveUpdateDestroyAPIView):
 
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
-    serializer_class = CustomUserSerializer
 
     def get(self, request, *args, **kwargs):
         try:
@@ -55,7 +54,7 @@ class MentorList(generics.ListAPIView):
         if not queryset:
             return Response({"message": "No mentors found."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CustomUserSerializer(queryset, many=True)
+        serializer = MentorListSerializer(queryset, many=True)
         response_data = serializer.data
         return Response(response_data)
 

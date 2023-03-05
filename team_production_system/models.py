@@ -143,7 +143,7 @@ class Session(models.Model):
                 raise ValueError('Requested time slot is not available')
 
     def __str__(self):
-        return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username}"
+        return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
 
 
 # Notification model that will the mentor to be alerted when they have a session request. 
