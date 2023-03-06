@@ -41,7 +41,7 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('user', 'first_name', 'last_name', 'is_mentor', 'mentor_profile')
+        fields = ('user', 'pk', 'username', 'first_name', 'last_name', 'is_mentor', 'mentor_profile')
 
 
 # Serializer to show a list of all users flagged as a mentee
