@@ -145,7 +145,7 @@ No body returned for response
 - Update the users profile information. 
 
 ```http
-PATCH - https://team-production-system.onrender.com/user/<"pk">
+PATCH - https://team-production-system.onrender.com/myprofile/
 ```
 
 | Body           | Type        | Description                 |
@@ -164,7 +164,7 @@ PATCH - https://team-production-system.onrender.com/user/<"pk">
 #### Request Sample:
 
 ```
-PATCH /user/<"pk">
+PATCH /myprofile/
 Content-Type: json
 Authorization: Required
 Host: https://team-production-system.onrender.com
@@ -196,6 +196,56 @@ Host: https://team-production-system.onrender.com
 	"is_mentee": true,
 	"is_active": true
 }
+
+```
+---
+
+## View Mentors (User Authentication **Required**)
+
+- View a list of all mentors 
+
+```http
+GET - https://team-production-system.onrender.com/mentor/
+```
+
+| Body           | Type        | Description                 |
+| :------------- | :---------- | :-------------------------- |
+
+
+#### Request Sample:
+
+```
+GET /myprofile/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 4,
+		"username": "test12username",
+		"first_name": "Test",
+		"last_name": "User 12",
+		"is_mentor": true,
+		"mentor_profile": {
+			"about_me": "I am test user 12",
+			"skills": [
+				"CSS",
+				"JavaScript",
+				"Django"
+			]
+		}
+	}
+]
 
 ```
 ---

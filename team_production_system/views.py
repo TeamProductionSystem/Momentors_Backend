@@ -1,6 +1,6 @@
 from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session, Mentor
 from rest_framework import generics, status
-from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MentorProfileSerializer
+from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MenteeListSerializer
 from django.db.models import Q
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -27,19 +27,19 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 
 
 # View for the users to load profile pictures
-class CustomUserView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    parser_classes = (MultiPartParser, FormParser)
+# class CustomUserView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = CustomUser.objects.all()
+#     serializer_class = CustomUserSerializer
+#     parser_classes = (MultiPartParser, FormParser)
 
-    def patch(self, request, pk, format=None):
-        user = get_object_or_404(CustomUser, pk=pk)
-        serializer = CustomUserSerializer(
-            user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def patch(self, request, pk, format=None):
+#         user = get_object_or_404(CustomUser, pk=pk)
+#         serializer = CustomUserSerializer(
+#             user, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # View to see a list of all users flagged as a mentor
@@ -61,7 +61,6 @@ class MentorList(generics.ListAPIView):
 
 # View to see a list of all users flagged as a mentee
 class MenteeList(generics.ListAPIView):
-    serializer_class = CustomUserSerializer
 
     def get(self, request, *args, **kwargs):
         try:
@@ -72,7 +71,7 @@ class MenteeList(generics.ListAPIView):
         if not queryset:
             return Response({"message": "No mentees found."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CustomUserSerializer(queryset, many=True)
+        serializer = MenteeListSerializer(queryset, many=True)
         response_data = serializer.data
         return Response(response_data)
 
