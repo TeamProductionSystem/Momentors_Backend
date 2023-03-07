@@ -4,7 +4,7 @@ from team_production_system import views
 
 urlpatterns = [
     # User information end points
-     path('user/<int:pk>/', views.CustomUserView.as_view(), name='user'),
+    #  path('user/<int:pk>/', views.CustomUserView.as_view(), name='user'),
      path('myprofile/', views.UserProfile.as_view(), name='my-profile'),
 
      # List of mentor and mentees end points

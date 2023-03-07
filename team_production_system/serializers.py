@@ -34,6 +34,7 @@ class MentorProfileSerializer(serializers.ModelSerializer):
         model = Mentor
         fields = ('about_me', 'skills')
 
+
 # Serializer to show a list of all users flagged as a mentor
 class MentorListSerializer(serializers.ModelSerializer):
     mentor_profile = MentorProfileSerializer(read_only=True, source='mentor')
@@ -41,16 +42,26 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('user', 'pk', 'username', 'first_name', 'last_name', 'is_mentor', 'mentor_profile')
+        fields = ('user', 'pk', 'username', 'first_name',
+                  'last_name', 'is_mentor', 'mentor_profile')
+
+
+
+class MenteeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mentee
+        fields = ('team_number',)
 
 
 # Serializer to show a list of all users flagged as a mentee
 class MenteeListSerializer(serializers.ModelSerializer):
+    mentee_profile = MenteeProfileSerializer(read_only=True, source='mentee')
+    user = CustomUserSerializer(read_only=True, source='customuser')
 
     class Meta:
-        model = Mentee
-        fields = ('first_name', 'last_name', 'email',
-                  'about_me', 'team_number', 'mentor_photo')
+        model = CustomUser
+        fields = ('user', 'pk', 'username', 'first_name',
+                  'last_name', 'is_mentee', 'mentee_profile')
 
 
 # The serializer for the session request form
