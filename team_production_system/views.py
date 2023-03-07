@@ -5,6 +5,7 @@ from django.db.models import Q
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 
 # View to update the user profile information
@@ -98,12 +99,20 @@ class SessionRequestForm(generics.ListCreateAPIView):
 
 # Create and view all availabilities
 class AvailabilityView(generics.ListCreateAPIView):
-    queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
+
+    def get_queryset(self):
+    # Exclude any availability that has an end time in the past
+        return Availability.objects.filter(end_time__gte=timezone.now())
 
     def get(self, request):
         try:
             availabilities = self.get_queryset()
+
+            # Check if there are any availabilities
+            if not availabilities:
+                return Response("No open availabilities.", status=status.HTTP_404_NOT_FOUND)
+
             serializer = self.serializer_class(availabilities, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
