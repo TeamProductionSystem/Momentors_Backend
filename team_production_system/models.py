@@ -85,6 +85,9 @@ class Availability(models.Model):
         sessions = self.mentor_availability.mentor_session.filter(
             start_time__lt=end_time, end_time__gt=start_time)
         return not sessions.exists()
+    
+    def __str__(self):
+        return f"{self.mentor}'s available times"
 
 
 # A form for mentees to fill out information about what they need help with when setting up a session.
