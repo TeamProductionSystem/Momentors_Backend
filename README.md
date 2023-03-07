@@ -202,7 +202,7 @@ Host: https://team-production-system.onrender.com
 
 ## View Mentors (User Authentication **Required**)
 
-- View a list of all mentors 
+- View a list of all user with the mentors flag
 
 ```http
 GET - https://team-production-system.onrender.com/mentor/
