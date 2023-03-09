@@ -85,9 +85,9 @@ class Availability(models.Model):
         sessions = self.mentor_availability.mentor_session.filter(
             start_time__lt=end_time, end_time__gt=start_time)
         return not sessions.exists()
-    
+
     def __str__(self):
-        return f"{self.mentor}'s available times"
+        return f"{self.mentor}'s available times for {self.start_time.strftime('%A, %b %d, %Y at %I:%M %p')} to {self.end_time.strftime('%A, %b %d, %Y at %I:%M %p')}"
 
 
 # A form for mentees to fill out information about what they need help with when setting up a session.
@@ -115,7 +115,7 @@ class Session(models.Model):
         ('Canceled', 'Canceled'),
         ('Completed', 'Completed')
     ]
-    # The mentee will be able to schedule a 30 minute or 60 mintue session. 
+    # The mentee will be able to schedule a 30 minute or 60 mintue session.
     status = models.CharField(
         max_length=10, choices=status_choices, default='Pending')
     session_length_choices = [
@@ -149,7 +149,7 @@ class Session(models.Model):
         return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
 
 
-# Notification model that will the mentor to be alerted when they have a session request. 
+# Notification model that will the mentor to be alerted when they have a session request.
 class Notification(models.Model):
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='notifications')
