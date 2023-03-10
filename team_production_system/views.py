@@ -6,6 +6,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+import datetime
+from datetime import timedelta
 
 
 # View to update the user profile information
@@ -14,50 +16,33 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomUserSerializer
 
     def get_object(self):
-        try:
-            user = self.request.user
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        user = self.request.user
         if not user.is_authenticated:
-            return Response({'error': 'User is not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'User is not authenticated.'},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
-        return user
-
-
-# View for the users to load profile pictures
-# class CustomUserView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = CustomUser.objects.all()
-#     serializer_class = CustomUserSerializer
-#     parser_classes = (MultiPartParser, FormParser)
-
-#     def patch(self, request, pk, format=None):
-#         user = get_object_or_404(CustomUser, pk=pk)
-#         serializer = CustomUserSerializer(
-#             user, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            return super().get_object()
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found.'},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = CustomUser.objects.filter(is_mentor=True)
-        except Exception as e:
-            return Response({"error": "Failed to retrieve mentor list."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        queryset = CustomUser.objects.filter(is_mentor=True)
 
-        if not queryset:
-            return Response({"message": "No mentors found."}, status=status.HTTP_404_NOT_FOUND)
+        if not queryset.exists():
+            return Response({"message": "No mentors found."},
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = MentorListSerializer(queryset, many=True)
-        response_data = serializer.data
-        return Response(response_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # View to see a list of all users flagged as a mentee
@@ -102,7 +87,7 @@ class AvailabilityView(generics.ListCreateAPIView):
     serializer_class = AvailabilitySerializer
 
     def get_queryset(self):
-    # Exclude any availability that has an end time in the past
+        # Exclude any availability that has an end time in the past
         return Availability.objects.filter(end_time__gte=timezone.now())
 
     def get(self, request):

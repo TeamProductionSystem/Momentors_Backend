@@ -46,7 +46,6 @@ class MentorListSerializer(serializers.ModelSerializer):
                   'last_name', 'is_mentor', 'mentor_profile')
 
 
-
 class MenteeProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentee
