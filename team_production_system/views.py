@@ -22,7 +22,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            return super().get_object()
+            user = self.request.user
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'},
                             status=status.HTTP_404_NOT_FOUND)
@@ -119,22 +119,3 @@ class AvailabilityView(generics.ListCreateAPIView):
 class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-
-    def post(self, request, *args, **kwargs):
-        try:
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def handle_exception(self, exc):
-        if isinstance(exc, ValueError):
-            return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        elif isinstance(exc, KeyError):
-            return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'error': 'An unexpected error occurred. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
