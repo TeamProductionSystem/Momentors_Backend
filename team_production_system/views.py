@@ -1,4 +1,4 @@
-from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session, Mentor
+from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session
 from rest_framework import generics, status
 from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MenteeListSerializer
 from django.db.models import Q
@@ -8,12 +8,14 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import datetime
 from datetime import timedelta
+from rest_framework.permissions import IsAuthenticated
 
 
 # View to update the user profile information
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         user = self.request.user
@@ -35,6 +37,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         queryset = CustomUser.objects.filter(is_mentor=True)
@@ -49,6 +52,7 @@ class MentorList(generics.ListAPIView):
 
 # View to see a list of all users flagged as a mentee
 class MenteeList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -68,6 +72,7 @@ class MenteeList(generics.ListAPIView):
 class SessionRequestForm(generics.ListCreateAPIView):
     queryset = SessionRequestForm.objects.all()
     serializer_class = SessionRequestSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         try:
@@ -87,6 +92,8 @@ class SessionRequestForm(generics.ListCreateAPIView):
 # Create and view all availabilities
 class AvailabilityView(generics.ListCreateAPIView):
     serializer_class = AvailabilitySerializer
+    permission_classes = [IsAuthenticated]
+    
 
     def get_queryset(self):
         # Exclude any availability that has an end time in the past
@@ -121,3 +128,5 @@ class AvailabilityView(generics.ListCreateAPIView):
 class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticated]
+    
