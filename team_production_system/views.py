@@ -30,6 +30,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
             return Response({'error': str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        return user
+
 
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
