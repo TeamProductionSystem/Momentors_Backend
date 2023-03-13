@@ -1,6 +1,6 @@
-from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session
+from .models import CustomUser, Mentee, SessionRequestForm, Availability, Session, Mentor
 from rest_framework import generics, status
-from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MenteeListSerializer
+from .serializers import CustomUserSerializer, SessionRequestSerializer, AvailabilitySerializer, SessionSerializer, MentorListSerializer, MenteeListSerializer, MentorProfileSerializer, MenteeProfileSerializer
 from django.db.models import Q
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -93,7 +93,6 @@ class SessionRequestForm(generics.ListCreateAPIView):
 class AvailabilityView(generics.ListCreateAPIView):
     serializer_class = AvailabilitySerializer
     permission_classes = [IsAuthenticated]
-    
 
     def get_queryset(self):
         # Exclude any availability that has an end time in the past
@@ -129,4 +128,48 @@ class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
-    
+
+
+# View to allow mentors to add the about me and skills.
+class MentorInfoView(generics.ListCreateAPIView):
+    serializer_class = MentorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return Mentor.objects.filter(user=self.request.user)
+
+
+class MentorInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MentorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_object(self):
+        return self.request.user.mentor
+
+
+class MenteeInfoView(generics.ListCreateAPIView):
+    serializer_class = MenteeProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return Mentee.objects.filter(user=self.request.user)
+
+
+class MenteeInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MenteeProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_object(self):
+        return self.request.user.mentee
