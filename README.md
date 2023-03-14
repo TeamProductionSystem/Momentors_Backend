@@ -2,6 +2,13 @@
 
 Team Production System is an app for mentees to schedule one-on-one sessions with mentors.
 
+## Quick links:
+- [Features](#features)
+- [Run Locally](#run-locally)
+- [Environment Variables](#environment-variables)
+- [API Reference](#api-reference)
+
+
 ## Contributing
 
 Contributions are always welcome!
@@ -10,7 +17,7 @@ See [contributing.md](https://github.com/TeamProductionSystem/Team_Production_Sy
 
 Please adhere to this project's [code of conduct](https://github.com/TeamProductionSystem/Team_Production_System_BE/blob/main/CODE_OF_CONDUCT.md).
 
-## Features
+## Features<a name="features"></a>
 
 - Users can setup profiles as a mentor or mentee.
 - Mentors can set their skill set and avalibilty.
@@ -18,7 +25,7 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 - Menotrs can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
-# Run Locally
+# Run Locally<a name="runlocally"></a>
 
 Clone the project:
 
