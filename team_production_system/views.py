@@ -50,7 +50,32 @@ class MentorList(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# View to allow mentors to create and view the about me/skills.
+class MentorInfoView(generics.ListCreateAPIView):
+    serializer_class = MentorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return Mentor.objects.filter(user=self.request.user)
+
+
+# View to edit the logged in mentors about me and skills
+class MentorInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MentorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_object(self):
+        return self.request.user.mentor
+
 # View to see a list of all users flagged as a mentee
+
+
 class MenteeList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -128,29 +153,6 @@ class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
-
-
-# View to allow mentors to add the about me and skills.
-class MentorInfoView(generics.ListCreateAPIView):
-    serializer_class = MentorProfileSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def get_queryset(self):
-        return Mentor.objects.filter(user=self.request.user)
-
-
-class MentorInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = MentorProfileSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def get_object(self):
-        return self.request.user.mentor
 
 
 class MenteeInfoView(generics.ListCreateAPIView):
