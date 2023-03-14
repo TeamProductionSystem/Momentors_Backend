@@ -3,11 +3,11 @@
 Team Production System is an app for mentees to schedule one-on-one sessions with mentors.
 
 ## Quick links:
+
 - [Features](#features)
 - [Run Locally](#run-locally)
 - [Environment Variables](#environment-variables)
 - [API Reference](#api-reference)
-
 
 ## Contributing
 
@@ -17,7 +17,7 @@ See [contributing.md](https://github.com/TeamProductionSystem/Team_Production_Sy
 
 Please adhere to this project's [code of conduct](https://github.com/TeamProductionSystem/Team_Production_System_BE/blob/main/CODE_OF_CONDUCT.md).
 
-## Features<a name="features"></a>
+## Features
 
 - Users can setup profiles as a mentor or mentee.
 - Mentors can set their skill set and avalibilty.
@@ -25,7 +25,7 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 - Menotrs can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
-# Run Locally<a name="runlocally"></a>
+# Run Locally
 
 Clone the project:
 
@@ -73,11 +73,12 @@ The app should now be running at http://localhost:8000/
 
 ## Environment Variables
 
-1. Create a file named .env in the root directory of your project. This file will contain your environment variables.
-2. Open the .env file in a text editor and set your environment variables in the following format:
-'VARIABLE_NAME=value'
+1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
+2.  Open the .env file in a text editor and set your environment variables in the following format:
+    'VARIABLE_NAME=value'
 
-	For example:
+        For example:
+
 ```DATABASE_URL=postgres://username:password@localhost/mydatabase
 SECRET_KEY=my_secret_key
 DEBUG=True
@@ -98,14 +99,15 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 
 - DJANGO_SUPERUSER_EMAIL: This should be set to the email address you want to use for the Django superuser account.
 
-
 3. Save the .env file.
 
----
-
 # API Reference
+API URL - https://team-production-system.onrender.com
+## Quck Links:
 
-API https://team-production-system.onrender.com
+- [User Endpoints](#user-create)
+- [Mentor Endpoints](#view-mentors-user-authentication-required)
+
 
 ## User Create
 
