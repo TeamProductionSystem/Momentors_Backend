@@ -102,12 +102,13 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 3. Save the .env file.
 
 # API Reference
+
 API URL - https://team-production-system.onrender.com
+
 ## Quck Links:
 
 - [User Endpoints](#user-create)
 - [Mentor Endpoints](#view-mentors-user-authentication-required)
-
 
 ## User Create
 
@@ -339,7 +340,70 @@ Host: https://team-production-system.onrender.com
 
 ---
 
-## View Mentors (User Authentication **Required**)
+## View Mentors List (User Authentication **Required**)
+
+- View a list of all user with the mentors flag
+
+```http
+GET - https://team-production-system.onrender.com/mentor/
+```
+
+| Body            | Type        | Description                 |
+| :-------------- | :---------- | :-------------------------- |
+| `pk`            | `int`       | The user pk                 |
+| `username`      | `string`    | Username                    |
+| `first_name`    | `string`    | User generated first name   |
+| `last_name`     | `string`    | User generated last name    |
+| `is_mentor`     | `boolean`   | Is mentor flag              |
+| `profile_photo` | `form-data` | User submitted phone number |
+
+Nested Information:
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+GET /mentor/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 6,
+		"username": "testusername",
+		"first_name": "Test",
+		"last_name": "User",
+		"is_mentor": true,
+		"mentor_profile": {
+			"about_me": "I am test user",
+			"skills": [
+				"CSS",
+				"JavaScript",
+				"Django"
+			]
+		}
+	}
+]
+
+```
+
+---
+
+## View Mentors List (User Authentication **Required**)
 
 - View a list of all user with the mentors flag
 
@@ -397,6 +461,124 @@ Host: https://team-production-system.onrender.com
 		}
 	}
 ]
+
+```
+
+---
+
+## Create Mentors Information (User Authentication **Required**)
+
+- Create information about the current logged-in mentor.
+
+```http
+POST - https://team-production-system.onrender.com/mentorinfo/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+POST /mentorinfo/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"about_me": "Hi, I am so and so and do such and such",
+	"skills": "CSS"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+{
+	"about_me": "Hi, I am so and so and do such and such",
+	"skills": "CSS"
+}
+
+```
+
+---
+
+## View Mentors Information (User Authentication **Required**)
+
+- Retrieve information about the current logged-in mentor.
+
+```http
+GET - https://team-production-system.onrender.com/mentorinfo/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+GET /mentorinfo/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+{
+	"about_me": "Hi, I am so and so and do such and such",
+	"skills": "CSS"
+}
+
+```
+
+---
+
+## Update Mentors Information (User Authentication **Required**)
+
+- Update information about the current logged-in mentor.
+
+```http
+PATCH - https://team-production-system.onrender.com/mentorinfo/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+PATCH /mentorinfo/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"skills": "Python"
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+{
+	"about_me": "Hi, I am so and so and do such and such",
+	"skills": "Python"
+}
 
 ```
 
