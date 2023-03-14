@@ -39,3 +39,31 @@ Replace "my-new-feature" with the name of the branch you created in step 2.
 Visit the Team Production System repository on GitHub and click the "New pull request" button. Select your forked repository and the branch you created in step 2, and then click "Create pull request". This will open a new pull request in the main repository.
 
 One last thing - we want to make sure that everyone who contributes to Team Production System feels welcome and respected. So please make sure to follow our code of conduct, which you can find here 👉 [code of conduct](https://github.com/TeamProductionSystem/Team_Production_System_BE/blob/main/CODE_OF_CONDUCT.md). Thanks, and happy coding!
+
+--- 
+## Submitting Bug Issues
+
+We strive to make Team Production System as bug-free as possible, but sometimes bugs slip through the cracks. If you come across a bug, we encourage you to submit an issue on our GitHub repository. Here's how to do it:
+
+1. Check if the issue has already been reported by searching the existing issues on GitHub. If the issue has already been reported, you can add additional information or give it a thumbs up reaction to let us know it's affecting multiple people.
+2. If the issue has not been reported, click the "New issue" button in the "Issues" tab on GitHub.
+3. Choose the "Bug report" issue template and fill out as much information as possible, including steps to reproduce the issue and any error messages you received. The more information you can provide, the easier it will be for us to reproduce and fix the bug.
+4. Click "Submit new issue" to create the issue.
+
+We will review the issue and try to reproduce the bug. Once we've identified the problem, we will work on a fix and provide updates on the progress. Thank you for helping us make Team Production System better by reporting bugs!
+
+---
+
+## Requesting Features
+
+Do you have a great idea for a new feature or improvement to the Team Production System? We'd love to hear it! Here's how you can submit a feature request:
+
+1. Check the existing issues to make sure your idea hasn't already been suggested.
+2. If your idea hasn't been suggested, create a new issue and label it as a "feature request".
+3. Give your feature request a descriptive title and provide a detailed description of what you'd like to see added or improved in Team Production System.
+4. If possible, include any relevant screenshots, mockups, or examples that can help illustrate your idea.
+5. Be sure to tag the issue with the appropriate labels to help us organize and prioritize feature requests.
+6. Our team will review the feature request and provide feedback, ask questions, or discuss potential solutions.
+7. Once the feature request is approved, we'll work on implementing it as soon as possible.
+
+We're always looking for ways to improve Team Production System, and your ideas can help make it even better. Thank you for your contribution!
