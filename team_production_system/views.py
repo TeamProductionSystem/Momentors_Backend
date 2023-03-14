@@ -93,6 +93,18 @@ class MenteeList(generics.ListAPIView):
         return Response(response_data)
 
 
+# View to edit the logged in mentees team number
+class MenteeInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MenteeProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_object(self):
+        return self.request.user.mentee
+
+
 # View for mentees to submit session request forms. It is set to auto add the user who submited the form as request user.
 class SessionRequestForm(generics.ListCreateAPIView):
     queryset = SessionRequestForm.objects.all()
@@ -164,14 +176,3 @@ class MenteeInfoView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Mentee.objects.filter(user=self.request.user)
-
-
-class MenteeInfoUpdateView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = MenteeProfileSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def get_object(self):
-        return self.request.user.mentee

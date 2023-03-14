@@ -108,7 +108,8 @@ API URL - https://team-production-system.onrender.com
 ## Quck Links:
 
 - [User Endpoints](#user-create)
-- [Mentor Endpoints](#view-mentors-user-authentication-required)
+- [Mentor Endpoints](#view-mentors-list-user-authentication-required)
+- [Mentee Endpoints](#view-mentee-list-user-authentication-required)
 
 ## User Create
 
@@ -550,7 +551,7 @@ Host: https://team-production-system.onrender.com
 - Update information about the current logged-in mentor.
 
 ```http
-PATCH - https://team-production-system.onrender.com/mentorinfo/
+PATCH - https://team-production-system.onrender.com/mentorinfoupdate/
 ```
 
 | Body       | Type     | Description                |
@@ -561,7 +562,7 @@ PATCH - https://team-production-system.onrender.com/mentorinfo/
 #### Request Sample:
 
 ```
-PATCH /mentorinfo/
+PATCH /mentorinfoupdate/
 Content-Type: json
 Authorization: Required
 Host: https://team-production-system.onrender.com
@@ -579,6 +580,255 @@ Host: https://team-production-system.onrender.com
 	"about_me": "Hi, I am so and so and do such and such",
 	"skills": "Python"
 }
+
+```
+
+---
+
+## Delete Mentors Information (User Authentication **Required**)
+
+- Delete information about the current logged-in mentor.
+
+```http
+DELETE - https://team-production-system.onrender.com/mentorinfoupdate/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+DELETE /mentorinfoupdate/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (204 No Content)
+
+```
+
+No body returned to response
+
+```
+
+---
+
+## View Mentee List (User Authentication **Required**)
+
+- View a list of all user with the mentee flag set to true
+
+```http
+GET - https://team-production-system.onrender.com/mentee/
+```
+
+| Body            | Type        | Description                 |
+| :-------------- | :---------- | :-------------------------- |
+| `pk`            | `int`       | The user pk                 |
+| `username`      | `string`    | Username                    |
+| `first_name`    | `string`    | User generated first name   |
+| `last_name`     | `string`    | User generated last name    |
+| `is_mentee`     | `boolean`   | Is mentor flag              |
+| `profile_photo` | `form-data` | User submitted phone number |
+
+Nested Information:
+
+| Body          | Type     | Description                           |
+| :------------ | :------- | :------------------------------------ |
+| `team_number` | `int`    | Team number associated with the user  |
+
+
+#### Request Sample:
+
+```
+GET /mentee/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 4,
+		"username": "testusername",
+		"first_name": "Test",
+		"last_name": "User",
+		"is_mentee": true,
+		"mentee_profile": {
+			"team_number": 4
+		}
+	}
+]
+
+```
+
+---
+
+## Create Mentees Information (User Authentication **Required**)
+
+- Create information about the current logged-in mentee.
+
+```http
+POST - https://team-production-system.onrender.com/menteeinfo/
+```
+
+| Body          | Type     | Description                           |
+| :------------ | :------- | :------------------------------------ |
+| `team_number` | `int`    | Team number associated with the user  |
+
+#### Request Sample:
+
+```
+POST /menteeinfo/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"team_number": "4"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+[
+	{
+		"team_number": 4
+	}
+]
+
+```
+
+---
+
+## View Mentees Information (User Authentication **Required**)
+
+- Retrieve information about the current logged-in mentee.
+
+```http
+GET - https://team-production-system.onrender.com/menteeinfo/
+```
+
+| Body          | Type     | Description                           |
+| :------------ | :------- | :------------------------------------ |
+| `team_number` | `int`    | Team number associated with the user  |
+
+#### Request Sample:
+
+```
+GET /menteeinfo/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"team_number": 4
+	}
+]
+
+```
+
+---
+
+## Update Mentees Information (User Authentication **Required**)
+
+- Update information about the current logged-in mentee.
+
+```http
+PATCH - https://team-production-system.onrender.com/menteeinfoupdate/
+```
+
+| Body          | Type     | Description                           |
+| :------------ | :------- | :------------------------------------ |
+| `team_number` | `int`    | Team number associated with the user  |
+
+#### Request Sample:
+
+```
+PATCH /menteeinfoupdate/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+[
+	{
+		"team_number": "5"
+	}
+]
+
+```
+
+#### Response Example (200 OK)
+
+```
+{
+	"team_number": 5
+}
+
+```
+
+---
+
+## Delete Mentors Information (User Authentication **Required**)
+
+- Delete information about the current logged-in mentor.
+
+```http
+DELETE - https://team-production-system.onrender.com/menteeinfoupdate/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+DELETE /menteeinfoupdate/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (204 No Content)
+
+```
+
+No body returned to response
 
 ```
 
