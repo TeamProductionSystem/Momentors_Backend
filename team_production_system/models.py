@@ -65,14 +65,14 @@ class Availability(models.Model):
     end_time = models.DateTimeField()
 
     def is_available(self):
-        now = datetime.now()
-        return self.end_time > now and True
+        now = timezone.now()
+        return self.end_time > now
 
     # Show a rolling 7 day calander to the mentor, so they can input their availabiltie
     def get_next_seven_days_availability(self):
         availabilities = []
         start_date = timezone.now().date()
-        end_date = start_date + timedelta(days=7)
+        end_date = start_date + timedelta(days=6)
         slots = self.availabilities.filter(
             start_time__range=[start_date, end_date]).order_by('start_time')
         for current_day in range(start_date, end_date+timedelta(days=1)):
