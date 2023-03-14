@@ -7,7 +7,7 @@
 
 1. First off, fork the repository so you can make changes to your own copy of the code. 
 Fork the Team Production System repository on GitHub by clicking the "Fork" button at the top right of the repository page. 
-![alt text](../LMT-Backend/static/ReadMe/Screenshot%202023-03-13%20at%208.10.14%20PM.png "Fork") This will create a copy of the repository in your own GitHub account.
+![Fork](../LMT-Backend/static/ReadMe/Screenshot%202023-03-13%20at%208.10.14%20PM.png) This will create a copy of the repository in your own GitHub account.
 
 2. Create a new branch for your changes
 Once you've forked the repository, create a new branch for your changes. We recommend naming the branch something descriptive, like "my-new-feature", so it's clear what you're working on.
