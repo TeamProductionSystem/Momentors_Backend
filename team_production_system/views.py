@@ -54,9 +54,9 @@ class MentorsFilteredList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         skills = self.kwargs['skills'].split(',')
-        queryset = Mentor.objects.filter(skills__contains=skills[0])
+        queryset = Mentor.objects.filter(skills__icontains=skills[0])
         for skill in skills[1:]:
-            queryset = queryset.filter(skills__contains=skill)
+            queryset = queryset.filter(skills__icontains=skill)
 
         if not queryset.exists():
             return Response({"message": "No mentors found."},
