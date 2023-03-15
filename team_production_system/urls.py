@@ -10,8 +10,11 @@ urlpatterns = [
     # List of mentor end points
     path('mentor/', views.MentorList.as_view(), name='mentor-list'),
     path('mentorinfo/', views.MentorInfoView.as_view(), name='mentor-info'),
+    path('mentors/<str:skills>/', views.MentorsFilteredList.as_view(),
+         name='mentors-filtered-list'),
     path('mentorinfoupdate/', views.MentorInfoUpdateView.as_view(),
          name='mentor-info-update'),
+
 
     # List of mentee end points
     path('mentee/', views.MenteeList.as_view(), name='mentee-list'),
