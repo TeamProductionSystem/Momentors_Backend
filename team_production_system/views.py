@@ -49,6 +49,23 @@ class MentorList(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class MentorsFilteredList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        skills = self.kwargs['skills'].split(',')
+        queryset = Mentor.objects.filter(skills__icontains=skills[0])
+        for skill in skills[1:]:
+            queryset = queryset.filter(skills__icontains=skill)
+
+        if not queryset.exists():
+            return Response({"message": "No mentors found."},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MentorProfileSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 # View to allow mentors to create and view the about me/skills.
 class MentorInfoView(generics.ListCreateAPIView):
     serializer_class = MentorProfileSerializer
@@ -167,7 +184,8 @@ class SessionRequestForm(generics.ListCreateAPIView):
         try:
             serializer.save(user=self.request.user)
         except Exception as e:
-            return Response({'error': 'Failed to create session request form. Error: {}'.format(str(e))},
+            return Response({'error':
+                             'Failed to create session request form. Error: {}'.format(str(e))},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def create(self, request, *args, **kwargs):
