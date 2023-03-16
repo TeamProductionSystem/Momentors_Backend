@@ -49,7 +49,7 @@ class MentorList(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class MentorsFilteredList(generics.ListAPIView):
+class MentorFilteredList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -63,7 +63,7 @@ class MentorsFilteredList(generics.ListAPIView):
                             status=status.HTTP_404_NOT_FOUND)
 
         serializer = MentorProfileSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
 
 
 # View to allow mentors to create and view the about me/skills.
