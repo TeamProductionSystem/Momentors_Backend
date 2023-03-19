@@ -110,6 +110,7 @@ API URL - https://team-production-system.onrender.com
 - [User Endpoints](#user-create)
 - [Mentor Endpoints](#view-mentors-list-user-authentication-required)
 - [Mentee Endpoints](#view-mentee-list-user-authentication-required)
+- [Availability Endpoints](#mentors-availabilty-user-authentication-required)
 
 ## User Create
 
@@ -624,7 +625,7 @@ No body returned to response
 
 ## View a List of mentors by skill (User Authentication **Required**)
 
-- View a list of mentors filtered by their skill. 
+- View a list of mentors filtered by their skill.
 
 ```http
 GET - https://team-production-system.onrender.com/mentor/<str:skills>/
@@ -680,7 +681,6 @@ Host: https://team-production-system.onrender.com
 
 ---
 
-
 ## View Mentee List (User Authentication **Required**)
 
 - View a list of all user with the mentee flag set to true
@@ -700,10 +700,9 @@ GET - https://team-production-system.onrender.com/mentee/
 
 Nested Information:
 
-| Body          | Type     | Description                           |
-| :------------ | :------- | :------------------------------------ |
-| `team_number` | `int`    | Team number associated with the user  |
-
+| Body          | Type  | Description                          |
+| :------------ | :---- | :----------------------------------- |
+| `team_number` | `int` | Team number associated with the user |
 
 #### Request Sample:
 
@@ -747,9 +746,9 @@ Host: https://team-production-system.onrender.com
 POST - https://team-production-system.onrender.com/menteeinfo/
 ```
 
-| Body          | Type     | Description                           |
-| :------------ | :------- | :------------------------------------ |
-| `team_number` | `int`    | Team number associated with the user  |
+| Body          | Type  | Description                          |
+| :------------ | :---- | :----------------------------------- |
+| `team_number` | `int` | Team number associated with the user |
 
 #### Request Sample:
 
@@ -786,9 +785,9 @@ Host: https://team-production-system.onrender.com
 GET - https://team-production-system.onrender.com/menteeinfo/
 ```
 
-| Body          | Type     | Description                           |
-| :------------ | :------- | :------------------------------------ |
-| `team_number` | `int`    | Team number associated with the user  |
+| Body          | Type  | Description                          |
+| :------------ | :---- | :----------------------------------- |
+| `team_number` | `int` | Team number associated with the user |
 
 #### Request Sample:
 
@@ -825,9 +824,9 @@ Host: https://team-production-system.onrender.com
 PATCH - https://team-production-system.onrender.com/menteeinfoupdate/
 ```
 
-| Body          | Type     | Description                           |
-| :------------ | :------- | :------------------------------------ |
-| `team_number` | `int`    | Team number associated with the user  |
+| Body          | Type  | Description                          |
+| :------------ | :---- | :----------------------------------- |
+| `team_number` | `int` | Team number associated with the user |
 
 #### Request Sample:
 
@@ -864,9 +863,9 @@ Host: https://team-production-system.onrender.com
 DELETE - https://team-production-system.onrender.com/menteeinfoupdate/
 ```
 
-| Body          | Type     | Description                           |
-| :------------ | :------- | :----------------------------------   |
-| `team_number` | `int`    | Team number associated with the user  |
+| Body          | Type  | Description                          |
+| :------------ | :---- | :----------------------------------- |
+| `team_number` | `int` | Team number associated with the user |
 
 #### Request Sample:
 
@@ -892,3 +891,108 @@ No body returned to response
 
 ---
 
+## Mentors Availabilty (User Authentication **Required**)
+
+- Get mentor availabilty
+
+```http
+GET - https://team-production-system.onrender.com/availabilty/
+```
+
+| Body         | Type        | Description                                      |
+| :----------- | :---------- | :----------------------------------------------- |
+| `pk`         | `int`       | The pk of the availabilty                        |
+| `mentor`     | `int`       | The pk of the mentor attached to the availabilty |
+| `start_time` | `date-time` | Start time of the availabilty                    |
+| `end_time`   | `date-time` | Start time of the availabilty                    |
+
+#### Request Sample:
+
+```
+GET /availabilty/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 19,
+		"mentor": 4,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:30:00Z"
+	},
+	{
+		"pk": 20,
+		"mentor": 5,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:30:00Z"
+	},
+	{
+		"pk": 21,
+		"mentor": 4,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:30:00Z"
+	},
+	{
+		"pk": 22,
+		"mentor": 7,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:30:00Z"
+	}
+]
+```
+
+---
+
+## Add Mentor Availabilty (User Authentication **Required**)
+
+- Add mentor availabilty (This endpoint filters out any expired availabilty. Only shows availabilty that is in the future.)
+
+```http
+POST - https://team-production-system.onrender.com/availabilty/
+```
+
+| Body         | Type        | Description                                      |
+| :----------- | :---------- | :----------------------------------------------- |
+| `pk`         | `int`       | The pk of the availabilty                        |
+| `mentor`     | `int`       | The pk of the mentor attached to the availabilty |
+| `start_time` | `date-time` | Start time of the availabilty                    |
+| `end_time`   | `date-time` | Start time of the availabilty                    |
+
+#### Request Sample:
+
+```
+POST /availabilty/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"mentor": "4",
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T15:30:00Z"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+{
+	"pk": 23,
+	"mentor": 4,
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T14:30:00Z"
+}
+```
+
+---
