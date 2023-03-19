@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Mentor, Mentee, SessionRequestForm, CustomUser, Availability, Session
+from .models import Mentor, Mentee, SessionRequestForm, CustomUser
+from .models import Availability, Session
 
 
 # The serializer for the user information
@@ -30,9 +31,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Mentor
-        fields = ('about_me', 'skills')
+        fields = ('pk', 'about_me', 'skills')
 
 
 # Serializer to show a list of all users flagged as a mentor
