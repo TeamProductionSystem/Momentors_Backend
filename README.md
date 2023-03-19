@@ -622,6 +622,65 @@ No body returned to response
 
 ---
 
+## View a List of mentors by skill (User Authentication **Required**)
+
+- View a list of mentors filtered by their skill. 
+
+```http
+GET - https://team-production-system.onrender.com/mentor/<str:skills>/
+```
+
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
+
+#### Request Sample:
+
+```
+GET mentor/<str:skills>/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 Ok)
+
+```
+[
+	{
+		"pk": 2,
+		"about_me": "Hi i'm testuser, I like to code.",
+		"skills": [
+			"HTML",
+		]
+	},
+	{
+		"pk": 5,
+		"about_me": "Coding is so fun",
+		"skills": [
+			"HTML",
+			"CSS",
+			"Django"
+		]
+	},
+	{
+		"pk": 6,
+		"about_me": "Hi, I'm testuser",
+		"skills": "HTML"
+	}
+]
+
+```
+
+---
+
+
 ## View Mentee List (User Authentication **Required**)
 
 - View a list of all user with the mentee flag set to true
@@ -797,18 +856,17 @@ Host: https://team-production-system.onrender.com
 
 ---
 
-## Delete Mentors Information (User Authentication **Required**)
+## Delete Mentees Information (User Authentication **Required**)
 
-- Delete information about the current logged-in mentor.
+- Delete information about the current logged-in mentee.
 
 ```http
 DELETE - https://team-production-system.onrender.com/menteeinfoupdate/
 ```
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body          | Type     | Description                           |
+| :------------ | :------- | :----------------------------------   |
+| `team_number` | `int`    | Team number associated with the user  |
 
 #### Request Sample:
 
@@ -833,3 +891,4 @@ No body returned to response
 ```
 
 ---
+
