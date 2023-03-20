@@ -35,6 +35,11 @@ class MentorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentor
         fields = ('pk', 'about_me', 'skills')
+        read_only_fields = ('pk',)
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 # Serializer to show a list of all users flagged as a mentor
