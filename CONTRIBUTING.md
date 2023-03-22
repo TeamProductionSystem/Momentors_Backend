@@ -37,7 +37,7 @@ Replace "my-new-feature" with your chosen branch name.
 5. Now it's time to make your changes! This is the fun part, where you get to add your own personal touch to the code. When you're done, commit your changes with a message that describes what you did, like "Add awesome new feature".
 
 ```bash
-git commit -am "Add awesome new feature"
+git commit -m "Add awesome new feature"
 ```
 Replace "Add awesome new feature" with a short, descriptive message that summarizes the changes you've made.
 
