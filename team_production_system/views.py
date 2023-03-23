@@ -9,12 +9,16 @@ from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 
+from rest_framework.parsers import MultiPartParser
+from django.http import JsonResponse
+
 
 # View to update the user profile information
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
 
     def get_object(self):
         user = self.request.user
