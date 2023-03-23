@@ -238,17 +238,17 @@ No body returned for response
 GET - https://team-production-system.onrender.com/myprofile/
 ```
 
-| Body            | Type        | Description                 |
-| :-------------- | :---------- | :-------------------------- |
-| `username`      | `string`    | Username                    |
-| `first_name`    | `string`    | User generated first name   |
-| `last_name`     | `string`    | User generated last name    |
-| `email`         | `string`    | User generated email        |
-| `phone_number`  | `string`    | User generated phone number |
-| `profile_photo` | `form-data` | User submitted phone number |
-| `is_mentor`     | `boolean`   | Is mentor flag              |
-| `is_mentee`     | `boolean`   | Is mentee flag              |
-| `is_active`     | `boolean`   | Is active flag              |
+| Body            | Type        | Description                  |
+| :-------------- | :---------- | :--------------------------- |
+| `username`      | `string`    | Username                     |
+| `first_name`    | `string`    | User generated first name    |
+| `last_name`     | `string`    | User generated last name     |
+| `email`         | `string`    | User generated email         |
+| `phone_number`  | `string`    | User generated phone number  |
+| `profile_photo` | `form-data` | User submitted profile photo |
+| `is_mentor`     | `boolean`   | Is mentor flag               |
+| `is_mentee`     | `boolean`   | Is mentee flag               |
+| `is_active`     | `boolean`   | Is active flag               |
 
 #### Request Sample:
 
@@ -292,32 +292,36 @@ Host: https://team-production-system.onrender.com
 PATCH - https://team-production-system.onrender.com/myprofile/
 ```
 
-| Body            | Type        | Description                 |
-| :-------------- | :---------- | :-------------------------- |
-| `username`      | `string`    | Username                    |
-| `first_name`    | `string`    | User generated first name   |
-| `last_name`     | `string`    | User generated last name    |
-| `email`         | `string`    | User generated email        |
-| `phone_number`  | `string`    | User generated phone number |
-| `profile_photo` | `form-data` | User submitted phone number |
-| `is_mentor`     | `boolean`   | Is mentor flag              |
-| `is_mentee`     | `boolean`   | Is mentee flag              |
-| `is_active`     | `boolean`   | Is active flag              |
+| Body            | Type        | Description                  |
+| :-------------- | :---------- | :--------------------------- |
+| `username`      | `string`    | Username                     |
+| `first_name`    | `string`    | User generated first name    |
+| `last_name`     | `string`    | User generated last name     |
+| `email`         | `string`    | User generated email         |
+| `phone_number`  | `string`    | User generated phone number  |
+| `profile_photo` | `form-data` | User submitted profile photo |
+| `is_mentor`     | `boolean`   | Is mentor flag               |
+| `is_mentee`     | `boolean`   | Is mentee flag               |
+| `is_active`     | `boolean`   | Is active flag               |
 
 #### Request Sample:
 
 ```
+const formData = new FormData()
+formData.append("first_name", "testuserfirstname")
+formData.append("last_name", "testuserlastname)
+formData.append("phone_number", "+12345678987")
+formData.append("profile_photo", new File(["testuser.jpg"], "testuser.jpg"))
+formData.append("is_mentor", "true")
+formData.append("is_active", "true")
+
 PATCH /myprofile/
-Content-Type: json
+Content-Type: multipart/form-data
 Authorization: Required
 Host: https://team-production-system.onrender.com
 
 {
-	"first_name": "testuserfirstname",
-	"last_name": "testuserlastname",
-	"phone_number": "+12345678987",
-	"is_mentor": true,
-	"is_active": true
+	body: formData,
 }
 
 ```
@@ -332,7 +336,7 @@ Host: https://team-production-system.onrender.com
 	"last_name": "testuserlastname",
 	"email": "testuser@testemail.com",
 	"phone_number": "+12345678987",
-	"profile_photo": null,
+	"profile_photo": ".../testuser.jpg",
 	"is_mentor": true,
 	"is_mentee": false,
 	"is_active": true
@@ -350,14 +354,14 @@ Host: https://team-production-system.onrender.com
 GET - https://team-production-system.onrender.com/mentor/
 ```
 
-| Body            | Type        | Description                 |
-| :-------------- | :---------- | :-------------------------- |
-| `pk`            | `int`       | The user pk                 |
-| `username`      | `string`    | Username                    |
-| `first_name`    | `string`    | User generated first name   |
-| `last_name`     | `string`    | User generated last name    |
-| `is_mentor`     | `boolean`   | Is mentor flag              |
-| `profile_photo` | `form-data` | User submitted phone number |
+| Body            | Type        | Description                  |
+| :-------------- | :---------- | :--------------------------- |
+| `pk`            | `int`       | The user pk                  |
+| `username`      | `string`    | Username                     |
+| `first_name`    | `string`    | User generated first name    |
+| `last_name`     | `string`    | User generated last name     |
+| `is_mentor`     | `boolean`   | Is mentor flag               |
+| `profile_photo` | `form-data` | User submitted profile photo |
 
 Nested Information:
 
@@ -413,14 +417,14 @@ Host: https://team-production-system.onrender.com
 GET - https://team-production-system.onrender.com/mentor/
 ```
 
-| Body            | Type        | Description                 |
-| :-------------- | :---------- | :-------------------------- |
-| `pk`            | `int`       | The user pk                 |
-| `username`      | `string`    | Username                    |
-| `first_name`    | `string`    | User generated first name   |
-| `last_name`     | `string`    | User generated last name    |
-| `is_mentor`     | `boolean`   | Is mentor flag              |
-| `profile_photo` | `form-data` | User submitted phone number |
+| Body            | Type        | Description                  |
+| :-------------- | :---------- | :--------------------------- |
+| `pk`            | `int`       | The user pk                  |
+| `username`      | `string`    | Username                     |
+| `first_name`    | `string`    | User generated first name    |
+| `last_name`     | `string`    | User generated last name     |
+| `is_mentor`     | `boolean`   | Is mentor flag               |
+| `profile_photo` | `form-data` | User submitted profile photo |
 
 Nested Information:
 
@@ -689,14 +693,14 @@ Host: https://team-production-system.onrender.com
 GET - https://team-production-system.onrender.com/mentee/
 ```
 
-| Body            | Type        | Description                 |
-| :-------------- | :---------- | :-------------------------- |
-| `pk`            | `int`       | The user pk                 |
-| `username`      | `string`    | Username                    |
-| `first_name`    | `string`    | User generated first name   |
-| `last_name`     | `string`    | User generated last name    |
-| `is_mentee`     | `boolean`   | Is mentor flag              |
-| `profile_photo` | `form-data` | User submitted phone number |
+| Body            | Type        | Description                  |
+| :-------------- | :---------- | :--------------------------- |
+| `pk`            | `int`       | The user pk                  |
+| `username`      | `string`    | Username                     |
+| `first_name`    | `string`    | User generated first name    |
+| `last_name`     | `string`    | User generated last name     |
+| `is_mentee`     | `boolean`   | Is mentor flag               |
+| `profile_photo` | `form-data` | User submitted profile photo |
 
 Nested Information:
 
