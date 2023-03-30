@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, fields
 from .models import Mentor, Mentee, SessionRequestForm, CustomUser
 from .models import Availability, Session
 
@@ -38,7 +38,9 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):
-    availabilities = AvailabilitySerializer(many=True, read_only=True, source='mentor_availability')
+    availabilities = AvailabilitySerializer(
+        many=True, read_only=True, source='mentor_availability')
+    skills = fields.MultipleChoiceField(choices=Mentor.SKILLS_CHOICES)
 
     class Meta:
         model = Mentor
@@ -59,7 +61,8 @@ class MentorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('pk', 'username', 'first_name',
-                  'last_name', 'profile_photo', 'is_mentor', 'about_me', 'skills', 'availabilities')
+                  'last_name', 'profile_photo', 'is_mentor', 'about_me',
+                  'skills', 'availabilities')
 
     def get_about_me(self, obj):
         mentor = Mentor.objects.get(user=obj.pk)
