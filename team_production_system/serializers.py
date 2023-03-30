@@ -30,11 +30,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #         return instance
 
 
+# The mentor availability serializer
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ('pk', 'mentor', 'start_time', 'end_time')
+
+
 class MentorProfileSerializer(serializers.ModelSerializer):
+    availabilities = AvailabilitySerializer(many=True, read_only=True, source='mentor_availability')
 
     class Meta:
         model = Mentor
-        fields = ('pk', 'about_me', 'skills')
+        fields = ('pk', 'about_me', 'skills', 'availabilities')
         read_only_fields = ('pk',)
 
     def create(self, validated_data):
@@ -44,13 +52,27 @@ class MentorProfileSerializer(serializers.ModelSerializer):
 
 # Serializer to show a list of all users flagged as a mentor
 class MentorListSerializer(serializers.ModelSerializer):
-    mentor_profile = MentorProfileSerializer(read_only=True, source='mentor')
-    user = CustomUserSerializer(read_only=True, source='customuser')
+    about_me = serializers.SerializerMethodField('get_about_me')
+    skills = serializers.SerializerMethodField('get_skills')
+    availabilities = serializers.SerializerMethodField('get_availabilities')
 
     class Meta:
         model = CustomUser
-        fields = ('user', 'pk', 'username', 'first_name',
-                  'last_name', 'is_mentor', 'mentor_profile')
+        fields = ('pk', 'username', 'first_name',
+                  'last_name', 'profile_photo', 'is_mentor', 'about_me', 'skills', 'availabilities')
+
+    def get_about_me(self, obj):
+        mentor = Mentor.objects.get(user=obj.pk)
+        return mentor.about_me
+
+    def get_skills(self, obj):
+        mentor = Mentor.objects.get(user=obj.pk)
+        return mentor.skills
+
+    def get_availabilities(self, obj):
+        availabilities = Availability.objects.filter(mentor=obj.pk)
+        serializer = AvailabilitySerializer(instance=availabilities, many=True)
+        return serializer.data
 
 
 class MenteeProfileSerializer(serializers.ModelSerializer):
@@ -75,13 +97,6 @@ class SessionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SessionRequestForm
         fields = ('project', 'help_text', 'git_link', 'confirmed')
-
-
-# The mentor avalablity serializer
-class AvailabilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Availability
-        fields = ('pk', 'mentor', 'start_time', 'end_time')
 
 
 # Serializer to show session information
