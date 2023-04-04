@@ -65,17 +65,26 @@ class MentorListSerializer(serializers.ModelSerializer):
                   'skills', 'availabilities')
 
     def get_about_me(self, obj):
-        mentor = Mentor.objects.get(user=obj.pk)
-        return mentor.about_me
+        try:
+            mentor = Mentor.objects.get(user=obj.pk)
+            return mentor.about_me
+        except Mentor.DoesNotExist:
+            return None
 
     def get_skills(self, obj):
-        mentor = Mentor.objects.get(user=obj.pk)
-        return mentor.skills
+        try:
+            mentor = Mentor.objects.get(user=obj.pk)
+            return mentor.skills
+        except Mentor.DoesNotExist:
+            return None
 
     def get_availabilities(self, obj):
-        availabilities = Availability.objects.filter(mentor=obj.pk)
-        serializer = AvailabilitySerializer(instance=availabilities, many=True)
-        return serializer.data
+        try:
+            availabilities = Availability.objects.filter(mentor=obj.pk)
+            serializer = AvailabilitySerializer(instance=availabilities, many=True)
+            return serializer.data
+        except Mentor.DoesNotExist:
+            return None
 
 
 class MenteeProfileSerializer(serializers.ModelSerializer):
