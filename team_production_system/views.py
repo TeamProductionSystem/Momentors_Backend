@@ -41,16 +41,19 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.filter(is_mentor=True)
+    serializer_class = MentorListSerializer
 
-    def get(self, request, *args, **kwargs):
-        queryset = CustomUser.objects.filter(is_mentor=True)
 
-        if not queryset.exists():
-            return Response({"message": "No mentors found."},
-                            status=status.HTTP_404_NOT_FOUND)
+    # def get(self, request, *args, **kwargs):
+    #     queryset = CustomUser.objects.filter(is_mentor=True)
 
-        serializer = MentorListSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    #     if not queryset.exists():
+    #         return Response({"message": "No mentors found."},
+    #                         status=status.HTTP_404_NOT_FOUND)
+
+    #     serializer = MentorListSerializer(queryset, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class MentorFilteredList(generics.ListAPIView):
