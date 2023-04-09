@@ -1,8 +1,8 @@
-from .models import CustomUser, Mentee, SessionRequestForm, Availability
+from .models import CustomUser, Mentee, Availability
 from .models import Session, Mentor
 from rest_framework import generics, status
 from .serializers import CustomUserSerializer, AvailabilitySerializer
-from .serializers import SessionRequestSerializer, SessionSerializer
+from .serializers import SessionSerializer
 from .serializers import MentorListSerializer, MentorProfileSerializer
 from .serializers import MenteeListSerializer, MenteeProfileSerializer
 from rest_framework.response import Response
@@ -10,7 +10,6 @@ from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.parsers import MultiPartParser
-from django.http import JsonResponse
 
 
 # View to update the user profile information
@@ -179,31 +178,20 @@ class AvailabilityView(generics.ListCreateAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-# View for mentees to submit session request forms.
-# It is set to auto add the user who submited the form as request user.
-class SessionRequestForm(generics.ListCreateAPIView):
-    queryset = SessionRequestForm.objects.all()
-    serializer_class = SessionRequestSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        try:
-            serializer.save(user=self.request.user)
-        except Exception as e:
-            return Response({'error':
-                             'Failed to create session request form. Error: {}'.format(str(e))},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def create(self, request, *args, **kwargs):
-        try:
-            return super().create(request, *args, **kwargs)
-        except Exception as e:
-            return Response({'error': 'Failed to create session request form. Error: {}'.format(str(e))},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 # Creat and view all sessions
 class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # Get the mentor availability ID from the request data
+        mentor_availability_id = self.request.data.get('mentor_availability')
+
+        # Get the mentor availability instance
+        mentor_availability = Availability.objects.get(
+            id=mentor_availability_id)
+
+        # Set the mentor for the session
+        serializer.save(mentor=mentor_availability.mentor,
+                        mentor_availability=mentor_availability)

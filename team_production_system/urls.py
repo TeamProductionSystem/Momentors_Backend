@@ -22,8 +22,7 @@ urlpatterns = [
          name='mentee-info-update'),
 
     # End points related to sessions
-    path('availabilty/', views.AvailabilityView.as_view(), name='availabilty'),
-    path('sessionrequestform/',
-         views.SessionRequestForm.as_view(), name='request-form'),
+    path('availability/', views.AvailabilityView.as_view(),
+         name='availability'),
     path('session/', views.SessionView.as_view(), name='session'),
 ]
