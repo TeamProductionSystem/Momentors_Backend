@@ -1,5 +1,5 @@
 from rest_framework import serializers, fields
-from .models import Mentor, Mentee, SessionRequestForm, CustomUser
+from .models import Mentor, Mentee, CustomUser
 from .models import Availability, Session
 
 
@@ -81,7 +81,8 @@ class MentorListSerializer(serializers.ModelSerializer):
     def get_availabilities(self, obj):
         try:
             availabilities = Availability.objects.filter(mentor=obj.pk)
-            serializer = AvailabilitySerializer(instance=availabilities, many=True)
+            serializer = AvailabilitySerializer(
+                instance=availabilities, many=True)
             return serializer.data
         except Mentor.DoesNotExist:
             return None
@@ -104,16 +105,11 @@ class MenteeListSerializer(serializers.ModelSerializer):
                   'last_name', 'is_mentee', 'mentee_profile')
 
 
-# The serializer for the session request form
-class SessionRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SessionRequestForm
-        fields = ('project', 'help_text', 'git_link', 'confirmed')
-
-
 # Serializer to show session information
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_availability', 'mentee',
-                  'start_time', 'status', 'session_length', 'end_time')
+                  'start_time', 'status', 'session_length',
+                  'end_time')
+        read_only_fields = ('mentor',)
