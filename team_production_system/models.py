@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from django.core.mail import send_mail
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from datetime import timedelta
@@ -47,7 +49,7 @@ class Mentor(models.Model):
         return self.user.username
 
 
-# Model for mentees to input thier team
+# Model for mentees to input their team
 class Mentee(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, primary_key=True)
@@ -104,6 +106,14 @@ class Session(models.Model):
 
     def __str__(self):
         return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
+
+    def mentor_session_notify(self):
+        send_mail(
+            subject=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} has requested your help'),
+            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {self.start_time} on {self.start_time}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[f'{self.mentor.user.email}'],
+        )
 
 
 # Notification model that will the mentor to be alerted when

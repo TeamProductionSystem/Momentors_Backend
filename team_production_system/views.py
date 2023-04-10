@@ -178,7 +178,7 @@ class AvailabilityView(generics.ListCreateAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-# Creat and view all sessions
+# Create and view all sessions
 class SessionView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
@@ -195,3 +195,7 @@ class SessionView(generics.ListCreateAPIView):
         # Set the mentor for the session
         serializer.save(mentor=mentor_availability.mentor,
                         mentor_availability=mentor_availability)
+
+        # Email notification to the mentor
+        session = serializer.instance
+        session.mentor_session_notify()
