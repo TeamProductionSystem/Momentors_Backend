@@ -22,19 +22,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'is_active',
         ]
 
-#     def update(self, instance, validated_data):
-#         profile_photo = validated_data.get('profile_photo', None)
-#         if profile_photo:
-#             instance.profile_photo = profile_photo
-#             instance.save()
-#         return instance
 
-
-# The mentor availability serializer
+# The mentor availability serializerx
 class AvailabilitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Availability
-        fields = ('pk', 'mentor', 'start_time', 'end_time')
+        fields = ('pk', 'mentor', 'start_time', 'end_time',)
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):
@@ -107,9 +101,14 @@ class MenteeListSerializer(serializers.ModelSerializer):
 
 # Serializer to show session information
 class SessionSerializer(serializers.ModelSerializer):
+    mentor_first_name = serializers.SlugField(source='mentor.user.first_name',
+                                              read_only=True)
+    mentor_last_name = serializers.SlugField(source='mentor.user.last_name',
+                                             read_only=True)
+
     class Meta:
         model = Session
-        fields = ('pk', 'mentor_availability', 'mentee',
-                  'start_time', 'status', 'session_length',
-                  'end_time')
-        read_only_fields = ('mentor',)
+        fields = ('pk', 'mentor_first_name', 'mentor_last_name',
+                  'mentor_availability', 'mentee', 'start_time',
+                  'end_time', 'status', 'session_length',)
+        read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',)
