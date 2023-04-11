@@ -108,9 +108,12 @@ class Session(models.Model):
         return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
 
     def mentor_session_notify(self):
+        session_time = self.start_time.strftime('%-I:%M %p')
+        session_date = self.start_time.strftime('%A, %B %-d')
+
         send_mail(
             subject=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} has requested your help'),
-            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {self.start_time} on {self.start_time}.'),
+            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[f'{self.mentor.user.email}'],
         )
