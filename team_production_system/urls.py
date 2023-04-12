@@ -24,5 +24,9 @@ urlpatterns = [
     # End points related to sessions
     path('availability/', views.AvailabilityView.as_view(),
          name='availability'),
-    path('session/', views.SessionView.as_view(), name='session'),
+    path('sessionrequest/', views.SessionRequestView.as_view(),
+         name='session'),
+    path('sessionrequest/<int:pk>/', views.SessionRequestDetailView.as_view(),
+         name='session-detail'),
+
 ]
