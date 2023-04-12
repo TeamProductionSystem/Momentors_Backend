@@ -111,4 +111,5 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
                   'mentor_availability', 'mentee', 'start_time',
                   'end_time', 'status', 'session_length',)
-        read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',)
+        read_only_fields = ('mentor', 'mentor_first_name',
+                            'mentor_last_name',)
