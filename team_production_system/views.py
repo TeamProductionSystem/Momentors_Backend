@@ -184,6 +184,11 @@ class SessionRequestView(generics.ListCreateAPIView):
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Get a list of all sessions belonging to the logged in user
+        return Session.objects.filter(mentee=self.request.user.mentee)
+    
+
     def perform_create(self, serializer):
         # Get the mentor availability ID from the request data
         mentor_availability_id = self.request.data.get('mentor_availability')
@@ -205,6 +210,7 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
+
 
     def perform_update(self, serializer):
         # Get the mentor availability ID from the request data
