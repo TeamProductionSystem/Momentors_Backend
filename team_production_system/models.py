@@ -112,42 +112,26 @@ class Session(models.Model):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
 
-        try:
-
-            send_mail(
-                subject=(
-                    f'{self.mentee.user.first_name} {self.mentee.user.last_name} has requested your help'),
-                message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[f'{self.mentor.user.email}'],
+        send_mail(
+            subject=(
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} has requested your help'),
+            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentor.user.email],
             )
-
-        except SMTPRecipientsRefused as e:
-            invalid_recipients = list(e.recipients.keys())
-        # Handle the error, such as informing the user that the email address they provided is not valid
-        print(
-            f"The following email addresses are invalid: {', '.join(invalid_recipients)}")
 
     def session_cancel_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
 
-        try:
+        send_mail(
+            subject=(
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} has canceled their session'),
+            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has canceled their {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentor.user.email, self.mentee.user.email]
 
-            send_mail(
-                subject=(
-                    f'{self.mentee.user.first_name} {self.mentee.user.last_name} has canceled their session'),
-                message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has canceled their {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[{self.mentor.user.email},
-                                {self.mentee.user.email}]
-
-            )
-        except SMTPRecipientsRefused as e:
-            invalid_recipients = list(e.recipients.keys())
-        # Handle the error, such as informing the user that the email address they provided is not valid
-        print(
-            f"The following email addresses are invalid: {', '.join(invalid_recipients)}")
+        )
 
 
 # Notification model that will the mentor to be alerted when
