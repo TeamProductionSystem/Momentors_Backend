@@ -208,32 +208,18 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
 
+    # Update the session status
     def perform_update(self, serializer):
-        # Get the mentor availability ID from the request data
-        mentor_availability_id = self.request.data.get('mentor_availability')
-
-        # Get the mentor availability instance
-        mentor_availability = Availability.objects.get(
-            id=mentor_availability_id)
-
-        # Set the mentor for the session
-        serializer.save(mentor=mentor_availability.mentor,
-                        mentor_availability=mentor_availability)
-
-        # Email notification to the mentor
+        # Email notification if the session is cancelled
         session = serializer.instance
-        if session.status == 'Canceled':
+        status = self.request.data.get('status')
+
+        if status == 'Canceled':
+            session.status = status
+            session.save()
             session.session_cancel_notify()
         else:
-            session.mentor_session_notify()
-
-    def perform_destroy(self, instance):
-        # Email notification to the mentor
-        instance.session_cancel_notify()
-
-        # Mark the session as canceled
-        instance.status = 'Canceled'
-        instance.save()
+            serializer.save()
 
 
 class SessionView(generics.ListAPIView):
