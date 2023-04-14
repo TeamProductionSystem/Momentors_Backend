@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
+from .custom_permissions import IsMentorMentee
 
 
 from rest_framework.parsers import MultiPartParser
@@ -206,7 +207,7 @@ class SessionRequestView(generics.ListCreateAPIView):
 class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsMentorMentee]
 
     # Update the session status
     def perform_update(self, serializer):
