@@ -10,9 +10,9 @@ from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 from .custom_permissions import IsMentorMentee
-
-
+from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
+from django.core.exceptions import ValidationError
 
 
 # View to update the user profile information
@@ -181,6 +181,15 @@ class AvailabilityView(generics.ListCreateAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
+# Time conversion helper function
+def time_convert(time, minutes):
+    datetime_str = time + '00'
+    datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S%z')
+    datetime_delta = datetime_obj - timedelta(minutes=minutes)
+    new_start_time = datetime.strftime(datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
+    return new_start_time
+
+
 # Create and view all sessions
 class SessionRequestView(generics.ListCreateAPIView):
     queryset = Session.objects.all()
@@ -195,13 +204,48 @@ class SessionRequestView(generics.ListCreateAPIView):
         mentor_availability = Availability.objects.get(
             id=mentor_availability_id)
 
-        # Set the mentor for the session
-        serializer.save(mentor=mentor_availability.mentor,
-                        mentor_availability=mentor_availability)
+        # Ensure no overlap between mentor or mentee's sessions
+        mentor = self.request.data['mentor']
+        mentee = self.request.data['mentee']
+        start_time = self.request.data['start_time']
+        session_length = self.request.data['session_length']
 
-        # Email notification to the mentor
-        session = serializer.instance
-        session.mentor_session_notify()
+        if session_length == 30:
+            new_start_time = time_convert(start_time, session_length)
+
+            if Session.objects.filter(mentor=mentor, start_time=start_time).exists() or Session.objects.filter(mentor=mentor, start_time=new_start_time, session_length=60).exists():
+                raise ValidationError('A session with this mentor is already scheduled during this time.')
+
+            elif Session.objects.filter(mentee=mentee, start_time=start_time).exists() or Session.objects.filter(mentee=mentee, start_time=new_start_time, session_length=60).exists():
+                raise ValidationError('A session with this mentee is already scheduled during this time.')
+
+            # Set the mentor for the session
+            else:
+                serializer.save(mentor=mentor_availability.mentor,
+                            mentor_availability=mentor_availability)
+
+            # Email notification to the mentor
+                session = serializer.instance
+                session.mentor_session_notify()
+
+        if session_length == 60:
+            before_start_time = time_convert(start_time, 30)
+            after_start_time = time_convert(start_time, -30)
+
+            if Session.objects.filter(mentor=mentor, start_time=start_time).exists() or Session.objects.filter(mentor=mentor, start_time=before_start_time, session_length=60).exists() or Session.objects.filter(mentor=mentor, start_time=after_start_time).exists():
+                raise ValidationError('A session with this mentor is already scheduled during this time.')
+
+            elif Session.objects.filter(mentee=mentee, start_time=start_time).exists() or Session.objects.filter(mentee=mentee, start_time=before_start_time, session_length=60).exists() or Session.objects.filter(mentee=mentee, start_time=after_start_time).exists():
+                raise ValidationError('A session with this mentee is already scheduled during this time.')
+
+            # Set the mentor for the session
+            else:
+                serializer.save(mentor=mentor_availability.mentor,
+                            mentor_availability=mentor_availability)
+
+            # Email notification to the mentor
+                session = serializer.instance
+                session.mentor_session_notify()
 
 
 class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
