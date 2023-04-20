@@ -218,14 +218,14 @@ class SessionRequestView(generics.ListCreateAPIView):
             new_start_time = time_convert(start_time, session_length)
 
             if Session.objects.filter(
-                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'confirmed']) |
-                Q(mentor=mentor, start_time=new_start_time, session_length=60, status__in=['Pending', 'confirmed'])
+                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError('A session with this mentor is already scheduled during this time.')
 
             elif Session.objects.filter(
-                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'confirmed']) |
-                Q(mentee=mentee, start_time=new_start_time, session_length=60, status__in=['Pending', 'confirmed'])
+                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError('A session with this mentee is already scheduled during this time.')
 
@@ -243,16 +243,16 @@ class SessionRequestView(generics.ListCreateAPIView):
             after_start_time = time_convert(start_time, -30)
 
             if Session.objects.filter(
-                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'confirmed']) |
-                Q(mentor=mentor, start_time=before_start_time, session_length=60, status__in=['Pending', 'confirmed']) |
-                Q(mentor=mentor, start_time=after_start_time, status__in=['Pending', 'confirmed'])
+                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError('A session with this mentor is already scheduled during this time.')
 
             elif Session.objects.filter(
-                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'confirmed']) |
-                Q(mentee=mentee, start_time=before_start_time, session_length=60, status__in=['Pending', 'confirmed']) |
-                Q(mentee=mentee, start_time=after_start_time, status__in=['Pending', 'confirmed'])
+                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError('A session with this mentee is already scheduled during this time.')
 
