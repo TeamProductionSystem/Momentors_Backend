@@ -205,23 +205,32 @@ class SessionRequestView(generics.ListCreateAPIView):
             id=mentor_availability_id)
 
         # Ensure no overlap between mentor or mentee's sessions
-        mentor = self.request.data['mentor']
-        mentee = self.request.data['mentee']
+        mentor = mentor_availability.mentor
+
+        mentee_id = self.request.data['mentee']
+        mentee = Mentee.objects.get(user_id=mentee_id)
+
         start_time = self.request.data['start_time']
         session_length = self.request.data['session_length']
 
         if session_length == 30:
             new_start_time = time_convert(start_time, session_length)
 
-            if Session.objects.filter(mentor=mentor, start_time=start_time).exists() or Session.objects.filter(mentor=mentor, start_time=new_start_time, session_length=60).exists():
+            if Session.objects.filter(
+                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
+            ).exists():
                 raise ValidationError('A session with this mentor is already scheduled during this time.')
 
-            elif Session.objects.filter(mentee=mentee, start_time=start_time).exists() or Session.objects.filter(mentee=mentee, start_time=new_start_time, session_length=60).exists():
+            elif Session.objects.filter(
+                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
+            ).exists():
                 raise ValidationError('A session with this mentee is already scheduled during this time.')
 
             # Set the mentor for the session
             else:
-                serializer.save(mentor=mentor_availability.mentor,
+                serializer.save(mentor=mentor,
                             mentor_availability=mentor_availability)
 
             # Email notification to the mentor
@@ -232,15 +241,23 @@ class SessionRequestView(generics.ListCreateAPIView):
             before_start_time = time_convert(start_time, 30)
             after_start_time = time_convert(start_time, -30)
 
-            if Session.objects.filter(mentor=mentor, start_time=start_time).exists() or Session.objects.filter(mentor=mentor, start_time=before_start_time, session_length=60).exists() or Session.objects.filter(mentor=mentor, start_time=after_start_time).exists():
+            if Session.objects.filter(
+                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
+            ).exists():
                 raise ValidationError('A session with this mentor is already scheduled during this time.')
 
-            elif Session.objects.filter(mentee=mentee, start_time=start_time).exists() or Session.objects.filter(mentee=mentee, start_time=before_start_time, session_length=60).exists() or Session.objects.filter(mentee=mentee, start_time=after_start_time).exists():
+            elif Session.objects.filter(
+                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
+            ).exists():
                 raise ValidationError('A session with this mentee is already scheduled during this time.')
 
             # Set the mentor for the session
             else:
-                serializer.save(mentor=mentor_availability.mentor,
+                serializer.save(mentor=mentor,
                             mentor_availability=mentor_availability)
 
             # Email notification to the mentor
