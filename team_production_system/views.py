@@ -186,7 +186,8 @@ def time_convert(time, minutes):
     datetime_str = time + '00'
     datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S%z')
     datetime_delta = datetime_obj - timedelta(minutes=minutes)
-    new_start_time = datetime.strftime(datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
+    new_start_time = datetime.strftime(
+        datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
     return new_start_time
 
 
@@ -217,21 +218,26 @@ class SessionRequestView(generics.ListCreateAPIView):
             new_start_time = time_convert(start_time, session_length)
 
             if Session.objects.filter(
-                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
-                Q(mentor=mentor, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
+                Q(mentor=mentor, start_time=start_time,
+                  status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=new_start_time,
+                  session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
-                raise ValidationError('A session with this mentor is already scheduled during this time.')
+                raise ValidationError(
+                    'A session with this mentor is already scheduled during this time.')
 
             elif Session.objects.filter(
                 Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
-                Q(mentee=mentee, start_time=new_start_time, session_length=60, status__in=['Pending', 'Confirmed'])
+                Q(mentee=mentee, start_time=new_start_time,
+                  session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
-                raise ValidationError('A session with this mentee is already scheduled during this time.')
+                raise ValidationError(
+                    'A session with this mentee is already scheduled during this time.')
 
             # Set the mentor for the session
             else:
                 serializer.save(mentor=mentor,
-                            mentor_availability=mentor_availability)
+                                mentor_availability=mentor_availability)
 
             # Email notification to the mentor
                 session = serializer.instance
@@ -244,21 +250,27 @@ class SessionRequestView(generics.ListCreateAPIView):
             if Session.objects.filter(
                 Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
                 Q(mentor=mentor, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
-                Q(mentor=mentor, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
+                Q(mentor=mentor, start_time=after_start_time,
+                  status__in=['Pending', 'Confirmed'])
             ).exists():
-                raise ValidationError('A session with this mentor is already scheduled during this time.')
+                raise ValidationError(
+                    'A session with this mentor is already scheduled during this time.')
 
             elif Session.objects.filter(
-                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
-                Q(mentee=mentee, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
-                Q(mentee=mentee, start_time=after_start_time, status__in=['Pending', 'Confirmed'])
+                Q(mentee=mentee, start_time=start_time,
+                  status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=before_start_time,
+                  session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=after_start_time,
+                  status__in=['Pending', 'Confirmed'])
             ).exists():
-                raise ValidationError('A session with this mentee is already scheduled during this time.')
+                raise ValidationError(
+                    'A session with this mentee is already scheduled during this time.')
 
             # Set the mentor for the session
             else:
                 serializer.save(mentor=mentor,
-                            mentor_availability=mentor_availability)
+                                mentor_availability=mentor_availability)
 
             # Email notification to the mentor
                 session = serializer.instance
