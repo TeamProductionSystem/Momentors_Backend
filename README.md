@@ -1086,9 +1086,10 @@ Authorization: Required
 Host: https://team-production-system.onrender.com
 
 {
-	"mentor": "4",
-	"start_time": "1999-12-31T14:30:00Z",
-	"end_time": "1999-12-31T15:30:00Z"
+	"mentor_availability": 8,
+	"mentee": 3,
+	"start_time": "2020-04-26 16:00:00-05",
+	"session_length": 60
 }
 
 ```
@@ -1097,11 +1098,17 @@ Host: https://team-production-system.onrender.com
 
 ```
 {
-	"pk": 23,
-	"mentor": 4,
-	"start_time": "1999-12-31T14:30:00Z",
-	"end_time": "1999-12-31T14:30:00Z"
+	"pk": 8,
+	"mentor_first_name": "testuser",
+	"mentor_last_name": "testuser",
+	"mentor_availability": 8,
+	"mentee": 3,
+	"start_time": "2020-04-26T21:00:00Z",
+	"end_time": "2020-04-26T22:00:00Z",
+	"status": "Pending",
+	"session_length": 60
 }
+
 ```
 
 ---
