@@ -314,7 +314,7 @@ Authorization: Required
 Host: https://team-production-system.onrender.com
 
 	body: MultiPartFormData,
-	Example: 
+	Example:
 
 	{
 		"username": "testusername",
@@ -369,7 +369,7 @@ GET - https://team-production-system.onrender.com/mentor/
 **Nested Information:**
 
 | Body             | Type     | Description                   |
-| :--------------- | :------- | :---------------------------  |
+| :--------------- | :------- | :---------------------------- |
 | `about_me`       | `string` | Information about the user    |
 | `skills`         | `string` | Skills the user has           |
 | `availabilities` | `array`  | Availabilities the mentor has |
@@ -476,9 +476,9 @@ GET - https://team-production-system.onrender.com/mentorinfo/
 
 **Nested Information:**
 
-| Body             | Type     | Description                   |
-| :--------------- | :------- | :---------------------------  |
-| `availabilities` | `array`  | Availabilities the mentor has |
+| Body             | Type    | Description                   |
+| :--------------- | :------ | :---------------------------- |
+| `availabilities` | `array` | Availabilities the mentor has |
 
 #### Request Sample:
 
@@ -599,10 +599,10 @@ No body returned to response
 GET - https://team-production-system.onrender.com/mentor/<str:skills>/
 ```
 
-| Body             | Type     | Description                |
-| :------------    | :------- | :------------------------- |
-| `about_me`       | `string` | Information about the user |
-| `skills`         | `string` | Skills the user has        |
+| Body       | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `about_me` | `string` | Information about the user |
+| `skills`   | `string` | Skills the user has        |
 
 #### Request Sample:
 
@@ -862,6 +862,7 @@ No body returned to response
 ## Mentors Availabilty (User Authentication **Required**)
 
 - Get mentor availabilty
+- This endpoint filters out any expired availabilty. Only shows availabilty that is in the future.
 
 ```http
 GET - https://team-production-system.onrender.com/availabilty/
@@ -940,6 +941,146 @@ POST - https://team-production-system.onrender.com/availabilty/
 
 ```
 POST /availabilty/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"mentor": "4",
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T15:30:00Z"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+{
+	"pk": 23,
+	"mentor": 4,
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T14:30:00Z"
+}
+```
+
+---
+
+## Sessions (User Authentication **Required**)
+
+- Get a list of all sessions
+
+````http
+
+```http
+GET - https://team-production-system.onrender.com/sessionrequest/
+````
+
+| Body                 | Type        | Description                                      |
+| :------------------- | :---------- | :----------------------------------------------- |
+| `pk`                 | `int`       | The pk of the session                            |
+| `mentor_firstname`   | `string`    | The first name of the mentor attached to session |
+| `mentor_lastname`    | `string`    | The last name of the mentor attached to session  |
+| `mentor_avaliabilty` | `int`       | The avalibility pk attached to mentor            |
+| `mentor`             | `int`       | The pk of the mentor attached to the availabilty |
+| `mentee`             | `int`       | The pk of the mentee attached to the session     |
+| `start_time`         | `date-time` | Start time of the availabilty                    |
+| `end_time`           | `date-time` | Start time of the availabilty                    |
+| `status`             | `string`    | Status of the session                            |
+| `session_length`     | `int`       | Length of the session                            |
+
+#### Request Sample:
+
+```
+GET /sessionrequest/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 5,
+		"mentor_first_name": "Test User",
+		"mentor_last_name": "Test User",
+		"mentor_availability": 2,
+		"mentee": 3,
+		"start_time": "2023-04-12T15:30:00Z",
+		"end_time": "2023-04-12T16:00:00Z",
+		"status": "Pending",
+		"session_length": 60
+	},
+	{
+		"pk": 2,
+		"mentor_first_name": "Test User",
+		"mentor_last_name": "Test User",
+		"mentor_availability": 2,
+		"mentee": 3,
+		"start_time": "2023-04-12T15:30:00Z",
+		"end_time": "2023-04-12T16:00:00Z",
+		"status": "Confirmed",
+		"session_length": 30
+	},
+	{
+		"pk": 6,
+		"mentor_first_name": "Test User",
+		"mentor_last_name": "Test User",
+		"mentor_availability": 2,
+		"mentee": 3,
+		"start_time": "2023-04-12T15:30:00Z",
+		"end_time": "2023-04-12T16:00:00Z",
+		"status": "Confirmed",
+		"session_length": 30
+	},
+	{
+		"pk": 7,
+		"mentor_first_name": "Test User",
+		"mentor_last_name": "Test User",
+		"mentor_availability": 2,
+		"mentee": 3,
+		"start_time": "2023-04-12T15:30:00Z",
+		"end_time": "2023-04-12T16:00:00Z",
+		"status": "Canceled",
+		"session_length": 30
+	}
+]
+```
+
+---
+
+## Create a Session (User Authentication **Required**)
+
+- Create a session with a mentor
+
+```http
+POST - https://team-production-system.onrender.com/sessionrequest/
+```
+
+| Body                 | Type        | Description                                      |
+| :------------------- | :---------- | :----------------------------------------------- |
+| `pk`                 | `int`       | The pk of the session                            |
+| `mentor_firstname`   | `string`    | The first name of the mentor attached to session |
+| `mentor_lastname`    | `string`    | The last name of the mentor attached to session  |
+| `mentor_avaliabilty` | `int`       | The avalibility pk attached to mentor            |
+| `mentor`             | `int`       | The pk of the mentor attached to the availabilty |
+| `mentee`             | `int`       | The pk of the mentee attached to the session     |
+| `start_time`         | `date-time` | Start time of the availabilty                    |
+| `end_time`           | `date-time` | Start time of the availabilty                    |
+| `status`             | `string`    | Status of the session                            |
+| `session_length`     | `int`       | Length of the session                            |
+
+#### Request Sample:
+
+```
+POST /sessionrequest/
 Content-Type: json
 Authorization: Required
 Host: https://team-production-system.onrender.com
