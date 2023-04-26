@@ -287,6 +287,7 @@ Host: https://team-production-system.onrender.com
 ## Edit User Profile (User Authentication **Required**)
 
 - Update the users profile information.
+- **Note: This endpoint has multipart/form-data content type.**
 
 ```http
 PATCH - https://team-production-system.onrender.com/myprofile/
@@ -307,22 +308,24 @@ PATCH - https://team-production-system.onrender.com/myprofile/
 #### Request Sample:
 
 ```
-const formData = new FormData()
-formData.append("first_name", "testuserfirstname")
-formData.append("last_name", "testuserlastname)
-formData.append("phone_number", "+12345678987")
-formData.append("profile_photo", new File(["testuser.jpg"], "testuser.jpg"))
-formData.append("is_mentor", "true")
-formData.append("is_active", "true")
-
 PATCH /myprofile/
-Content-Type: multipart/form-data
+Content-Type: Multipart/form-data
 Authorization: Required
 Host: https://team-production-system.onrender.com
 
-{
-	body: formData,
-}
+	body: MultiPartFormData,
+	Example: 
+
+	{
+		"username": "testusername",
+		"first_name": "testuserfirstname",
+		"last_name": "testuserlastname",
+		"email": "testuser@testemail.com",
+		"phone_number": "+12345678987",
+		"profile_photo": ".../testuser.jpg",
+		"is_mentor": true
+	}
+
 
 ```
 
@@ -363,12 +366,13 @@ GET - https://team-production-system.onrender.com/mentor/
 | `is_mentor`     | `boolean`   | Is mentor flag               |
 | `profile_photo` | `form-data` | User submitted profile photo |
 
-Nested Information:
+**Nested Information:**
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body             | Type     | Description                   |
+| :--------------- | :------- | :---------------------------  |
+| `about_me`       | `string` | Information about the user    |
+| `skills`         | `string` | Skills the user has           |
+| `availabilities` | `array`  | Availabilities the mentor has |
 
 #### Request Sample:
 
@@ -401,68 +405,13 @@ Host: https://team-production-system.onrender.com
 				"JavaScript",
 				"Django"
 			]
-		}
-	}
-]
-
-```
-
----
-
-## View Mentors List (User Authentication **Required**)
-
-- View a list of all user with the mentors flag
-
-```http
-GET - https://team-production-system.onrender.com/mentor/
-```
-
-| Body            | Type        | Description                  |
-| :-------------- | :---------- | :--------------------------- |
-| `pk`            | `int`       | The user pk                  |
-| `username`      | `string`    | Username                     |
-| `first_name`    | `string`    | User generated first name    |
-| `last_name`     | `string`    | User generated last name     |
-| `is_mentor`     | `boolean`   | Is mentor flag               |
-| `profile_photo` | `form-data` | User submitted profile photo |
-
-Nested Information:
-
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
-
-#### Request Sample:
-
-```
-GET /myprofile/
-Content-Type: json
-Authorization: Required
-Host: https://team-production-system.onrender.com
-
-{
-	""
-}
-
-```
-
-#### Response Example (200 OK)
-
-```
-[
-	{
-		"pk": 6,
-		"username": "testusername",
-		"first_name": "Test",
-		"last_name": "User",
-		"is_mentor": true,
-		"mentor_profile": {
-			"about_me": "I am test user",
-			"skills": [
-				"CSS",
-				"JavaScript",
-				"Django"
+			"availabilities": [
+				{
+					"pk": 2,
+					"mentor": 6,
+					"start_time": "2023-04-12T05:30:00Z",
+					"end_time": "2023-04-12T15:30:00Z"
+				},
 			]
 		}
 	}
@@ -525,6 +474,12 @@ GET - https://team-production-system.onrender.com/mentorinfo/
 | `about_me` | `string` | Information about the user |
 | `skills`   | `string` | Skills the user has        |
 
+**Nested Information:**
+
+| Body             | Type     | Description                   |
+| :--------------- | :------- | :---------------------------  |
+| `availabilities` | `array`  | Availabilities the mentor has |
+
 #### Request Sample:
 
 ```
@@ -545,6 +500,15 @@ Host: https://team-production-system.onrender.com
 {
 	"about_me": "Hi, I am so and so and do such and such",
 	"skills": "CSS"
+	"availabilities": [
+			{
+				"pk": 1,
+				"mentor": 2,
+				"start_time": "2023-04-12T14:30:00Z",
+				"end_time": "2023-04-12T15:30:00Z"
+			}
+		]
+
 }
 
 ```
@@ -635,10 +599,10 @@ No body returned to response
 GET - https://team-production-system.onrender.com/mentor/<str:skills>/
 ```
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body             | Type     | Description                |
+| :------------    | :------- | :------------------------- |
+| `about_me`       | `string` | Information about the user |
+| `skills`         | `string` | Skills the user has        |
 
 #### Request Sample:
 
