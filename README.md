@@ -1112,3 +1112,57 @@ Host: https://team-production-system.onrender.com
 ```
 
 ---
+
+## Update a Session (User Authentication **Required**)
+
+- Update a session status
+
+```http
+PATCH - https://team-production-system.onrender.com/sessionrequest/<int:pk>
+```
+
+| Body                 | Type        | Description                                      |
+| :------------------- | :---------- | :----------------------------------------------- |
+| `pk`                 | `int`       | The pk of the session                            |
+| `mentor_firstname`   | `string`    | The first name of the mentor attached to session |
+| `mentor_lastname`    | `string`    | The last name of the mentor attached to session  |
+| `mentor_avaliabilty` | `int`       | The avalibility pk attached to mentor            |
+| `mentor`             | `int`       | The pk of the mentor attached to the availabilty |
+| `mentee`             | `int`       | The pk of the mentee attached to the session     |
+| `start_time`         | `date-time` | Start time of the availabilty                    |
+| `end_time`           | `date-time` | Start time of the availabilty                    |
+| `status`             | `string`    | Status of the session                            |
+| `session_length`     | `int`       | Length of the session                            |
+
+#### Request Sample:
+
+```
+PATCH /sessionrequest/<int:pk>
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"status": "Confirmed"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+{
+	"pk": 8,
+	"mentor_first_name": "testuser",
+	"mentor_last_name": "testuser",
+	"mentor_availability": 8,
+	"mentee": 3,
+	"start_time": "2020-04-26T21:00:00Z",
+	"end_time": "2020-04-26T22:00:00Z",
+	"status": "Confirmed",
+	"session_length": 60
+}
+
+```
+
+---
