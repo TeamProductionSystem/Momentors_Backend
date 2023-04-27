@@ -166,20 +166,6 @@ class AvailabilityView(generics.ListCreateAPIView):
             return Response("Error: Failed to retrieve availabilities.",
                             status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request):
-        try:
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data,
-                                status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors,
-                                status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response("Error: Failed to create availability.",
-                            status=status.HTTP_400_BAD_REQUEST)
-
 
 # Time conversion helper function
 def time_convert(time, minutes):
