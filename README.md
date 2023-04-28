@@ -946,7 +946,6 @@ Authorization: Required
 Host: https://team-production-system.onrender.com
 
 {
-	"mentor": "4",
 	"start_time": "1999-12-31T14:30:00Z",
 	"end_time": "1999-12-31T15:30:00Z"
 }
