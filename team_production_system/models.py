@@ -42,9 +42,9 @@ class Mentor(models.Model):
 
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, primary_key=True)
-    about_me = models.TextField(max_length=1000)
+    about_me = models.TextField(max_length=1000, default='')
     skills = MultiSelectField(choices=SKILLS_CHOICES,
-                              max_choices=7, max_length=52)
+                              max_choices=7, max_length=52, default='HTML')
 
     def __str__(self):
         return self.user.username
@@ -54,7 +54,7 @@ class Mentor(models.Model):
 class Mentee(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, primary_key=True)
-    team_number = models.IntegerField()
+    team_number = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
