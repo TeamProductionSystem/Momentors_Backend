@@ -29,6 +29,13 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ('pk', 'mentor', 'start_time', 'end_time',)
+        read_only_fields = ('mentor',)
+
+    def create(self, validated_data):
+        mentor = Mentor.objects.get(user=self.context['request'].user)
+        availability = Availability.objects.create(
+            mentor=mentor, **validated_data)
+        return availability
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):
