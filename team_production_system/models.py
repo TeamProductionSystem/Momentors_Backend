@@ -18,7 +18,8 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=75)
     last_name = models.CharField(max_length=75)
     email = models.EmailField(max_length=75, unique=True)
-    phone_number = PhoneNumberField(null=True, blank=True, unique=True)
+    phone_number = PhoneNumberField(
+        null=True, blank=True, unique=True, default="")
     profile_photo = models.ImageField(
         upload_to='profile_photo', blank=True, null=True)
 
@@ -118,7 +119,7 @@ class Session(models.Model):
             message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email],
-            )
+        )
 
     def session_cancel_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
