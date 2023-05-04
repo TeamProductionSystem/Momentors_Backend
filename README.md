@@ -120,11 +120,12 @@ API URL - https://team-production-system.onrender.com
   POST https://team-production-system.onrender.com/auth/users/
 ```
 
-| Body       | Type     | Description             |
-| :--------- | :------- | :---------------------- |
-| `username` | `string` | New Username            |
-| `password` | `string` | User generated password |
-| `email`    | `string` | User generated email    |
+| Body          | Type     | Description             |
+| :------------ | :------- | :---------------------- |
+| `username`    | `string` | New Username            |
+| `password`    | `string` | User generated password |
+| `re_password` | `string` | User generated password |
+| `email`       | `string` | User generated email    |
 
 #### Request Sample:
 
@@ -135,8 +136,9 @@ Authorization: N/A
 Host: https://team-production-system.onrender.com
 {
 	"username": "TestUserLogin" ,
-	"password": "TestUserPassword",
 	"email": "testemail@fake.com"
+	"password": "TestUserPassword",
+	"re_password": "TestUserPassword",
 }
 
 ```
