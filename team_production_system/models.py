@@ -5,10 +5,7 @@ from django.core.mail import send_mail
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from datetime import timedelta
-from smtplib import SMTPRecipientsRefused
 
-
-# Create your models here.
 
 # Model for all users
 class CustomUser(AbstractUser):
@@ -19,7 +16,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=75)
     email = models.EmailField(max_length=75, unique=True)
     phone_number = PhoneNumberField(
-        null=True, blank=True, unique=True, default=" ")
+        null=True, blank=True, unique=True, default=None)
     profile_photo = models.ImageField(
         upload_to='profile_photo', blank=True, null=True)
 
