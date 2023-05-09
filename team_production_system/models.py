@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from datetime import timedelta
+from django.core.files.storage import default_storage
+import random
 
 
 # Model for all users
@@ -22,6 +24,19 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.get_default_photo()
+
+        super().save(*args, **kwargs)
+
+    def get_default_photo(self):
+        files = default_storage.listdir('random_photo')[1]
+        filename = random.choice(files)
+
+        with default_storage.open(f'random_photo/{filename}') as file:
+            self.profile_photo.save(filename, file, save=False)
 
 
 # The mentor model that allows the mentor to select skills
