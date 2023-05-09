@@ -13,6 +13,8 @@ from .custom_permissions import IsMentorMentee
 from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
 from django.core.exceptions import ValidationError
+from django.conf import settings
+import boto3
 
 
 # View to update the user profile information
@@ -38,6 +40,27 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return user
+
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()
+
+        if 'first_name' in request.data:
+            user.first_name = request.data['first_name']
+        if 'last_name' in request.data:
+            user.last_name = request.data['last_name']
+        if 'email' in request.data:
+            user.email = request.data['email']
+
+        if 'profile_photo' in request.FILES:
+            if user.profile_photo:
+                s3 = boto3.client('s3')
+                s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
+
+            user.profile_photo = request.FILES['profile_photo']
+
+        user.save()
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # View to see a list of all users flagged as a mentor
