@@ -42,14 +42,13 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         return user
 
     def patch(self, request, *args, **kwargs):
-        user = self.get_object()
+        user = self.request.user
 
-        if 'first_name' in request.data:
-            user.first_name = request.data['first_name']
-        if 'last_name' in request.data:
-            user.last_name = request.data['last_name']
-        if 'email' in request.data:
-            user.email = request.data['email']
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'is_mentor', 'is_mentee', 'is_active']
+
+        for field in fields:
+            if field in request.data:
+                setattr(user, field, request.data[field])
 
         if 'profile_photo' in request.FILES:
             if user.profile_photo:
