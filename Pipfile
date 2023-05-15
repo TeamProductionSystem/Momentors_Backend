@@ -20,6 +20,7 @@ django-imagekit = "*"
 django-storages = "*"
 django-multiselectfield = "*"
 boto3 = "*"
+sentry-sdk = {extras = ["django"], version = "*"}
 
 [dev-packages]
 autopep8 = "*"
