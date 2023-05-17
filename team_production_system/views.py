@@ -216,8 +216,7 @@ class SessionRequestView(generics.ListCreateAPIView):
         # Ensure no overlap between mentor or mentee's sessions
         mentor = mentor_availability.mentor
 
-        mentee_id = self.request.data['mentee']
-        mentee = Mentee.objects.get(user_id=mentee_id)
+        mentee = Mentee.objects.get(user=self.request.user)
 
         start_time = self.request.data['start_time']
         session_length = self.request.data['session_length']
