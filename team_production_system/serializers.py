@@ -1,6 +1,7 @@
 from rest_framework import serializers, fields
 from .models import Mentor, Mentee, CustomUser
 from .models import Availability, Session
+from django.utils import timezone
 
 
 # The serializer for the user information
@@ -81,7 +82,8 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     def get_availabilities(self, obj):
         try:
-            availabilities = Availability.objects.filter(mentor=obj.pk)
+            availabilities = Availability.objects.filter(mentor=obj.pk,
+                                                         end_time__gte=timezone.now())
             serializer = AvailabilitySerializer(
                 instance=availabilities, many=True)
             return serializer.data
@@ -122,4 +124,4 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
                   'mentor_availability', 'mentee', 'mentee_first_name', 'mentee_last_name', 'start_time', 'end_time', 'status', 'session_length',)
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
-                            'mentee', 'mentee_first_name','mentee_last_name')
+                            'mentee', 'mentee_first_name', 'mentee_last_name')
