@@ -353,7 +353,7 @@ Host: https://team-production-system.onrender.com
 
 ## View Mentors List (User Authentication **Required**)
 
-- View a list of all user with the mentors flag
+- View a list of all user with the mentors flag (Expired availabilties are filtered out)
 
 ```http
 GET - https://team-production-system.onrender.com/mentor/
