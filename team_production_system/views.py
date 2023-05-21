@@ -244,7 +244,8 @@ class SessionRequestView(generics.ListCreateAPIView):
             # Set the mentor for the session
             else:
                 serializer.save(mentor=mentor,
-                                mentor_availability=mentor_availability)
+                                mentor_availability=mentor_availability,
+                                mentee=mentee)
 
             # Email notification to the mentor
                 session = serializer.instance
@@ -277,7 +278,8 @@ class SessionRequestView(generics.ListCreateAPIView):
             # Set the mentor for the session
             else:
                 serializer.save(mentor=mentor,
-                                mentor_availability=mentor_availability)
+                                mentor_availability=mentor_availability,
+                                mentee=mentee)
 
             # Email notification to the mentor
                 session = serializer.instance
@@ -311,4 +313,5 @@ class SessionView(generics.ListAPIView):
     def get_queryset(self):
         # Get sessions for the logged in user
         return Session.objects.filter(Q(mentor__user=self.request.user) |
-                                      Q(mentee__user=self.request.user))
+                                      Q(mentee__user=self.request.user),
+                                      start_time__gte=datetime.now(timezone.utc) - timedelta(hours=24))
