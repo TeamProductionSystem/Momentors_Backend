@@ -314,4 +314,4 @@ class SessionView(generics.ListAPIView):
         # Get sessions for the logged in user
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
-                                      start_time__gte=datetime.now(timezone.utc) - timedelta(hours=24))
+                                      start_time__gte=timezone.now() - timedelta(hours=24))
