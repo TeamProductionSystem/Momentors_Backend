@@ -44,13 +44,23 @@ class CustomUser(AbstractUser):
 class Mentor(models.Model):
 
     SKILLS_CHOICES = [
-        ('HTML', 'HTML'),
+        ('AWS S3', 'AWS S3'),
+        ('Bootstrap', 'Bootstrap'),
         ('CSS', 'CSS'),
-        ('JavaScript', 'JavaScript'),
-        ('React', 'React'),
-        ('Python', 'Python'),
         ('Django', 'Django'),
-        ('Django REST', 'Django REST')
+        ('Git', 'Git'),
+        ('GitHub', 'GitHub'),
+        ('HTML', 'HTML'),
+        ('Insomnia', 'Insomnia'),
+        ('JavaScript', 'JavaScript'),
+        ('MUI', 'MUI'),
+        ('Other', 'Other'),
+        ('PostgreSQL', 'PostgreSQL'),
+        ('Postico', 'Postico'),
+        ('Python', 'Python'),
+        ('React', 'React'),
+        ('SQL', 'SQL'),
+        ('Time Management', 'Time Management')
     ]
 
     user = models.OneToOneField(
