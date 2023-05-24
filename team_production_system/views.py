@@ -44,7 +44,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         user = self.request.user
 
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'is_mentor', 'is_mentee', 'is_active']
+        fields = ['first_name', 'last_name', 'email',
+                  'phone_number', 'is_mentor', 'is_mentee', 'is_active']
 
         for field in fields:
             if field in request.data:
@@ -53,7 +54,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         if 'profile_photo' in request.FILES:
             if user.profile_photo:
                 s3 = boto3.client('s3')
-                s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
+                s3.delete_object(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
 
             user.profile_photo = request.FILES['profile_photo']
 
@@ -315,3 +317,15 @@ class SessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       start_time__gte=timezone.now() - timedelta(hours=24))
+
+
+class ArchiveSessionView(generics.ListAPIView):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Get sessions for the logged in user
+        return Session.objects.filter(Q(mentor__user=self.request.user) |
+                                      Q(mentee__user=self.request.user),
+                                      start_time__lt=timezone.now() - timedelta(hours=24))
