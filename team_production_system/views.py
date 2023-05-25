@@ -190,10 +190,14 @@ class AvailabilityView(generics.ListCreateAPIView):
 
 
 # Time conversion helper function
+# During a session request, must convert start_time string to a datetime
+# object in order to use timedelta to check for overlapping sessions
 def time_convert(time, minutes):
-    datetime_str = time + '00'
-    datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S%z')
+    # Convert string from front end to datetime object
+    datetime_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+    # Change time dependent on session length minutes
     datetime_delta = datetime_obj - timedelta(minutes=minutes)
+    # Convert datetime object back to string
     new_start_time = datetime.strftime(
         datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
     return new_start_time
