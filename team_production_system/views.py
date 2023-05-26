@@ -31,12 +31,12 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            user = self.request.user
+            return user
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'},
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)},
+            return Response({'error': 'An unexpected error occured.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return user
