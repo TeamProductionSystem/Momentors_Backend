@@ -143,7 +143,19 @@ class Session(models.Model):
             recipient_list=[self.mentor.user.email],
         )
 
-    def session_cancel_notify(self):
+    def mentee_session_notify(self):
+        session_time = self.start_time.strftime('%-I:%M %p')
+        session_date = self.start_time.strftime('%A, %B %-d')
+
+        send_mail(
+            subject=(
+                f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your session request'),
+            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} from Team {self.mentor.team_number} has confirmed your request for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentee.user.email],
+        )
+
+    def mentor_cancel_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
 
@@ -152,8 +164,19 @@ class Session(models.Model):
                 f'{self.mentee.user.first_name} {self.mentee.user.last_name} has canceled their session'),
             message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has canceled their {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentor.user.email, self.mentee.user.email]
+            recipient_list=[self.mentor.user.email],
+        )
 
+    def mentee_cancel_notify(self):
+        session_time = self.start_time.strftime('%-I:%M %p')
+        session_date = self.start_time.strftime('%A, %B %-d')
+
+        send_mail(
+            subject=(
+                f'{self.mentor.user.first_name} {self.mentor.user.last_name} has canceled your session'),
+            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} from Team {self.mentor.team_number} has canceled the {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentee.user.email],
         )
 
 

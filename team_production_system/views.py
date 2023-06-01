@@ -304,7 +304,14 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
         if status == 'Canceled':
             session.status = status
             session.save()
-            session.session_cancel_notify()
+            if self.request.user.is_mentee:
+                session.mentor_cancel_notify()
+            else:
+                session.mentee_cancel_notify()
+        elif status == 'Confirmed':
+            session.status = status
+            session.save()
+            session.mentee_session_notify()
         else:
             serializer.save()
 
