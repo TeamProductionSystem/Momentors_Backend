@@ -31,12 +31,12 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            user = self.request.user
+            return user
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'},
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)},
+            return Response({'error': 'An unexpected error occured.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return user
@@ -192,10 +192,14 @@ class AvailabilityView(generics.ListCreateAPIView):
 
 
 # Time conversion helper function
+# During a session request, must convert start_time string to a datetime
+# object in order to use timedelta to check for overlapping sessions
 def time_convert(time, minutes):
-    datetime_str = time + '00'
-    datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S%z')
+    # Convert string from front end to datetime object
+    datetime_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+    # Change time dependent on session length minutes
     datetime_delta = datetime_obj - timedelta(minutes=minutes)
+    # Convert datetime object back to string
     new_start_time = datetime.strftime(
         datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
     return new_start_time
