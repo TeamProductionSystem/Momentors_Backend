@@ -26,10 +26,17 @@ class CustomUser(AbstractUser):
         return self.username
 
     def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.get_default_photo()
+        # Check if user is a new user
+        is_new_user = self.pk is None
 
         super().save(*args, **kwargs)
+
+        if is_new_user:
+            # Instantiate notification model for new user
+            NotificationSettings.objects.create(user=self)
+            # Assign default photo to a new user
+            self.get_default_photo()
+            self.save()
 
     def get_default_photo(self):
         files = default_storage.listdir('random_photo')[1]
@@ -115,7 +122,7 @@ class Session(models.Model):
         ('Canceled', 'Canceled'),
         ('Completed', 'Completed')
     ]
-    # The mentee will be able to schedule a 30 minute or 60 mintue session.
+    # The mentee will be able to schedule a 30 minute or 60 minute session.
     status = models.CharField(
         max_length=10, choices=status_choices, default='Pending')
     session_length_choices = [
@@ -131,6 +138,7 @@ class Session(models.Model):
     def __str__(self):
         return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
 
+    # Notify a mentor that a mentee has requested a session
     def mentor_session_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
@@ -143,6 +151,7 @@ class Session(models.Model):
             recipient_list=[self.mentor.user.email],
         )
 
+    # Notify a mentee that a mentor has confirmed a session request
     def mentee_session_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
@@ -150,11 +159,12 @@ class Session(models.Model):
         send_mail(
             subject=(
                 f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your session request'),
-            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} from Team {self.mentor.team_number} has confirmed your request for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}.'),
+            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your request for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email],
         )
 
+    # Notify a mentor that a mentee has canceled a scheduled session
     def mentor_cancel_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
@@ -167,6 +177,7 @@ class Session(models.Model):
             recipient_list=[self.mentor.user.email],
         )
 
+    # Notify a mentee that a mentor has canceled a scheduled session
     def mentee_cancel_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
@@ -174,19 +185,22 @@ class Session(models.Model):
         send_mail(
             subject=(
                 f'{self.mentor.user.first_name} {self.mentor.user.last_name} has canceled your session'),
-            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} from Team {self.mentor.team_number} has canceled the {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} has canceled the {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email],
         )
 
 
-# Notification model that will the mentor to be alerted when
-# they have a session request.
-class Notification(models.Model):
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='notifications')
-    message = models.CharField(max_length=500)
-    created_at = models.DateTimeField(auto_now_add=True)
+# Notification settings model that allows users to choose to be alerted when
+# they have a session requested, confirmed, or canceled.
+class NotificationSettings(models.Model):
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name='notification_settings')
+    session_requested = models.BooleanField(default=False)
+    session_confirmed = models.BooleanField(default=False)
+    session_canceled = models.BooleanField(default=False)
+    fifteen_minute_alert = models.BooleanField(default=False)
+    sixty_minute_alert = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.message
+        return f'Notification settings for {self.user.first_name} {self.user.last_name}'

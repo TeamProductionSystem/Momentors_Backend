@@ -1,15 +1,15 @@
 from .models import CustomUser, Mentee, Availability
-from .models import Session, Mentor
+from .models import Session, Mentor, NotificationSettings
 from rest_framework import generics, status
 from .serializers import CustomUserSerializer, AvailabilitySerializer
-from .serializers import SessionSerializer
+from .serializers import SessionSerializer, NotificationSettingsSerializer
 from .serializers import MentorListSerializer, MentorProfileSerializer
 from .serializers import MenteeListSerializer, MenteeProfileSerializer
 from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from .custom_permissions import IsMentorMentee
+from .custom_permissions import IsMentorMentee, NotificationSettingsPermission
 from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
 from django.core.exceptions import ValidationError
@@ -44,7 +44,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         user = self.request.user
 
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'is_mentor', 'is_mentee', 'is_active']
+        fields = ['first_name', 'last_name', 'email',
+                  'phone_number', 'is_mentor', 'is_mentee', 'is_active']
 
         for field in fields:
             if field in request.data:
@@ -53,7 +54,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         if 'profile_photo' in request.FILES:
             if user.profile_photo:
                 s3 = boto3.client('s3')
-                s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
+                s3.delete_object(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
 
             user.profile_photo = request.FILES['profile_photo']
 
@@ -194,7 +196,8 @@ class AvailabilityView(generics.ListCreateAPIView):
 # object in order to use timedelta to check for overlapping sessions
 def time_convert(time, minutes):
     # Convert string from front end to datetime object
-    datetime_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+    datetime_obj = datetime.strptime(
+        time, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
     # Change time dependent on session length minutes
     datetime_delta = datetime_obj - timedelta(minutes=minutes)
     # Convert datetime object back to string
@@ -285,9 +288,10 @@ class SessionRequestView(generics.ListCreateAPIView):
                                 mentor_availability=mentor_availability,
                                 mentee=mentee)
 
-            # Email notification to the mentor
+                # Email notification to the mentor
                 session = serializer.instance
-                session.mentor_session_notify()
+                if session.mentee.user.notification_settings.session_requested:
+                    session.mentor_session_notify()
 
 
 class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -297,21 +301,30 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     # Update the session status
     def perform_update(self, serializer):
-        # Email notification if the session is cancelled
         session = serializer.instance
         status = self.request.data.get('status')
 
+        # Notify users if session is canceled
         if status == 'Canceled':
             session.status = status
             session.save()
-            if self.request.user.is_mentee:
+
+            # If mentee cancels session, check mentor notification settings before notifying
+            if self.request.user.is_mentee and session.mentor.user.notification_settings.session_canceled:
                 session.mentor_cancel_notify()
-            else:
+
+            # If mentor cancels session, check mentee notification settings before notifying
+            elif self.request.user.is_mentor and session.mentee.user.notification_settings.session_canceled:
                 session.mentee_cancel_notify()
+
+        # Notify mentee when a mentor confirms session request
         elif status == 'Confirmed':
             session.status = status
             session.save()
-            session.mentee_session_notify()
+
+            # Check mentee's notification settings before notifying
+            if session.mentee.user.notification_settings.session_confirmed:
+                session.mentee_session_notify()
         else:
             serializer.save()
 
@@ -326,3 +339,9 @@ class SessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       start_time__gte=timezone.now() - timedelta(hours=24))
+
+
+class NotificationSettingsView(generics.RetrieveUpdateAPIView):
+    queryset = NotificationSettings.objects.all()
+    serializer_class = NotificationSettingsSerializer
+    permission_classes = [NotificationSettingsPermission]
