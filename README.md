@@ -1062,7 +1062,7 @@ Host: https://team-production-system.onrender.com
 - Get a list of all archived sessions (start time earlier than 24 hrs before time of request)
 
 ```http
-GET - https://team-production-system.onrender.com/sessionrequest/
+GET - https://team-production-system.onrender.com/archivesession/
 ```
 
 | Body                 | Type        | Description                                      |
