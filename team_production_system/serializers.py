@@ -1,6 +1,6 @@
 from rest_framework import serializers, fields
 from .models import Mentor, Mentee, CustomUser
-from .models import Availability, Session
+from .models import Availability, Session, NotificationSettings
 from django.utils import timezone
 
 
@@ -125,3 +125,12 @@ class SessionSerializer(serializers.ModelSerializer):
                   'mentor_availability', 'mentee', 'mentee_first_name', 'mentee_last_name', 'start_time', 'end_time', 'status', 'session_length',)
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
                             'mentee', 'mentee_first_name', 'mentee_last_name')
+
+
+# Serializer for notification settings
+class NotificationSettingsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NotificationSettings
+        fields = ('pk', 'user', 'session_requested', 'session_confirmed',
+                  'session_canceled', 'fifteen_minute_alert', 'sixty_minute_alert',)
