@@ -7,6 +7,7 @@ from multiselectfield import MultiSelectField
 from datetime import timedelta
 from django.core.files.storage import default_storage
 import random
+import secrets
 
 
 # Model for all users
@@ -151,17 +152,29 @@ class Session(models.Model):
             recipient_list=[self.mentor.user.email],
         )
 
-    # Notify a mentee that a mentor has confirmed a session request
+    # Create a a random string of characters to be used as a session code
+    def create_session_code(self):
+        # Set the start of the code to be 'MomentumMentorSession'
+        code = 'MomentumMentorSession'
+        # Append 20 random characters to the code
+        code += secrets.token_urlsafe(20)
+        return code
+
+    # Create a jitsi meeting link for the session with the randomly generated code
+    def create_meeting_link(self):
+        code = self.create_session_code()
+        return f'https://meet.jit.si/{code}'
+
+    # Notify the mentee and mentor the requested session has been confirmed
     def mentee_session_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
 
         send_mail(
-            subject=(
-                f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your session request'),
-            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your request for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}.'),
+            subject=('Mentor Session Confirmed'),
+            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentee.user.email],
+            recipient_list=[self.mentee.user.email, self.mentor.user.email],
         )
 
     # Notify a mentor that a mentee has canceled a scheduled session
