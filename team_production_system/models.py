@@ -165,15 +165,14 @@ class Session(models.Model):
         code = self.create_session_code()
         return f'https://meet.jit.si/{code}'
 
-    # Notify a mentee that a mentor has confirmed a session request
+    # Notify the mentee and mentor the requested session has been confirmed
     def mentee_session_notify(self):
         session_time = self.start_time.strftime('%-I:%M %p')
         session_date = self.start_time.strftime('%A, %B %-d')
 
         send_mail(
-            subject=(
-                f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your session request'),
-            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} has confirmed your request for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
+            subject=('Mentor Session Confirmed'),
+            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email, self.mentor.user.email],
         )
