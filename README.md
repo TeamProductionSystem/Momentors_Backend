@@ -665,7 +665,7 @@ GET - https://team-production-system.onrender.com/mentee/
 | `username`      | `string`    | Username                     |
 | `first_name`    | `string`    | User generated first name    |
 | `last_name`     | `string`    | User generated last name     |
-| `is_mentee`     | `boolean`   | Is mentor flag               |
+| `is_mentee`     | `boolean`   | Is mentee flag               |
 | `profile_photo` | `form-data` | User submitted profile photo |
 
 Nested Information:
@@ -1221,6 +1221,54 @@ Host: https://team-production-system.onrender.com
 	"end_time": "2020-04-26T22:00:00Z",
 	"status": "Confirmed",
 	"session_length": 60
+}
+
+```
+
+---
+
+## Update Notification Settings (User Authentication **Required**)
+
+- Update user's notification settings
+
+```http
+PATCH - https://team-production-system.onrender.com/notificationsettings/<int:pk>
+```
+
+| Body                   | Type      | Description                            |
+| :--------------------- | :-------- | :------------------------------------- |
+| `pk`                   | `int`     | The pk of the notification             |
+| `session_requested`    | `boolean` | Session requested notification flag    |
+| `session_confirmed`    | `boolean` | Session confirmation notification flag |
+| `session_canceled`     | `boolean` | Session cancellation notification flag |
+| `fifteen_minute_alert` | `boolean` | 15-minute alert notification flag      |
+| `sixty_minute_alert`   | `int`     | 60-minute alert notification flag      |
+
+#### Request Sample:
+
+```
+PATCH /notificationsettings/<int:pk>
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"sixty_minute_alert": "True"
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+{
+	"pk": 4,
+	"user": 3,
+	"session_requested": false,
+	"session_confirmed": false,
+	"session_canceled": true,
+	"fifteen_minute_alert": false,
+	"sixty_minute_alert": true
 }
 
 ```

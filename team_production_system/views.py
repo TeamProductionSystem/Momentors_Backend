@@ -1,15 +1,15 @@
 from .models import CustomUser, Mentee, Availability
-from .models import Session, Mentor
+from .models import Session, Mentor, NotificationSettings
 from rest_framework import generics, status
 from .serializers import CustomUserSerializer, AvailabilitySerializer
-from .serializers import SessionSerializer
+from .serializers import SessionSerializer, NotificationSettingsSerializer
 from .serializers import MentorListSerializer, MentorProfileSerializer
 from .serializers import MenteeListSerializer, MenteeProfileSerializer
 from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from .custom_permissions import IsMentorMentee
+from .custom_permissions import IsMentorMentee, NotificationSettingsPermission
 from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
 from django.core.exceptions import ValidationError
@@ -31,12 +31,12 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            user = self.request.user
+            return user
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'},
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)},
+            return Response({'error': 'An unexpected error occured.'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return user
@@ -192,10 +192,15 @@ class AvailabilityView(generics.ListCreateAPIView):
 
 
 # Time conversion helper function
+# During a session request, must convert start_time string to a datetime
+# object in order to use timedelta to check for overlapping sessions
 def time_convert(time, minutes):
-    datetime_str = time + '00'
-    datetime_obj = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S%z')
+    # Convert string from front end to datetime object
+    datetime_obj = datetime.strptime(
+        time, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+    # Change time dependent on session length minutes
     datetime_delta = datetime_obj - timedelta(minutes=minutes)
+    # Convert datetime object back to string
     new_start_time = datetime.strftime(
         datetime_delta, '%Y-%m-%d %H:%M:%S%z')[:-2]
     return new_start_time
@@ -283,9 +288,10 @@ class SessionRequestView(generics.ListCreateAPIView):
                                 mentor_availability=mentor_availability,
                                 mentee=mentee)
 
-            # Email notification to the mentor
+                # Email notification to the mentor
                 session = serializer.instance
-                session.mentor_session_notify()
+                if session.mentee.user.notification_settings.session_requested:
+                    session.mentor_session_notify()
 
 
 class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -295,14 +301,30 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     # Update the session status
     def perform_update(self, serializer):
-        # Email notification if the session is cancelled
         session = serializer.instance
         status = self.request.data.get('status')
 
+        # Notify users if session is canceled
         if status == 'Canceled':
             session.status = status
             session.save()
-            session.session_cancel_notify()
+
+            # If mentee cancels session, check mentor notification settings before notifying
+            if self.request.user.is_mentee and session.mentor.user.notification_settings.session_canceled:
+                session.mentor_cancel_notify()
+
+            # If mentor cancels session, check mentee notification settings before notifying
+            elif self.request.user.is_mentor and session.mentee.user.notification_settings.session_canceled:
+                session.mentee_cancel_notify()
+
+        # Notify mentee when a mentor confirms session request
+        elif status == 'Confirmed':
+            session.status = status
+            session.save()
+
+            # Check mentee's notification settings before notifying
+            if session.mentee.user.notification_settings.session_confirmed:
+                session.mentee_session_notify()
         else:
             serializer.save()
 
@@ -319,6 +341,7 @@ class SessionView(generics.ListAPIView):
                                       start_time__gte=timezone.now() - timedelta(hours=24))
 
 
+<<<<<<< HEAD
 class ArchiveSessionView(generics.ListAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
@@ -329,3 +352,9 @@ class ArchiveSessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       start_time__lt=timezone.now() - timedelta(hours=24))
+=======
+class NotificationSettingsView(generics.RetrieveUpdateAPIView):
+    queryset = NotificationSettings.objects.all()
+    serializer_class = NotificationSettingsSerializer
+    permission_classes = [NotificationSettingsPermission]
+>>>>>>> main
