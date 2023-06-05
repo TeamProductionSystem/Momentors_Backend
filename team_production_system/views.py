@@ -341,7 +341,6 @@ class SessionView(generics.ListAPIView):
                                       start_time__gte=timezone.now() - timedelta(hours=24))
 
 
-<<<<<<< HEAD
 class ArchiveSessionView(generics.ListAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
@@ -352,9 +351,9 @@ class ArchiveSessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       start_time__lt=timezone.now() - timedelta(hours=24))
-=======
+
+
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
     queryset = NotificationSettings.objects.all()
     serializer_class = NotificationSettingsSerializer
     permission_classes = [NotificationSettingsPermission]
->>>>>>> main
