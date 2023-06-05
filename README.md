@@ -1057,6 +1057,64 @@ Host: https://team-production-system.onrender.com
 
 ---
 
+## Archived Sessions (User Authentication **Required**)
+
+- Get a list of all archived sessions (start time earlier than 24 hrs before time of request)
+
+```http
+GET - https://team-production-system.onrender.com/archivesession/
+```
+
+| Body                 | Type        | Description                                      |
+| :------------------- | :---------- | :----------------------------------------------- |
+| `pk`                 | `int`       | The pk of the session                            |
+| `mentor_firstname`   | `string`    | The first name of the mentor attached to session |
+| `mentor_lastname`    | `string`    | The last name of the mentor attached to session  |
+| `mentor_avaliabilty` | `int`       | The avalibility pk attached to mentor            |
+| `mentor`             | `int`       | The pk of the mentor attached to the availabilty |
+| `mentee`             | `int`       | The pk of the mentee attached to the session     |
+| `start_time`         | `date-time` | Start time of the availabilty                    |
+| `end_time`           | `date-time` | Start time of the availabilty                    |
+| `status`             | `string`    | Status of the session                            |
+| `session_length`     | `int`       | Length of the session                            |
+
+#### Request Sample:
+
+```
+GET /archivesession/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```
+[
+	{
+		"pk": 1,
+		"mentor_first_name": "Test-mentor",
+		"mentor_last_name": "Test-mentor",
+		"mentor_availability": 1,
+		"mentee": 3,
+		"mentee_first_name": "Test-mentee",
+		"mentee_last_name": "Test-mentee",
+		"start_time": "2023-05-22T12:00:00Z",
+		"end_time": "2023-05-22T12:30:00Z",
+		"status": "Confirmed",
+		"session_length": 30
+	}
+]
+
+```
+
+---
+
 ## Create a Session (User Authentication **Required**)
 
 - Create a session with a mentor
