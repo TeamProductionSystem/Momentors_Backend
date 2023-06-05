@@ -974,7 +974,7 @@ Host: https://team-production-system.onrender.com
 ````http
 
 ```http
-GET - https://team-production-system.onrender.com/sessionrequest/
+GET - https://team-production-system.onrender.com/session/
 ````
 
 | Body                 | Type        | Description                                      |
@@ -993,7 +993,7 @@ GET - https://team-production-system.onrender.com/sessionrequest/
 #### Request Sample:
 
 ```
-GET /sessionrequest/
+GET /session/
 Content-Type: json
 Authorization: Required
 Host: https://team-production-system.onrender.com
