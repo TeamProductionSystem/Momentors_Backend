@@ -30,7 +30,7 @@ class CustomUser(AbstractUser):
     def save(self, *args, **kwargs):
         # Check if user is a new user
         is_new_user = self.pk is None
-
+        self.username = self.username.lower()
         super().save(*args, **kwargs)
 
         if is_new_user:
