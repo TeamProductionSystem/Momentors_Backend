@@ -341,6 +341,18 @@ class SessionView(generics.ListAPIView):
                                       start_time__gte=timezone.now() - timedelta(hours=24))
 
 
+# View to show mentor timeslots a mentee can sign up for
+class SessionSignupListView(generics.ListAPIView):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Filter out pending and confirmed sessions
+        return Session.objects.filter(Q(status='Pending') | Q(status='Confirmed'),
+                                      start_time__gte=timezone.now() - timedelta(hours=24))
+
+
 class ArchiveSessionView(generics.ListAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
