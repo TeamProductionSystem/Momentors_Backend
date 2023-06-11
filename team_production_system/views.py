@@ -348,8 +348,8 @@ class SessionSignupListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Filter out pending and confirmed sessions
-        return Session.objects.filter(Q(status='Pending') | Q(status='Confirmed'),
+        # Filter out completed sessions
+        return Session.objects.exclude(status='Completed',
                                       start_time__gte=timezone.now() - timedelta(hours=24))
 
 
