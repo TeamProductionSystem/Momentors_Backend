@@ -350,7 +350,7 @@ class SessionSignupListView(generics.ListAPIView):
     def get_queryset(self):
         # Filter out completed sessions
         return Session.objects.exclude(status='Completed',
-                                      start_time__gte=timezone.now() - timedelta(hours=24))
+                                      start_time__lt=timezone.now() - timedelta(hours=24))
 
 
 class ArchiveSessionView(generics.ListAPIView):
