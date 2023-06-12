@@ -172,23 +172,27 @@ class AvailabilityView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Get the Mentor instance for the logged in user
+        mentor = Mentor.objects.get(user=self.request.user)
         # Exclude any availability that has an end time in the past
-        return Availability.objects.filter(end_time__gte=timezone.now())
+        # and filter availabilities belonging to the logged in user's mentor
+        return Availability.objects.filter(mentor=mentor,
+                                           end_time__gte=timezone.now())
 
     def get(self, request):
         try:
             availabilities = self.get_queryset()
 
             # Check if there are any availabilities
-            if not availabilities:
+            if len(availabilities) == 0:
                 return Response("No open availabilities.",
                                 status=status.HTTP_404_NOT_FOUND)
 
             serializer = self.serializer_class(availabilities, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response("Error: Failed to retrieve availabilities.",
-                            status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({"error": "Failed to retrieve mentee list."},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # Time conversion helper function
@@ -350,7 +354,7 @@ class SessionSignupListView(generics.ListAPIView):
     def get_queryset(self):
         # Filter out completed sessions
         return Session.objects.exclude(status='Completed',
-                                      start_time__lt=timezone.now() - timedelta(hours=24))
+                                       start_time__lt=timezone.now() - timedelta(hours=24))
 
 
 class ArchiveSessionView(generics.ListAPIView):
