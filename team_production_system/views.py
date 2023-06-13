@@ -179,27 +179,10 @@ class AvailabilityView(generics.ListCreateAPIView):
         return Availability.objects.filter(mentor=mentor,
                                            end_time__gte=timezone.now())
 
-    def get(self, request):
-        try:
-            availabilities = self.get_queryset()
-
-            # Check if there are any availabilities
-            # If no availabilities, return an empty array
-            if len(availabilities) == 0:
-                return Response([], status=status.HTTP_200_OK)
-
-            serializer = self.serializer_class(availabilities, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            # Add logging or print statement here
-            print(e)
-            return Response({"error": "Failed to retrieve availabilities list."},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Time conversion helper function
 # During a session request, must convert start_time string to a datetime
 # object in order to use timedelta to check for overlapping sessions
-
 
 def time_convert(time, minutes):
     # Convert string from front end to datetime object
