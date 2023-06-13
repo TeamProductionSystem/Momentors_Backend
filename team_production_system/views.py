@@ -191,7 +191,7 @@ class AvailabilityView(generics.ListCreateAPIView):
             serializer = self.serializer_class(availabilities, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception:
-            return Response({"error": "Failed to retrieve mentee list."},
+            return Response({"error": "Failed to retrieve availabilities list."},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
