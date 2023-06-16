@@ -19,7 +19,6 @@ import boto3
 
 # View to update the user profile information
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser]
@@ -67,7 +66,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 # View to see a list of all users flagged as a mentor
 class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = CustomUser.objects.filter(is_mentor=True)
+    queryset = CustomUser.objects.filter(
+        is_mentor=True).select_related("mentor")
     serializer_class = MentorListSerializer
 
     def get(self, request, *args, **kwargs):
@@ -128,7 +128,8 @@ class MenteeList(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = CustomUser.objects.filter(is_mentee=True)
+            queryset = CustomUser.objects.filter(
+                is_mentee=True).select_related("mentee")
         except Exception as e:
             return Response({"error": "Failed to retrieve mentee list."},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
