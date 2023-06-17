@@ -178,7 +178,7 @@ class AvailabilityView(generics.ListCreateAPIView):
         # Exclude any availability that has an end time in the past
         # and filter availabilities belonging to the logged in user's mentor
         return Availability.objects.filter(mentor=mentor,
-                                           end_time__gte=timezone.now())
+                                           end_time__gte=timezone.now()).select_related('mentor__user')
 
 
 # Time conversion helper function
