@@ -24,7 +24,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         ]
 
 
-# The mentor availability serializerx
+# The mentor availability serializer
 class AvailabilitySerializer(serializers.ModelSerializer):
 
     class Meta:
