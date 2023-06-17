@@ -21,6 +21,7 @@ django-storages = "*"
 django-multiselectfield = "*"
 boto3 = "*"
 sentry-sdk = {extras = ["django"], version = "*"}
+pytz = "*"
 
 [dev-packages]
 autopep8 = "*"

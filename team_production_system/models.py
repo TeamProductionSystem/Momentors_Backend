@@ -9,6 +9,7 @@ from datetime import timedelta
 from django.core.files.storage import default_storage
 import random
 import secrets
+import pytz
 
 
 # Model for all users
@@ -148,8 +149,15 @@ class Session(models.Model):
 
     # Notify a mentor that a mentee has requested a session
     def mentor_session_notify(self):
-        session_time = self.start_time.strftime('%-I:%M %p')
-        session_date = self.start_time.strftime('%A, %B %-d')
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+        session_date = est_start_time.strftime('%A, %B %-d')
 
         send_mail(
             subject=(
@@ -174,8 +182,15 @@ class Session(models.Model):
 
     # Notify the mentee and mentor the requested session has been confirmed
     def mentee_session_notify(self):
-        session_time = self.start_time.strftime('%-I:%M %p')
-        session_date = self.start_time.strftime('%A, %B %-d')
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+        session_date = est_start_time.strftime('%A, %B %-d')
 
         send_mail(
             subject=('Mentor Session Confirmed'),
@@ -186,8 +201,15 @@ class Session(models.Model):
 
     # Notify a mentor that a mentee has canceled a scheduled session
     def mentor_cancel_notify(self):
-        session_time = self.start_time.strftime('%-I:%M %p')
-        session_date = self.start_time.strftime('%A, %B %-d')
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+        session_date = est_start_time.strftime('%A, %B %-d')
 
         send_mail(
             subject=(
@@ -199,8 +221,15 @@ class Session(models.Model):
 
     # Notify a mentee that a mentor has canceled a scheduled session
     def mentee_cancel_notify(self):
-        session_time = self.start_time.strftime('%-I:%M %p')
-        session_date = self.start_time.strftime('%A, %B %-d')
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+        session_date = est_start_time.strftime('%A, %B %-d')
 
         send_mail(
             subject=(
