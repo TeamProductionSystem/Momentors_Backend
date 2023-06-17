@@ -67,18 +67,18 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.filter(
-        is_mentor=True).select_related("mentor")
+        is_mentor=True).select_related("mentor").prefetch_related("mentor__mentor_availability")
     serializer_class = MentorListSerializer
 
-    def get(self, request, *args, **kwargs):
-        queryset = CustomUser.objects.filter(is_mentor=True)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
 
-        if not queryset.exists():
+        if not queryset:
             return Response({"message": "No mentors found."},
                             status=status.HTTP_404_NOT_FOUND)
 
-        serializer = MentorListSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class MentorFilteredList(generics.ListAPIView):
