@@ -30,43 +30,43 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 Clone the project:
 
 ```bash
-  git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
+git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
 ```
 
 Navigate to the project directory:
 
 ```bash
-  cd Team_Production_System_BE
+cd Team_Production_System_BE
 ```
 
 Set up a virtual environment for the project using pipenv. If you don't have pipenv installed, you can install it using pip:
 
 ```bash
-	pip install pipenv
+pip install pipenv
 ```
 
 Then, activate the virtual environment by running:
 
 ```bash
-   pipenv shell
+pipenv shell
 ```
 
 Install the project dependencies:
 
 ```bash
-	pipenv install
+pipenv install
 ```
 
 Set up the database by running the migrations:
 
 ```bash
-   python manage.py migrate
+python manage.py migrate
 ```
 
 Start the development server:
 
 ```bash
-  python manage.py runserver
+python manage.py runserver
 ```
 
 The app should now be running at http://localhost:8000/
