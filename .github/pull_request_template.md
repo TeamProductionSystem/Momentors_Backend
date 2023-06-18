@@ -4,7 +4,9 @@
 
 *(The first step to a good solution is knowing the problem. Please link the issue here.)*
 
-Fixes #...
+Issue #... or
+Ticket #...
+
 
 ### **2. 💡 Overview of Solution** ###
 
