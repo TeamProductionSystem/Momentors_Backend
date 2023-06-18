@@ -111,6 +111,8 @@ API URL - https://team-production-system.onrender.com
 - [Mentor Endpoints](#view-mentors-list-user-authentication-required)
 - [Mentee Endpoints](#view-mentee-list-user-authentication-required)
 - [Availability Endpoints](#mentors-availabilty-user-authentication-required)
+- [Session Endpoints](#sessions-user-authentication-required)
+- [Notification Endpoints](#update-notification-settings-user-authentication-required)
 
 ## User Create
 
