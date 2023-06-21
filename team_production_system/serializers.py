@@ -38,7 +38,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         end_time = self.data['end_time']
         overlapping_start = Availability.objects.filter(
             mentor=mentor,
-            #EndA <= StartB or StartA >= EndB
             start_time__lte=end_time,
             start_time__gte=start_time).count()
         overlapping_end = Availability.objects.filter(
