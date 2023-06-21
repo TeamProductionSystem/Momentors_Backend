@@ -22,7 +22,7 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 - Users can setup profiles as a mentor or mentee.
 - Mentors can set their skill set and avalibilty.
 - Mentees can schedule sessions with the menots, filtered by skills and avalibilty
-- Menotrs can confirm sessions
+- Mentors can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
 # Run Locally
