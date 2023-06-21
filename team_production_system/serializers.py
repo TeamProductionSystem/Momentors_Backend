@@ -34,9 +34,22 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         mentor = Mentor.objects.get(user=self.context['request'].user)
-        availability = Availability.objects.create(
-            mentor=mentor, **validated_data)
-        return availability
+        start_time = self.data['start_time']
+        end_time = self.data['end_time']
+        overlapping_start = Availability.objects.filter(
+            start_time__gte=start_time, 
+            start_time__lte=start_time).count()
+        overlapping_end = Availability.objects.filter(
+            end_time__gte=end_time, 
+            end_time__lte=end_time).count()
+        availability_overlap = overlapping_start > 0 or overlapping_end > 0
+        if availability_overlap == False:
+            availability = Availability.objects.create(
+                mentor=mentor, **validated_data)
+            return availability
+        else:
+            raise serializers.ValidationError(
+                "Input overlaps with existing availability.")
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):
