@@ -9,12 +9,13 @@ from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from .custom_permissions import IsMentorMentee, NotificationSettingsPermission
+from .custom_permissions import IsMentorMentee, NotificationSettingsPermission, IsOwnerOrAdmin
 from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
 from django.core.exceptions import ValidationError
 from django.conf import settings
 import boto3
+from django.http import Http404
 
 
 # View to update the user profile information
@@ -179,6 +180,22 @@ class AvailabilityView(generics.ListCreateAPIView):
         # and filter availabilities belonging to the logged in user's mentor
         return Availability.objects.filter(mentor=mentor,
                                            end_time__gte=timezone.now()).select_related('mentor__user')
+
+
+# Delete an availability
+class AvailabilityDeleteView(generics.DestroyAPIView):
+    serializer_class = AvailabilitySerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+    def get_object(self):
+        try:
+            # Get the Availability instance for the logged in user
+            availability = Availability.objects.select_related(
+                'mentor__user').get(id=self.kwargs['pk'])
+            self.check_object_permissions(self.request, availability)
+            return availability
+        except Availability.DoesNotExist:
+            raise Http404("No Availability matches the given query.")
 
 
 # Time conversion helper function

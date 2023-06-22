@@ -969,11 +969,45 @@ Host: https://team-production-system.onrender.com
 
 ---
 
+## Delete Mentor Availabilty (User Authentication **Required**)
+
+- Delete a mentor availabilty
+
+```
+DELETE - https://team-production-system.onrender.com/availabilty/<int:pk>/
+```
+
+| Body | Type  | Description               |
+| :--- | :---- | :------------------------ |
+| `pk` | `int` | The pk of the availabilty |
+
+#### Request Sample:
+
+```
+DELETE /availabilty/<int:pk>/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (204 No Content)
+
+```
+No body returned to response
+```
+
+---
+
+````http
+
 ## Sessions (User Authentication **Required**)
 
 - Get a list of all sessions
-
-````http
 
 ```http
 GET - https://team-production-system.onrender.com/session/
