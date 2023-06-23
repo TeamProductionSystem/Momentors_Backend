@@ -2,6 +2,7 @@ from rest_framework import serializers, fields
 from .models import Mentor, Mentee, CustomUser
 from .models import Availability, Session, NotificationSettings
 from django.utils import timezone
+from datetime import datetime, timedelta
 
 
 # The serializer for the user information
@@ -34,16 +35,19 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         mentor = Mentor.objects.get(user=self.context['request'].user)
-        start_time = self.data['start_time']
-        end_time = self.data['end_time']
+        start_time = validated_data['start_time']
+        end_time = validated_data['end_time']
+        breakpoint()
         overlapping_start = Availability.objects.filter(
             mentor=mentor,
             start_time__lte=end_time,
-            start_time__gte=start_time).count()
+            start_time__gte=start_time + timedelta(minutes=1)
+            ).prefetch_related('mentor').count()
         overlapping_end = Availability.objects.filter(
             mentor=mentor,
-            end_time__gte=start_time,
-            end_time__lte=end_time).count()
+            end_time__gte=start_time + timedelta(minutes=1),
+            end_time__lte=end_time
+            ).prefetch_related('mentor').count()
         availability_overlap = overlapping_start > 0 or overlapping_end > 0
         if availability_overlap == False:
             availability = Availability.objects.create(
