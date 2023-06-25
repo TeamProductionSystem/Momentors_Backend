@@ -264,7 +264,8 @@ class SessionRequestView(generics.ListCreateAPIView):
 
             # Email notification to the mentor
                 session = serializer.instance
-                session.mentor_session_notify()
+                if session.mentor.user.notification_settings.session_requested:
+                    session.mentor_session_notify()
 
         if session_length == 60:
             before_start_time = time_convert(start_time, 30)
@@ -298,7 +299,7 @@ class SessionRequestView(generics.ListCreateAPIView):
 
                 # Email notification to the mentor
                 session = serializer.instance
-                if session.mentee.user.notification_settings.session_requested:
+                if session.mentor.user.notification_settings.session_requested:
                     session.mentor_session_notify()
 
 
@@ -332,7 +333,12 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
 
             # Check mentee's notification settings before notifying
             if session.mentee.user.notification_settings.session_confirmed:
-                session.mentee_session_notify()
+                session.mentee_confirm_notify()
+
+            # Check mentor's notification settings before notifying
+            if session.mentor.user.notification_settings.session_confirmed:
+                session.mentor_confirm_notify()
+
         else:
             serializer.save()
 
