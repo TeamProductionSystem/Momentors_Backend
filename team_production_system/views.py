@@ -350,9 +350,11 @@ class SessionView(generics.ListAPIView):
 
     def get_queryset(self):
         # Get sessions for the logged in user
+        # Exclude sessions that have already ended and
+        # order by sessions that are coming up next first.
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
-                                      start_time__gte=timezone.now() - timedelta(hours=24))
+                                      start_time__gt=timezone.now()).order_by('start_time')
 
 
 # View to show mentor timeslots a mentee can sign up for
