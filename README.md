@@ -71,6 +71,8 @@ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
+#TODO: add info about setting up test databases
+
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
@@ -100,7 +102,6 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 - DJANGO_SUPERUSER_EMAIL: This should be set to the email address you want to use for the Django superuser account.
 
 3. Save the .env file.
-
 
 # Testing
 
