@@ -4,7 +4,6 @@ from datetime import timedelta
 from ..models import CustomUser, Mentor, Availability
 import unittest
 
-
 @unittest.skip("Test file is not ready yet")
 class AvailabilityTestCase(TestCase):
     def setUp(self):
