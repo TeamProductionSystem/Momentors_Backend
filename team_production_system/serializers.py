@@ -49,6 +49,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             end_time__lte=end_time
             ).exists()
         availability_overlap = overlapping_start or overlapping_end
+
         if not availability_overlap:
             availability = Availability.objects.create(
                 mentor=mentor, **validated_data)
