@@ -180,8 +180,8 @@ class Session(models.Model):
         code = self.create_session_code()
         return f'https://meet.jit.si/{code}'
 
-    # Notify the mentee and mentor the requested session has been confirmed
-    def mentee_session_notify(self):
+    # Notify the mentee and when the requested session has been confirmed
+    def mentee_confirm_notify(self):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
 
@@ -196,7 +196,26 @@ class Session(models.Model):
             subject=('Mentor Session Confirmed'),
             message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentee.user.email, self.mentor.user.email],
+            recipient_list=[self.mentee.user.email]
+        )
+
+    # Notify the mentor when the requested session has been confirmed
+    def mentor_confirm_notify(self):
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+        session_date = est_start_time.strftime('%A, %B %-d')
+
+        send_mail(
+            subject=('Mentor Session Confirmed'),
+            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentor.user.email]
         )
 
     # Notify a mentor that a mentee has canceled a scheduled session
