@@ -335,12 +335,14 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             session.status = status
             session.save()
 
-            # If mentee cancels session, check mentor notification
+            """If mentee cancels session, check mentor notification
+            settings before notifying"""
             if self.request.user.is_mentee and \
                     session.mentor.user.notification_settings.session_canceled:
                 session.mentor_cancel_notify()
 
-            # If mentor cancels session, check mentee notification
+            """If mentor cancels session, check mentee notification
+            settings before notifying"""
             elif self.request.user.is_mentor and \
                     session.mentee.user.notification_settings.session_canceled:
                 session.mentee_cancel_notify()
@@ -401,7 +403,6 @@ class ArchiveSessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       end_time__lt=timezone.now())
-
 
 
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
