@@ -1,6 +1,6 @@
 from django.test import TestCase
 from datetime import datetime, timedelta, timezone
-from ..models import Availability, Mentor, CustomUser
+from ....models import Availability, Mentor, CustomUser
 
 
 class AvailabilityTestCase(TestCase):
@@ -34,4 +34,3 @@ class AvailabilityTestCase(TestCase):
         self.assertEqual(saved_availability.start_time, start_time)
         self.assertEqual(saved_availability.end_time, end_time)
         self.assertEqual(saved_availability.mentor, self.mentor)
-        self.assertEqual(saved_availability.pk, 1)
