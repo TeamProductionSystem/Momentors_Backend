@@ -101,6 +101,9 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 
 3. Save the .env file.
 
+<span style="color:red">#TODO: add info about setting up test database and env variables
+ - python manage.py migrate --database=test (how to migrate on test database)</span>
+
 # API Reference
 
 API URL - https://team-production-system.onrender.com
