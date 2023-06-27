@@ -31,7 +31,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ('pk', 'mentor', 'start_time', 'end_time',)
-        read_only_fields = ('mentor',)
+        read_only_fields = ('mentor', 'pk',)
 
     def create(self, validated_data):
         mentor = Mentor.objects.select_related('user').get(
@@ -142,9 +142,9 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
-                        'mentor_availability', 'mentee', 'mentee_first_name',
-                        'mentee_last_name', 'start_time', 'end_time', 'status',
-                        'session_length')
+                  'mentor_availability', 'mentee', 'mentee_first_name',
+                  'mentee_last_name', 'start_time', 'end_time', 'status',
+                  'session_length',)
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
                             'mentee', 'mentee_first_name', 'mentee_last_name')
 
