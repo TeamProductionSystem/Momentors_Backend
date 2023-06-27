@@ -22,7 +22,7 @@ urlpatterns = [
          name='mentee-info-update'),
 
     # End points related to sessions
-    path('availability/', views.AvailabilityView.as_view(), name='availability'),
+    path('availability/', views.AvailabilityListCreateView.as_view(), name='availability'),
     # Delete availability
     path('availability/<int:pk>/', views.AvailabilityDeleteView.as_view(),
          name='availability-delete'),
