@@ -30,7 +30,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ('pk', 'mentor', 'start_time', 'end_time',)
-        read_only_fields = ('mentor',)
+        read_only_fields = ('mentor', 'pk',)
 
     def create(self, validated_data):
         mentor = Mentor.objects.get(user=self.context['request'].user)
@@ -45,7 +45,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             end_time__gte=start_time,
             end_time__lte=end_time).count()
         availability_overlap = overlapping_start > 0 or overlapping_end > 0
-        if availability_overlap == False:
+        if not availability_overlap:
             availability = Availability.objects.create(
                 mentor=mentor, **validated_data)
             return availability
@@ -97,8 +97,8 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     def get_availabilities(self, obj):
         try:
-            availabilities = Availability.objects.filter(mentor=obj.pk,
-                                                         end_time__gte=timezone.now())
+            availabilities = Availability.objects.filter(
+                mentor=obj.pk, end_time__gte=timezone.now())
             serializer = AvailabilitySerializer(
                 instance=availabilities, many=True)
             return serializer.data
@@ -137,7 +137,9 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
-                  'mentor_availability', 'mentee', 'mentee_first_name', 'mentee_last_name', 'start_time', 'end_time', 'status', 'session_length',)
+                  'mentor_availability', 'mentee', 'mentee_first_name',
+                  'mentee_last_name', 'start_time', 'end_time', 'status',
+                  'session_length',)
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
                             'mentee', 'mentee_first_name', 'mentee_last_name')
 
@@ -148,4 +150,5 @@ class NotificationSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotificationSettings
         fields = ('pk', 'user', 'session_requested', 'session_confirmed',
-                  'session_canceled', 'fifteen_minute_alert', 'sixty_minute_alert',)
+                  'session_canceled', 'fifteen_minute_alert',
+                  'sixty_minute_alert',)
