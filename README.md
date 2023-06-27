@@ -1182,7 +1182,7 @@ Host: https://team-production-system.onrender.com
 
 {
 	"mentor_availability": 8,
-	"start_time": "2020-04-26 16:00:00-05",
+	"start_time": "2020-06-23T21:30:00.000Z",
 	"session_length": 60
 }
 
