@@ -6,7 +6,7 @@ from ...models import Availability, Mentor, CustomUser
 from ...serializers import AvailabilitySerializer
 
 
-class AvailabilityTestCase(APITestCase):
+class AvailabilityListCreateTestCase(APITestCase):
     def setUp(self):
         # Create a Mentor object
         self.user = CustomUser.objects.create_user(
@@ -28,8 +28,11 @@ class AvailabilityTestCase(APITestCase):
             end_time=timezone.now() + timezone.timedelta(days=1, hours=1)
         )
 
-    # Test get request to retrieve all availabilities
     def test_get_availability_list(self):
+        """
+        Test that a GET request to retrieve the list of Availabilities returns
+        a status code of 200 OK and the correct serialized data.
+        """
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
 
@@ -40,7 +43,7 @@ class AvailabilityTestCase(APITestCase):
         # Check that the response has a status code of 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Check that the response data matches the serialized Availability objects
+        # Check that the response data matches the serialized Availability obj
         availabilities = Availability.objects.filter(
             mentor=self.mentor,
             end_time__gte=timezone.now()
@@ -49,8 +52,23 @@ class AvailabilityTestCase(APITestCase):
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(len(response.data), 2)
 
-    # Test POST request to create an availability with valid data
+    def test_get_availability_list_without_authentication(self):
+        """
+        Test that a GET request to retrieve the list of Availabilities without
+        authentication returns a status code of 401 UNAUTHORIZED.
+        """
+        # Send a GET request to retrieve the list of Availabilities
+        url = reverse('availability')
+        response = self.client.get(url, format='json')
+
+        # Check that the response has a status code of 401 UNAUTHORIZED
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_create_availability(self):
+        """
+        Test that a POST request to create a new Availability with valid data
+        returns a status code of 201 CREATED.
+        """
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
 
@@ -71,3 +89,56 @@ class AvailabilityTestCase(APITestCase):
         self.assertEqual(availability.start_time, data['start_time'])
         self.assertEqual(availability.end_time, data['end_time'])
         self.assertEqual(availability.mentor, self.mentor)
+
+
+    def test_create_availability_with_duplicate_start_time(self):
+        """
+        Test that a POST request to create a new Availability with a start time
+        that has already been used returns a status code of 400 BAD REQUEST and an
+        error message.
+        """
+        # Authenticate as the Mentor
+        self.client.force_authenticate(user=self.user)
+
+        '''Send a POST request to create a new Availability with
+        a start time that has already been used'''
+        data = {
+            'mentor': self.mentor.pk,
+            'start_time': self.availability1.start_time,
+            'end_time': timezone.now() + timezone.timedelta(hours=2)
+        }
+        url = reverse('availability')
+        response = self.client.post(url, data, format='json')
+
+        # Check that the response has a status code of 400 BAD REQUEST
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Check that the response data contains an error message
+        self.assertEqual(response.data[0],
+                         'Input overlaps with existing availability.')
+
+    def test_create_availability_with_duplicate_start_and_end_times(self):
+        """
+        Test that a POST request to create a new Availability with a start time
+        and end time that have already been used returns a status code of
+        400 BAD REQUEST and an error message.
+        """
+        # Authenticate as the Mentor
+        self.client.force_authenticate(user=self.user)
+
+        # Send a POST request to create a new Availability with duplicate
+        # start and end times
+        data = {
+            'mentor': self.mentor.pk,
+            'start_time': self.availability1.start_time,
+            'end_time': self.availability1.end_time
+        }
+        url = reverse('availability')
+        response = self.client.post(url, data, format='json')
+
+        # Check that the response has a status code of 400 BAD REQUEST
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Check that the response data contains an error message
+        self.assertEqual(response.data[0],
+                         'Input overlaps with existing availability.')
