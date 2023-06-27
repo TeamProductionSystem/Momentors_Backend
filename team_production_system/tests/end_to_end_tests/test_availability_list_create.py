@@ -90,12 +90,11 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.assertEqual(availability.end_time, data['end_time'])
         self.assertEqual(availability.mentor, self.mentor)
 
-
     def test_create_availability_with_duplicate_start_time(self):
         """
         Test that a POST request to create a new Availability with a start time
-        that has already been used returns a status code of 400 BAD REQUEST and an
-        error message.
+        that has already been used returns a status code of 400 BAD REQUEST
+        and an error message.
         """
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
