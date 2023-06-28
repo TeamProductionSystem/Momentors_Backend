@@ -67,6 +67,18 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'End time must be after start time.')
         return data
+<<<<<<< HEAD
+=======
+
+    def validate_end_time(self, value):
+        """
+        Check that the end_time is in the future.
+        """
+        if value <= timezone.now():
+            raise serializers.ValidationError('End time must be in the future')
+        return value
+
+>>>>>>> 3175194 (feat: adds validation for availability start and end times)
 
     def validate_end_time(self, value):
         """
