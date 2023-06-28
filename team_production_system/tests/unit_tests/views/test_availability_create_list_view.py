@@ -28,7 +28,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
     def test_get_availability_list(self, mock_timezone):
         """
         Test that the get method returns a list of Availabilities
-        belonging to all mentors and with an end time
+        belonging to the logged in mentor and with an end time
         in the future.
         """
 
@@ -40,7 +40,8 @@ class AvailabilityListCreateViewTestCase(TestCase):
                                                            tzinfo=timezone.utc)
 
         # Make a GET request to the AvailabilityList view
-        response = self.client.get('/availability/', format='json')
+        response = self.client.get('/availability/',
+                                   {'mentor': self.mentor.pk}, format='json')
 
         # Check that the response status code is 200 OK
         self.assertEqual(response.status_code, 200)
@@ -66,7 +67,6 @@ class AvailabilityListCreateViewTestCase(TestCase):
             'start_time': timezone.now() + timezone.timedelta(hours=3),
             'end_time': timezone.now() + timezone.timedelta(hours=4)
         }
-
         url = reverse('availability')
         response = client.post(url, data, format='json')
 
