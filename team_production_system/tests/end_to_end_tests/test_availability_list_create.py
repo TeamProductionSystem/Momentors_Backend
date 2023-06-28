@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from ...models import Availability, Mentor, CustomUser
 from ...serializers import AvailabilitySerializer
 
@@ -27,12 +27,27 @@ class AvailabilityListCreateTestCase(APITestCase):
             start_time=timezone.now() + timezone.timedelta(days=1),
             end_time=timezone.now() + timezone.timedelta(days=1, hours=1)
         )
+        # Create a Client
+        self.client = APIClient()
+
+    def test_get_availability_list_without_authentication(self):
+        """
+        Test that a GET request to retrieve the list of Availabilities without
+        authentication returns a status code of 401 UNAUTHORIZED.
+        """
+        # Send a GET request to retrieve the list of Availabilities
+        url = reverse('availability')
+        response = self.client.get(url, format='json')
+
+        # Check that the response has a status code of 401 UNAUTHORIZED
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_availability_list(self):
         """
         Test that a GET request to retrieve the list of Availabilities returns
         a status code of 200 OK and the correct serialized data.
         """
+
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
 
@@ -51,18 +66,6 @@ class AvailabilityListCreateTestCase(APITestCase):
         serializer = AvailabilitySerializer(availabilities, many=True)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(len(response.data), 2)
-
-    def test_get_availability_list_without_authentication(self):
-        """
-        Test that a GET request to retrieve the list of Availabilities without
-        authentication returns a status code of 401 UNAUTHORIZED.
-        """
-        # Send a GET request to retrieve the list of Availabilities
-        url = reverse('availability')
-        response = self.client.get(url, format='json')
-
-        # Check that the response has a status code of 401 UNAUTHORIZED
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_availability(self):
         """
@@ -141,3 +144,21 @@ class AvailabilityListCreateTestCase(APITestCase):
         # Check that the response data contains an error message
         self.assertEqual(response.data[0],
                          'Input overlaps with existing availability.')
+
+    def test_create_availability_with_end_time_before_start_time(self):
+        """
+        Test that a POST request to create a new Availability with a start time
+        after the end time returns a status code of 400 BAD REQUEST.
+        """
+        # Authenticate as the Mentor
+        self.client.force_authenticate(user=self.user)
+
+        availability_data = {
+            'start_time': '2022-01-01T14:00:00Z',
+            'end_time': '2022-01-01T12:00:00Z',
+            'mentor': self.mentor.pk
+        }
+        response = self.client.post('/availability/',
+                                    availability_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Availability.objects.count(), 2)
