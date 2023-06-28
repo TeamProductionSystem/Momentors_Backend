@@ -56,6 +56,25 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         raise serializers.ValidationError(
                 "Input overlaps with existing availability.")
 
+    def validate(self, data):
+        """
+        Check that the start_time is before the end_time.
+        """
+        start_time = data['start_time']
+        end_time = data['end_time']
+        if start_time >= end_time:
+            raise serializers.ValidationError(
+                'End time must be after start time.')
+        return data
+
+    def validate_end_time(self, value):
+        """
+        Check that the end_time is in the future.
+        """
+        if value <= timezone.now():
+            raise serializers.ValidationError('End time must be in the future')
+        return value
+
 
 # Serializer for the mentor profile
 class MentorProfileSerializer(serializers.ModelSerializer):
