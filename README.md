@@ -71,8 +71,6 @@ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
-#TODO: add info about setting up test databases
-
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
@@ -103,12 +101,13 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 
 3. Save the .env file.
 
-#TODO: add info about setting up env variables
- - python manage.py migrate --database=test (how to migrate on test database)
-
 # Testing
 
-#TODO: add instructions on how to run tests
+To run tests:
+```python manage.py test```
+
+To skip a test that isn't finished, add the following before the test class:
+```@unittest.skip("Test file is not ready yet")```
 
 # API Reference
 
