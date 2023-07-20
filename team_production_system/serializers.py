@@ -1,7 +1,8 @@
 from rest_framework import serializers, fields
+from django.utils import timezone
+from datetime import timedelta
 from .models import Mentor, Mentee, CustomUser
 from .models import Availability, Session, NotificationSettings
-from django.utils import timezone
 
 
 # The serializer for the user information
@@ -33,24 +34,32 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         read_only_fields = ('mentor', 'pk',)
 
     def create(self, validated_data):
-        mentor = Mentor.objects.get(user=self.context['request'].user)
-        start_time = self.data['start_time']
-        end_time = self.data['end_time']
+        mentor = Mentor.objects.select_related('user').get(
+            user=self.context['request'].user)
+        start_time = validated_data['start_time']
+        end_time = validated_data['end_time']
         overlapping_start = Availability.objects.filter(
             mentor=mentor,
             start_time__lte=end_time,
-            start_time__gte=start_time).count()
+            start_time__gte=start_time + timedelta(minutes=1)
+            ).exists()
         overlapping_end = Availability.objects.filter(
             mentor=mentor,
+<<<<<<< HEAD
             end_time__gte=start_time,
             end_time__lte=end_time).count()
         availability_overlap = overlapping_start > 0 or overlapping_end > 0
+=======
+            end_time__gte=start_time + timedelta(minutes=1),
+            end_time__lte=end_time
+            ).exists()
+        availability_overlap = overlapping_start or overlapping_end
+>>>>>>> main
         if not availability_overlap:
             availability = Availability.objects.create(
                 mentor=mentor, **validated_data)
             return availability
-        else:
-            raise serializers.ValidationError(
+        raise serializers.ValidationError(
                 "Input overlaps with existing availability.")
 
     def validate(self, data):
@@ -73,6 +82,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         return value
 
 
+# Serializer for the mentor profile
 class MentorProfileSerializer(serializers.ModelSerializer):
     availabilities = AvailabilitySerializer(
         many=True, read_only=True, source='mentor_availability')
@@ -125,6 +135,7 @@ class MentorListSerializer(serializers.ModelSerializer):
             return None
 
 
+# Serializer for the mentee profile
 class MenteeProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentee
@@ -156,9 +167,15 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
+<<<<<<< HEAD
                   'mentor_availability', 'mentee', 'mentee_first_name',
                   'mentee_last_name', 'start_time', 'end_time', 'status',
                   'session_length',)
+=======
+                        'mentor_availability', 'mentee', 'mentee_first_name',
+                        'mentee_last_name', 'start_time', 'end_time', 'status',
+                        'session_length')
+>>>>>>> main
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
                             'mentee', 'mentee_first_name', 'mentee_last_name')
 
