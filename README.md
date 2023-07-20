@@ -71,8 +71,6 @@ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
-#TODO: add info about setting up test databases
-
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
