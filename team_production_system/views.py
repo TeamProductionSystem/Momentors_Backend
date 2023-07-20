@@ -329,15 +329,16 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
         # Notify mentee when a mentor confirms session request
         elif status == 'Confirmed':
             session.status = status
+            meeting_link = session.create_meeting_link()
             session.save()
 
             # Check mentee's notification settings before notifying
             if session.mentee.user.notification_settings.session_confirmed:
-                session.mentee_confirm_notify()
+                session.mentee_confirm_notify(meeting_link)
 
             # Check mentor's notification settings before notifying
             if session.mentor.user.notification_settings.session_confirmed:
-                session.mentor_confirm_notify()
+                session.mentor_confirm_notify(meeting_link)
 
         else:
             serializer.save()
