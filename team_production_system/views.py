@@ -408,7 +408,6 @@ class ArchiveSessionView(generics.ListAPIView):
                                       timedelta(hours=24))
 >>>>>>> 9008244 (chore: resolving merge conflict)
 
-
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
     queryset = NotificationSettings.objects.all()
     serializer_class = NotificationSettingsSerializer
