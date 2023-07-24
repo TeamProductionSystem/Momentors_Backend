@@ -4,10 +4,6 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from django.db.models import Q
-<<<<<<< HEAD
-=======
-from django.shortcuts import get_object_or_404
->>>>>>> 1ba4c97ee6690a60a2b87f94df7b116f80f2fa51
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from datetime import datetime, timedelta
@@ -43,7 +39,6 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         if not user.is_authenticated:
             return Response({'error': 'User is not authenticated.'},
                             status=status.HTTP_401_UNAUTHORIZED)
-<<<<<<< HEAD
         try:
             return user
         except CustomUser.DoesNotExist:
@@ -53,10 +48,6 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
             return Response({
                 'error': 'An unexpected error occurred: {}'.format(str(e))
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-=======
-
-        return get_object_or_404(CustomUser, pk=user.pk)
->>>>>>> 1ba4c97ee6690a60a2b87f94df7b116f80f2fa51
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
@@ -411,7 +402,6 @@ class ArchiveSessionView(generics.ListAPIView):
                                       Q(mentee__user=self.request.user),
                                       start_time__lt=timezone.now() -
                                       timedelta(hours=24))
-
 
 
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
