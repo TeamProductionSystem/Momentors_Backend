@@ -39,8 +39,15 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         if not user.is_authenticated:
             return Response({'error': 'User is not authenticated.'},
                             status=status.HTTP_401_UNAUTHORIZED)
-
-        return get_object_or_404(CustomUser, pk=user.pk)
+        try:
+            return user
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found.'},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({
+                'error': 'An unexpected error occurred: {}'.format(str(e))
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
