@@ -401,12 +401,8 @@ class ArchiveSessionView(generics.ListAPIView):
         # Get sessions for the logged in user
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
-<<<<<<< HEAD
                                       end_time__lt=timezone.now())
-=======
-                                      start_time__lt=timezone.now() -
-                                      timedelta(hours=24))
->>>>>>> 9008244 (chore: resolving merge conflict)
+
 
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
     queryset = NotificationSettings.objects.all()
