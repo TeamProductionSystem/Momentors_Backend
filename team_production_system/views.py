@@ -1,21 +1,31 @@
-from .models import CustomUser, Mentee, Availability
-from .models import Session, Mentor, NotificationSettings
 from rest_framework import generics, status
-from .serializers import CustomUserSerializer, AvailabilitySerializer
-from .serializers import SessionSerializer, NotificationSettingsSerializer
-from .serializers import MentorListSerializer, MentorProfileSerializer
-from .serializers import MenteeListSerializer, MenteeProfileSerializer
 from rest_framework.response import Response
-from django.utils import timezone
-from rest_framework.permissions import IsAuthenticated
-from django.db.models import Q
-from .custom_permissions import IsMentorMentee, NotificationSettingsPermission, IsOwnerOrAdmin
-from datetime import datetime, timedelta
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from django.utils import timezone
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from datetime import datetime, timedelta
 import boto3
 from django.http import Http404
+from .serializers import (AvailabilitySerializer,
+                          CustomUserSerializer,
+                          MenteeListSerializer,
+                          MenteeProfileSerializer,
+                          MentorListSerializer,
+                          MentorProfileSerializer,
+                          NotificationSettingsSerializer,
+                          SessionSerializer)
+from .custom_permissions import (IsMentorMentee,
+                                 IsOwnerOrAdmin,
+                                 NotificationSettingsPermission)
+from .models import (Availability,
+                     CustomUser,
+                     Mentee,
+                     Mentor,
+                     NotificationSettings,
+                     Session)
 
 
 # View to update the user profile information
@@ -30,16 +40,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
             return Response({'error': 'User is not authenticated.'},
                             status=status.HTTP_401_UNAUTHORIZED)
 
-        try:
-            return user
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': 'An unexpected error occured.'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return user
+        return get_object_or_404(CustomUser, pk=user.pk)
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
@@ -55,7 +56,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
             if user.profile_photo:
                 s3 = boto3.client('s3')
                 s3.delete_object(
-                    Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name)
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                    Key=user.profile_photo.name)
 
             user.profile_photo = request.FILES['profile_photo']
 
@@ -68,7 +70,11 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.filter(
-        is_mentor=True).select_related("mentor").prefetch_related("mentor__mentor_availability")
+        is_mentor=True
+        ).select_related(
+            "mentor"
+        ).prefetch_related(
+            "mentor__mentor_availability")
     serializer_class = MentorListSerializer
 
     def list(self, request, *args, **kwargs):
@@ -128,14 +134,10 @@ class MenteeList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = CustomUser.objects.filter(
-                is_mentee=True).select_related("mentee")
-        except Exception as e:
-            return Response({"error": "Failed to retrieve mentee list."},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        queryset = CustomUser.objects.filter(is_mentee=True
+                                             ).prefetch_related("mentee")
 
-        if not queryset:
+        if not queryset.exists():
             return Response({"message": "No mentees found."},
                             status=status.HTTP_404_NOT_FOUND)
 
@@ -179,7 +181,8 @@ class AvailabilityView(generics.ListCreateAPIView):
         # Exclude any availability that has an end time in the past
         # and filter availabilities belonging to the logged in user's mentor
         return Availability.objects.filter(mentor=mentor,
-                                           end_time__gte=timezone.now()).select_related('mentor__user')
+                                           end_time__gte=timezone.now()
+                                           ).select_related('mentor__user')
 
 
 # Delete an availability
@@ -246,15 +249,18 @@ class SessionRequestView(generics.ListCreateAPIView):
                   session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError(
-                    'A session with this mentor is already scheduled during this time.')
+                    'A session with this mentor is \
+                     already scheduled during this time.')
 
             elif Session.objects.filter(
-                Q(mentee=mentee, start_time=start_time, status__in=['Pending', 'Confirmed']) |
+                Q(mentee=mentee, start_time=start_time,
+                    status__in=['Pending', 'Confirmed']) |
                 Q(mentee=mentee, start_time=new_start_time,
                   session_length=60, status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError(
-                    'A session with this mentee is already scheduled during this time.')
+                    'A session with this mentee is \
+                    already scheduled during this time.')
 
             # Set the mentor for the session
             else:
@@ -272,13 +278,16 @@ class SessionRequestView(generics.ListCreateAPIView):
             after_start_time = time_convert(start_time, -30)
 
             if Session.objects.filter(
-                Q(mentor=mentor, start_time=start_time, status__in=['Pending', 'Confirmed']) |
-                Q(mentor=mentor, start_time=before_start_time, session_length=60, status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=start_time,
+                  status__in=['Pending', 'Confirmed']) |
+                Q(mentor=mentor, start_time=before_start_time,
+                  session_length=60, status__in=['Pending', 'Confirmed']) |
                 Q(mentor=mentor, start_time=after_start_time,
                   status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError(
-                    'A session with this mentor is already scheduled during this time.')
+                    'A session with this mentor is \
+                    already scheduled during this time.')
 
             elif Session.objects.filter(
                 Q(mentee=mentee, start_time=start_time,
@@ -289,7 +298,8 @@ class SessionRequestView(generics.ListCreateAPIView):
                   status__in=['Pending', 'Confirmed'])
             ).exists():
                 raise ValidationError(
-                    'A session with this mentee is already scheduled during this time.')
+                    'A session with this mentee is already \
+                    scheduled during this time.')
 
             # Set the mentor for the session
             else:
@@ -318,12 +328,14 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             session.status = status
             session.save()
 
-            # If mentee cancels session, check mentor notification settings before notifying
-            if self.request.user.is_mentee and session.mentor.user.notification_settings.session_canceled:
+            """If mentee cancels session, check mentor notification
+            settings before notifying"""
+            if self.request.user.is_mentee and \
+                    session.mentor.user.notification_settings.session_canceled:
                 session.mentor_cancel_notify()
 
-            # If mentor cancels session, check mentee notification settings before notifying
-            elif self.request.user.is_mentor and session.mentee.user.notification_settings.session_canceled:
+            elif self.request.user.is_mentor and \
+                    session.mentee.user.notification_settings.session_canceled:
                 session.mentee_cancel_notify()
 
         # Notify mentee when a mentor confirms session request
@@ -355,7 +367,8 @@ class SessionView(generics.ListAPIView):
         # order by sessions that are coming up next first.
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
-                                      start_time__gt=timezone.now()).order_by('start_time')
+                                      start_time__gt=timezone.now()
+                                      ).order_by('start_time')
 
 
 # View to show mentor timeslots a mentee can sign up for
@@ -367,7 +380,8 @@ class SessionSignupListView(generics.ListAPIView):
     def get_queryset(self):
         # Filter out completed sessions
         return Session.objects.exclude(status='Completed',
-                                       start_time__lt=timezone.now() - timedelta(hours=24))
+                                       start_time__lt=timezone.now() -
+                                       timedelta(hours=24))
 
 
 class ArchiveSessionView(generics.ListAPIView):
@@ -380,6 +394,7 @@ class ArchiveSessionView(generics.ListAPIView):
         return Session.objects.filter(Q(mentor__user=self.request.user) |
                                       Q(mentee__user=self.request.user),
                                       end_time__lt=timezone.now())
+
 
 
 class NotificationSettingsView(generics.RetrieveUpdateAPIView):
