@@ -23,6 +23,8 @@ boto3 = "*"
 sentry-sdk = {extras = ["django"], version = "*"}
 pytz = "*"
 flake8 = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 autopep8 = "*"

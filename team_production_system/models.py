@@ -278,7 +278,7 @@ class Session(models.Model):
         )
 
     # Notify a user that a session is coming up in 15 min
-    def sixty_min_notify(self):
+    def fifteen_min_notify(self):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
 
