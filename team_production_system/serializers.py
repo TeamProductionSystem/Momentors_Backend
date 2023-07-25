@@ -31,7 +31,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ('pk', 'mentor', 'start_time', 'end_time',)
-        read_only_fields = ('mentor',)
+        read_only_fields = ('mentor', 'pk',)
 
     def create(self, validated_data):
         mentor = Mentor.objects.select_related('user').get(
@@ -55,6 +55,29 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             return availability
         raise serializers.ValidationError(
                 "Input overlaps with existing availability.")
+
+    def validate(self, data):
+        """
+        Check that the start_time is before the end_time.
+        """
+        start_time = data['start_time']
+        end_time = data['end_time']
+        if start_time >= end_time:
+            raise serializers.ValidationError(
+                'End time must be after start time.')
+        return data
+
+    def validate_end_time(self, value):
+        """
+        Check that the end_time is in the future.
+        """
+        if value <= timezone.now():
+            raise serializers.ValidationError(
+                'End time must be in the future.'
+                )
+        return value
+
+    # TODO: Add validation for start times
 
 
 # Serializer for the mentor profile
@@ -142,9 +165,9 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = ('pk', 'mentor_first_name', 'mentor_last_name',
-                        'mentor_availability', 'mentee', 'mentee_first_name',
-                        'mentee_last_name', 'start_time', 'end_time', 'status',
-                        'session_length')
+                  'mentor_availability', 'mentee', 'mentee_first_name',
+                  'mentee_last_name', 'start_time', 'end_time', 'status',
+                  'session_length',)
         read_only_fields = ('mentor', 'mentor_first_name', 'mentor_last_name',
                             'mentee', 'mentee_first_name', 'mentee_last_name')
 
