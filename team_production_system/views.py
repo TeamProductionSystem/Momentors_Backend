@@ -44,9 +44,9 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found.'},
                             status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+        except Exception:
             return Response({
-                'error': 'An unexpected error occurred: {}'.format(str(e))
+                'error': 'An unexpected error occurred.'
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self, request, *args, **kwargs):
