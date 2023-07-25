@@ -34,3 +34,5 @@ class AvailabilityTestCase(TestCase):
         self.assertEqual(saved_availability.start_time, start_time)
         self.assertEqual(saved_availability.end_time, end_time)
         self.assertEqual(saved_availability.mentor, self.mentor)
+
+    # TODO: Add test for self reference

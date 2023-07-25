@@ -75,6 +75,8 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('End time must be in the future')
         return value
 
+    # TODO: Add validation for start times
+
 
 # Serializer for the mentor profile
 class MentorProfileSerializer(serializers.ModelSerializer):
