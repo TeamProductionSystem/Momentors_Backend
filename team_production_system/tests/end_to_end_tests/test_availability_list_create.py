@@ -162,4 +162,6 @@ class AvailabilityListCreateTestCase(APITestCase):
         response = self.client.post('/availability/',
                                     availability_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(str(response.data['end_time'][0]),
+                         'End time must be in the future.')
         self.assertEqual(Availability.objects.count(), 2)
