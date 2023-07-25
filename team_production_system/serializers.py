@@ -75,14 +75,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('End time must be in the future')
         return value
 
-    def validate_end_time(self, value):
-        """
-        Check that the end_time is in the future.
-        """
-        if value <= timezone.now():
-            raise serializers.ValidationError('End time must be in the future')
-        return value
-
 
 # Serializer for the mentor profile
 class MentorProfileSerializer(serializers.ModelSerializer):
