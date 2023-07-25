@@ -103,11 +103,27 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 
 # Testing
 
+For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting. 
+
 To run tests:
 ```python manage.py test```
 
 To skip a test that isn't finished, add the following before the test class:
 ```@unittest.skip("Test file is not ready yet")```
+
+To run coverage for test: 
+```coverage run manage.py test```
+
+After you run tests you can get the report in command-line by running:
+```coverage report```
+
+For an interactive html report, run: 
+```coverage html```
+
+Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
+
+Here is some helpful information on testing in Django and Django REST Framework: https://www.rootstrap.com/blog/testing-in-django-django-rest-basics-useful-tools-good-practices
+
 
 # API Reference
 
