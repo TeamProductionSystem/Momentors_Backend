@@ -141,8 +141,12 @@ class MenteeList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        queryset = CustomUser.objects.filter(is_mentee=True
-                                             ).prefetch_related("mentee")
+        try:
+            queryset = CustomUser.objects.filter(
+                is_mentee=True).select_related("mentee")
+        except Exception:
+            return Response({"error": "Failed to retrieve mentee list."},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         if not queryset.exists():
             return Response({"message": "No mentees found."},
