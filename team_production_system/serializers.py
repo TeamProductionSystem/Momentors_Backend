@@ -72,7 +72,9 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         Check that the end_time is in the future.
         """
         if value <= timezone.now():
-            raise serializers.ValidationError('End time must be in the future')
+            raise serializers.ValidationError(
+                'End time must be in the future.'
+                )
         return value
 
     # TODO: Add validation for start times
