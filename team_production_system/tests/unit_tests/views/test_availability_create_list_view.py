@@ -28,11 +28,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
     def test_get_availability_list(self, mock_timezone):
         """
         Test that the get method returns a list of Availabilities
-<<<<<<< HEAD
         belonging to the logged in mentor and with an end time
-=======
-        belonging to all mentors and with an end time
->>>>>>> 760bdde (test: all tests passing)
         in the future.
         """
 

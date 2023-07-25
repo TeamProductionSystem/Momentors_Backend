@@ -49,10 +49,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             end_time__lte=end_time
             ).exists()
         availability_overlap = overlapping_start or overlapping_end
-<<<<<<< HEAD
-
-=======
->>>>>>> 4578425 (chore: resolves merge conflicts)
         if not availability_overlap:
             availability = Availability.objects.create(
                 mentor=mentor, **validated_data)
@@ -70,8 +66,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'End time must be after start time.')
         return data
-<<<<<<< HEAD
-=======
 
     def validate_end_time(self, value):
         """
@@ -80,8 +74,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         if value <= timezone.now():
             raise serializers.ValidationError('End time must be in the future')
         return value
-
->>>>>>> 3175194 (feat: adds validation for availability start and end times)
 
     def validate_end_time(self, value):
         """
