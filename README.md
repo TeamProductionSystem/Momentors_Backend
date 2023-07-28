@@ -85,6 +85,8 @@ DEBUG=True
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_PASSWORD=admin_password
 DJANGO_SUPERUSER_EMAIL=admin@example.com
+CELERY_BROKER_URL = local_redis_url
+CELERY_RESULT_BACKEND = local_redis_url
 ```
 
 - DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port.
@@ -98,6 +100,10 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 - DJANGO_SUPERUSER_PASSWORD: This should be set to the password you want to use for the Django superuser account.
 
 - DJANGO_SUPERUSER_EMAIL: This should be set to the email address you want to use for the Django superuser account.
+
+- CELERY_BROKER_URL: This should be set to your local redis url.
+
+- CELERY_RESULT_BACKEND: This should be set to your local redis url.
 
 3. Save the .env file.
 
