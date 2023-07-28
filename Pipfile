@@ -25,6 +25,7 @@ pytz = "*"
 flake8 = "*"
 celery = "*"
 redis = "*"
+coverage = "*"
 
 [dev-packages]
 autopep8 = "*"

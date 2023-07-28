@@ -181,7 +181,7 @@ class Session(models.Model):
         return f'https://meet.jit.si/{code}'
 
     # Notify the mentee and when the requested session has been confirmed
-    def mentee_confirm_notify(self):
+    def mentee_confirm_notify(self, meeting_link):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
 
@@ -194,13 +194,13 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session Confirmed'),
-            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
+            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {meeting_link}'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email]
         )
 
     # Notify the mentor when the requested session has been confirmed
-    def mentor_confirm_notify(self):
+    def mentor_confirm_notify(self, meeting_link):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
 
@@ -213,7 +213,7 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session Confirmed'),
-            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {self.create_meeting_link()}'),
+            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {meeting_link}'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email]
         )
