@@ -274,7 +274,7 @@ class Session(models.Model):
             subject=('Mentor Session in 60 Minutes'),
             message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 60 minutes. Here is the link to your session: {self.create_meeting_link()}'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentor.user.email],
+            recipient_list=[self.mentor.user.email, self.mentee.user.email],
         )
 
     # Notify a user that a session is coming up in 15 min
@@ -293,7 +293,7 @@ class Session(models.Model):
             subject=('Mentor Session in 15 Minutes'),
             message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 15 minutes. Here is the link to your session: {self.create_meeting_link()}'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentor.user.email],
+            recipient_list=[self.mentor.user.email, self.mentee.user.email],
         )
 
 
