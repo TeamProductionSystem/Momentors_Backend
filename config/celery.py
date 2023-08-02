@@ -20,5 +20,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 # for development
 app = Celery('config')
 
+app.conf.beat_schedule = {
+    'notify-every-5-min': {
+        'task': 'config.tasks.notify',
+        'schedule': 30.0,
+    },
+}
+
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

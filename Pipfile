@@ -26,6 +26,7 @@ flake8 = "*"
 celery = "*"
 redis = "*"
 coverage = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 autopep8 = "*"

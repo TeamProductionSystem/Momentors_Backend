@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'imagekit',
     'multiselectfield',
     "team_production_system",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
