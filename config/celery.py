@@ -22,8 +22,8 @@ app = Celery('config')
 
 app.conf.beat_schedule = {
     'notify-every-5-min': {
-        'task': 'config.tasks.notify',
-        'schedule': 30.0,
+        'task': 'team_production_system.tasks.notify',
+        'schedule': 300.0,
     },
 }
 
