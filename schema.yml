@@ -22,18 +22,17 @@ paths:
               examples:
                 Example:
                   value:
-                  - pk: 6
+                  - pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
   /auth/token/login/:
     post:
@@ -516,6 +515,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Availability'
+              examples:
+                Example1:
+                  value:
+                  - pk: 19
+                    mentor: 4
+                    start_time: '1999-12-31T14:30:00Z'
+                    end_time: '1999-12-31T15:30:00Z'
+                  summary: Example 1
+                Example2:
+                  value:
+                  - pk: 22
+                    mentor: 7
+                    start_time: '1999-12-31T14:30:00Z'
+                    end_time: '1999-12-31T15:30:00Z'
+                  summary: Example 2
+                Example3:
+                  value:
+                  - pk: 21
+                    mentor: 4
+                    start_time: '1999-12-31T15:30:00Z'
+                    end_time: '1999-12-31T16:00:00Z'
+                  summary: Example 3
           description: ''
     post:
       operationId: availability_create
@@ -541,6 +562,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Availability'
+              examples:
+                Example1:
+                  value:
+                    pk: 19
+                    mentor: 4
+                    start_time: '1999-12-31T14:30:00Z'
+                    end_time: '1999-12-31T15:30:00Z'
+                  summary: Example 1
+                Example2:
+                  value:
+                    pk: 22
+                    mentor: 7
+                    start_time: '1999-12-31T14:30:00Z'
+                    end_time: '1999-12-31T15:30:00Z'
+                  summary: Example 2
+                Example3:
+                  value:
+                    pk: 21
+                    mentor: 4
+                    start_time: '1999-12-31T15:30:00Z'
+                    end_time: '1999-12-31T16:00:00Z'
+                  summary: Example 3
           description: ''
   /availability/{id}/:
     delete:
@@ -983,18 +1026,17 @@ paths:
               examples:
                 Example:
                   value:
-                  - pk: 6
+                  - pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
   /sessionrequest/:
     get:
@@ -1014,18 +1056,17 @@ paths:
               examples:
                 Example:
                   value:
-                  - pk: 6
+                  - pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
     post:
       operationId: sessionrequest_create
@@ -1054,18 +1095,17 @@ paths:
               examples:
                 Example:
                   value:
-                    pk: 6
+                    pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
   /sessionrequest/{id}/:
     get:
@@ -1089,18 +1129,17 @@ paths:
               examples:
                 Example:
                   value:
-                    pk: 6
+                    pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
     put:
       operationId: sessionrequest_update
@@ -1135,18 +1174,17 @@ paths:
               examples:
                 Example:
                   value:
-                    pk: 6
+                    pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
     patch:
       operationId: sessionrequest_partial_update
@@ -1180,18 +1218,17 @@ paths:
               examples:
                 Example:
                   value:
-                    pk: 6
+                    pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
     delete:
       operationId: sessionrequest_destroy
@@ -1226,18 +1263,17 @@ paths:
               examples:
                 Example:
                   value:
-                  - pk: 6
+                  - pk: 1
                     mentor_first_name: Test
                     mentor_last_name: Mentor
-                    username: testusername
-                    first_name: Test
-                    last_name: User
-                    email: testuser@testemail.com
-                    phone_number: 555-123-4567
-                    profile_photo: 'null'
-                    is_mentor: true
-                    is_mentee: false
-                    is_active: true
+                    mentor_availability: 1
+                    mentee: 3
+                    mentee_first_name: Test
+                    mentee_last_name: Mentee
+                    start_time: '2023-05-22T12:00:00Z'
+                    end_time: '2023-05-22T12:30:00Z'
+                    status: Confirmed
+                    session_length: 30
           description: ''
 components:
   schemas:

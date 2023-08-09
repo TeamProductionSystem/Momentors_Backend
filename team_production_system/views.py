@@ -41,35 +41,6 @@ from .models import (
 
 
 # View to update the user profile information
-
-@extend_schema_view(
-    retrieve=extend_schema(
-        description="Get User Profile",
-        responses={
-            200: OpenApiResponse(
-                description='OK',
-                response=CustomUserSerializer,
-                examples=[
-                    OpenApiExample(
-                        name='Example',
-                        value={
-                            'pk': 6,
-                            'username': 'testusername',
-                            'first_name': 'Test',
-                            'last_name': 'User',
-                            'email': 'testuser@testemail.com',
-                            'phone_number': '555-123-4567',
-                            'profile_photo': 'null',
-                            'is_mentor': True,
-                            'is_mentee': False,
-                            'is_active': True,
-                        },
-                    ),
-                ],
-            )
-        }
-    )
-)
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]

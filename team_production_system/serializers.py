@@ -32,6 +32,50 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 # The mentor availability serializer
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name='Example 1',
+            value={
+                'pk': 19,
+                'mentor': 4,
+                'start_time': '1999-12-31T14:30:00Z',
+                'end_time': '1999-12-31T15:30:00Z',
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            name='Example 2',
+            value={
+                'pk': 20,
+                'mentor': 5,
+                'start_time': '1999-12-31T14:30:00Z',
+                'end_time': '1999-12-31T15:30:00Z',
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            name='Example 3',
+            value={
+                'pk': 21,
+                'mentor': 4,
+                'start_time': '1999-12-31T15:30:00Z',
+                'end_time': '1999-12-31T16:00:00Z',
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            name='Example 2',
+            value={
+                'pk': 22,
+                'mentor': 7,
+                'start_time': '1999-12-31T14:30:00Z',
+                'end_time': '1999-12-31T15:30:00Z',
+            },
+            response_only=True,
+        ),
+    ]
+)
 class AvailabilitySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -110,9 +154,16 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('pk', 'username', 'first_name',
-                  'last_name', 'profile_photo', 'is_mentor', 'about_me',
-                  'skills', 'availabilities')
+        fields = (
+            'pk',
+            'username',
+            'first_name',
+            'last_name',
+            'profile_photo',
+            'is_mentor', 'about_me',
+            'skills',
+            'availabilities',
+        )
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_about_me(self, obj):
@@ -154,8 +205,15 @@ class MenteeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('user', 'pk', 'username', 'first_name',
-                  'last_name', 'is_mentee', 'mentee_profile')
+        fields = (
+            'user',
+            'pk',
+            'username',
+            'first_name',
+            'last_name',
+            'is_mentee',
+            'mentee_profile',
+        )
 
 
 # Serializer to show session information
@@ -164,18 +222,17 @@ class MenteeListSerializer(serializers.ModelSerializer):
         OpenApiExample(
             name='Example',
             value={
-                'pk': 6,
+                'pk': 1,
                 'mentor_first_name': 'Test',
                 'mentor_last_name': 'Mentor',
-                'username': 'testusername',
-                'first_name': 'Test',
-                'last_name': 'User',
-                'email': 'testuser@testemail.com',
-                'phone_number': '555-123-4567',
-                'profile_photo': 'null',
-                'is_mentor': True,
-                'is_mentee': False,
-                'is_active': True,
+                'mentor_availability': 1,
+                'mentee': 3,
+                'mentee_first_name': 'Test',
+                'mentee_last_name': 'Mentee',
+                'start_time': '2023-05-22T12:00:00Z',
+                'end_time': '2023-05-22T12:30:00Z',
+                'status': 'Confirmed',
+                'session_length': 30,
             },
             response_only=True,
         ),
@@ -229,6 +286,12 @@ class NotificationSettingsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NotificationSettings
-        fields = ('pk', 'user', 'session_requested', 'session_confirmed',
-                  'session_canceled', 'fifteen_minute_alert',
-                  'sixty_minute_alert',)
+        fields = (
+            'pk',
+            'user',
+            'session_requested',
+            'session_confirmed',
+            'session_canceled',
+            'fifteen_minute_alert',
+            'sixty_minute_alert',
+        )
