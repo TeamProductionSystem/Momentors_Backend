@@ -71,6 +71,8 @@ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
+#TODO: Add documentation on how to get celery server running for development
+
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
