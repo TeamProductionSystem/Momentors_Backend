@@ -71,7 +71,27 @@ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
-#TODO: Add documentation on how to get celery server running for development
+## Run Celery and Redis locally
+
+Only needed if you want 15/60 minute reminders of scheduled sessions.
+
+Start the Redis server:
+
+```bash
+redis-server
+```
+
+Start the Celery server:
+
+```bash
+celery -A config.celery worker --loglevel=info
+```
+
+Start the Celery Beat server:
+
+```bash
+celery -A config.celery beat -l debug
+```
 
 ## Environment Variables
 
