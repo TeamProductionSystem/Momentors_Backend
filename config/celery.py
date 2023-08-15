@@ -7,18 +7,18 @@ from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 # for production
-# app = Celery(
-#     "config",
-#     broker_use_ssl={
-#         'ssl_cert_reqs': ssl.CERT_NONE
-#     },
-#     redis_backend_use_ssl={
-#         'ssl_cert_reqs': ssl.CERT_NONE
-#     }
-# )
+app = Celery(
+    "config",
+    broker_use_ssl={
+        'ssl_cert_reqs': ssl.CERT_NONE
+    },
+    redis_backend_use_ssl={
+        'ssl_cert_reqs': ssl.CERT_NONE
+    }
+)
 
 # for development
-app = Celery('config')
+# app = Celery('config')
 
 app.conf.beat_schedule = {
     'notify-every-5-min': {
