@@ -3,7 +3,7 @@ import django
 from django.conf import settings
 import os
 import ssl
-from .celery import Celery
+from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 # for production
