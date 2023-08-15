@@ -258,6 +258,44 @@ class Session(models.Model):
             recipient_list=[self.mentee.user.email],
         )
 
+    # Notify a user that a session is coming up in 60 min
+    # TODO: Needs unit testing
+    def sixty_min_notify(self):
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+
+        send_mail(
+            subject=('Mentor Session in 60 Minutes'),
+            message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 60 minutes.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentor.user.email, self.mentee.user.email],
+        )
+
+    # Notify a user that a session is coming up in 15 min
+    # TODO: Needs unit testing
+    def fifteen_min_notify(self):
+        # Define the timezone
+        est = pytz.timezone('US/Eastern')
+
+        # Convert the start time to EST
+        est_start_time = self.start_time.astimezone(est)
+
+        # Format the time and date
+        session_time = est_start_time.strftime('%-I:%M %p')
+
+        send_mail(
+            subject=('Mentor Session in 15 Minutes'),
+            message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 15 minutes.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[self.mentor.user.email, self.mentee.user.email],
+        )
+
 
 # Notification settings model that allows users to choose to be alerted when
 # they have a session requested, confirmed, or canceled.
