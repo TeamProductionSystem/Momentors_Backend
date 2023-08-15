@@ -259,6 +259,7 @@ class Session(models.Model):
         )
 
     # Notify a user that a session is coming up in 60 min
+    # TODO: Needs unit testing
     def sixty_min_notify(self):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
@@ -277,6 +278,7 @@ class Session(models.Model):
         )
 
     # Notify a user that a session is coming up in 15 min
+    # TODO: Needs unit testing
     def fifteen_min_notify(self):
         # Define the timezone
         est = pytz.timezone('US/Eastern')
