@@ -626,6 +626,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MenteeProfile'
+              examples:
+                Example1:
+                  value:
+                  - team_number: 5
+                  summary: Example 1
           description: ''
     post:
       operationId: menteeinfo_create
@@ -636,6 +641,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MenteeProfile'
+            examples:
+              Example1:
+                value:
+                  team_number: 5
+                summary: Example 1
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/MenteeProfile'
@@ -650,6 +660,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MenteeProfile'
+              examples:
+                Example1:
+                  value:
+                    team_number: 5
+                  summary: Example 1
           description: ''
   /menteeinfoupdate/:
     get:
@@ -664,6 +679,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MenteeProfile'
+              examples:
+                Example1:
+                  value:
+                    team_number: 5
+                  summary: Example 1
           description: ''
     put:
       operationId: menteeinfoupdate_update
@@ -674,6 +694,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MenteeProfile'
+            examples:
+              Example1:
+                value:
+                  team_number: 5
+                summary: Example 1
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/MenteeProfile'
@@ -688,6 +713,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MenteeProfile'
+              examples:
+                Example1:
+                  value:
+                    team_number: 5
+                  summary: Example 1
           description: ''
     patch:
       operationId: menteeinfoupdate_partial_update
@@ -698,6 +728,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedMenteeProfile'
+            examples:
+              Example1:
+                value:
+                  team_number: 5
+                summary: Example 1
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/PatchedMenteeProfile'
@@ -712,6 +747,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MenteeProfile'
+              examples:
+                Example1:
+                  value:
+                    team_number: 5
+                  summary: Example 1
           description: ''
     delete:
       operationId: menteeinfoupdate_destroy
@@ -880,6 +920,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomUser'
+              examples:
+                Example1:
+                  value:
+                    pk: 6
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: null
+                    is_mentor: false
+                    is_mentee: true
+                    is_active: true
+                  summary: Example 1
           description: ''
     put:
       operationId: myprofile_update
@@ -899,6 +953,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomUser'
+              examples:
+                Example1:
+                  value:
+                    pk: 6
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: null
+                    is_mentor: false
+                    is_mentee: true
+                    is_active: true
+                  summary: Example 1
           description: ''
     patch:
       operationId: myprofile_partial_update
@@ -917,6 +985,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomUser'
+              examples:
+                Example1:
+                  value:
+                    pk: 6
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: null
+                    is_mentor: false
+                    is_mentee: true
+                    is_active: true
+                  summary: Example 1
           description: ''
     delete:
       operationId: myprofile_destroy
@@ -946,6 +1028,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationSettings'
+              examples:
+                Example1:
+                  value:
+                    pk: 12
+                    user: 3
+                    session_requested: false
+                    session_confirmed: false
+                    session_canceled: true
+                    fifteen_minute_alert: true
+                    sixty_minute_alert: true
+                  summary: Example 1
           description: ''
     put:
       operationId: notificationsettings_update
@@ -962,6 +1055,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NotificationSettings'
+            examples:
+              Example1:
+                value:
+                  pk: 12
+                  user: 3
+                  session_requested: false
+                  session_confirmed: false
+                  session_canceled: true
+                  fifteen_minute_alert: true
+                  sixty_minute_alert: true
+                summary: Example 1
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/NotificationSettings'
@@ -977,6 +1081,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationSettings'
+              examples:
+                Example1:
+                  value:
+                    pk: 12
+                    user: 3
+                    session_requested: false
+                    session_confirmed: false
+                    session_canceled: true
+                    fifteen_minute_alert: true
+                    sixty_minute_alert: true
+                  summary: Example 1
           description: ''
     patch:
       operationId: notificationsettings_partial_update
@@ -993,6 +1108,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedNotificationSettings'
+            examples:
+              Example1:
+                value:
+                  pk: 12
+                  user: 3
+                  session_requested: false
+                  session_confirmed: false
+                  session_canceled: true
+                  fifteen_minute_alert: true
+                  sixty_minute_alert: true
+                summary: Example 1
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/PatchedNotificationSettings'
@@ -1007,6 +1133,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationSettings'
+              examples:
+                Example1:
+                  value:
+                    pk: 12
+                    user: 3
+                    session_requested: false
+                    session_confirmed: false
+                    session_canceled: true
+                    fifteen_minute_alert: true
+                    sixty_minute_alert: true
+                  summary: Example 1
           description: ''
   /session/:
     get:

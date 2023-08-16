@@ -12,6 +12,25 @@ from .models import Availability, Session, NotificationSettings
 
 
 # The serializer for the user information
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name='Example 1',
+            value={
+                'pk': 6,
+                'username': 'testusername',
+                'first_name': 'Test',
+                'last_name': 'User',
+                'email': 'testuser@testemail.com',
+                'phone_number': '555-123-4567',
+                'profile_photo': None,
+                'is_mentor': False,
+                'is_mentee': True,
+                'is_active': True,
+            }
+        )
+    ]
+)
 class CustomUserSerializer(serializers.ModelSerializer):
     profile_photo = serializers.ImageField()
 
@@ -192,6 +211,16 @@ class MentorListSerializer(serializers.ModelSerializer):
 
 
 # Serializer for the mentee profile
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name='Example 1',
+            value={
+                'team_number': 5,
+            },
+        ),
+    ],
+)
 class MenteeProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentee
@@ -199,6 +228,36 @@ class MenteeProfileSerializer(serializers.ModelSerializer):
 
 
 # Serializer to show a list of all users flagged as a mentee
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name='Example 1',
+            value={
+                "pk": 4,
+                "username": "testusername1",
+                "first_name": "Test",
+                "last_name": "Mentee",
+                "is_mentee": True,
+                "mentee_profile": {
+                    "team_number": 4
+                }
+            }
+        ),
+        OpenApiExample(
+            name='Example 2',
+            value={
+                "pk": 5,
+                "username": "testusername2",
+                "first_name": "Test",
+                "last_name": "Mentee",
+                "is_mentee": True,
+                "mentee_profile": {
+                    "team_number": 5
+                }
+            }
+        ),
+    ]
+)
 class MenteeListSerializer(serializers.ModelSerializer):
     mentee_profile = MenteeProfileSerializer(read_only=True, source='mentee')
     user = CustomUserSerializer(read_only=True, source='customuser')
@@ -282,6 +341,22 @@ class SessionSerializer(serializers.ModelSerializer):
 
 
 # Serializer for notification settings
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name='Example 1',
+            value={
+                'pk': 12,
+                'user': 3,
+                'session_requested': False,
+                'session_confirmed': False,
+                'session_canceled': True,
+                'fifteen_minute_alert': True,
+                'sixty_minute_alert': True,
+            }
+        )
+    ]
+)
 class NotificationSettingsSerializer(serializers.ModelSerializer):
 
     class Meta:
