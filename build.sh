@@ -9,4 +9,4 @@ pipenv run python manage.py collectstatic --no-input
 pipenv run python manage.py add_superuser
 
 celery --app tasks worker --loglevel info --concurrency 4
-celery -A config.celery beat -l debug
+celery -A config.celery_settings beat -l debug
