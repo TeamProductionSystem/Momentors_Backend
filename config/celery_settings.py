@@ -1,8 +1,8 @@
 from __future__ import absolute_import
-from django.conf import settings
 import os
 import ssl
 from celery import Celery
+from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 # for production
