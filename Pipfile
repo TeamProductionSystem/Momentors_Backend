@@ -23,9 +23,9 @@ boto3 = "*"
 sentry-sdk = {extras = ["django"], version = "*"}
 pytz = "*"
 flake8 = "*"
-celery = "*"
 redis = "*"
 coverage = "*"
+celery = "*"
 django-celery-beat = "*"
 
 [dev-packages]
