@@ -54,14 +54,18 @@ class CustomUser(AbstractUser):
 class Mentor(models.Model):
 
     SKILLS_CHOICES = [
+        ('AI', 'AI'),
         ('AWS S3', 'AWS S3'),
         ('Bootstrap', 'Bootstrap'),
+        ('Career Help', 'Career Help'),
         ('CSS', 'CSS'),
         ('Django', 'Django'),
+        ('FastAPI', 'FastAPI'),
         ('Git', 'Git'),
         ('GitHub', 'GitHub'),
         ('HTML', 'HTML'),
         ('Insomnia', 'Insomnia'),
+        ('Interview Help', 'Interview Help'),
         ('JavaScript', 'JavaScript'),
         ('MUI', 'MUI'),
         ('Other', 'Other'),
@@ -69,8 +73,10 @@ class Mentor(models.Model):
         ('Postico', 'Postico'),
         ('Python', 'Python'),
         ('React', 'React'),
+        ('Resume Help', 'Resume Help'),
         ('SQL', 'SQL'),
-        ('Time Management', 'Time Management')
+        ('Time Management', 'Time Management'),
+        ('Vue.js', 'Vue.js'),
     ]
 
     user = models.OneToOneField(
