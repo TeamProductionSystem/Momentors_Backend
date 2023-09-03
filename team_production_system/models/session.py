@@ -8,6 +8,7 @@ from datetime import timedelta
 import secrets
 import pytz
 
+
 # The session model allows the mentee to setup a session and
 # allows both mentee and mentor see their sessions they have scheduled
 class Session(models.Model):
@@ -43,7 +44,10 @@ class Session(models.Model):
         return self.start_time + timedelta(minutes=self.session_length)
 
     def __str__(self):
-        return f"{self.mentor_availability.mentor.user.username} session with {self.mentee.user.username} is ({self.status})"
+        return (
+            f"{self.mentor_availability.mentor.user.username} "
+            f"session with {self.mentee.user.username} is ({self.status})"
+        )
 
     # Notify a mentor that a mentee has requested a session
     def mentor_session_notify(self):
@@ -59,8 +63,15 @@ class Session(models.Model):
 
         send_mail(
             subject=(
-                f'{self.mentee.user.first_name} {self.mentee.user.last_name} has requested your help'),
-            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has requested a {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} '
+                f'has requested your help'
+            ),
+            message=(
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} '
+                f'from Team {self.mentee.team_number} '
+                f'has requested a {self.session_length}-min mentoring session '
+                f'with you at {session_time} EST on {session_date}.'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email],
         )
@@ -73,7 +84,8 @@ class Session(models.Model):
         code += secrets.token_urlsafe(20)
         return code
 
-    # Create a jitsi meeting link for the session with the randomly generated code
+    # Create a jitsi meeting link for the session
+    # with the randomly generated code
     def create_meeting_link(self):
         code = self.create_session_code()
         return f'https://meet.jit.si/{code}'
@@ -92,7 +104,14 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session Confirmed'),
-            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {meeting_link}'),
+            message=(
+                f'A session with {self.mentee.user.first_name} '
+                f'and {self.mentor.user.first_name} '
+                f'has been confirmed for a {self.session_length}'
+                f'-minute mentoring session '
+                f'at {session_time} EST on {session_date}. '
+                f'Here is the link to your session: {meeting_link}'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email]
         )
@@ -111,7 +130,14 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session Confirmed'),
-            message=(f'A session with {self.mentee.user.first_name} and {self.mentor.user.first_name} has been confirmed for a {self.session_length}-minute mentoring session at {session_time} EST on {session_date}. Here is the link to your session: {meeting_link}'),
+            message=(
+                f'A session with {self.mentee.user.first_name} '
+                f'and {self.mentor.user.first_name} '
+                f'has been confirmed for a {self.session_length}'
+                f'-minute mentoring session at {session_time} EST '
+                f'on {session_date}. '
+                f'Here is the link to your session: {meeting_link}'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email]
         )
@@ -130,8 +156,16 @@ class Session(models.Model):
 
         send_mail(
             subject=(
-                f'{self.mentee.user.first_name} {self.mentee.user.last_name} has canceled their session'),
-            message=(f'{self.mentee.user.first_name} {self.mentee.user.last_name} from Team {self.mentee.team_number} has canceled their {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} '
+                f'has canceled their session'
+            ),
+            message=(
+                f'{self.mentee.user.first_name} {self.mentee.user.last_name} '
+                f'from Team {self.mentee.team_number} '
+                f'has canceled their {self.session_length}'
+                f'-minute mentoring session with you '
+                f'at {session_time} EST on {session_date}.'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email],
         )
@@ -150,8 +184,15 @@ class Session(models.Model):
 
         send_mail(
             subject=(
-                f'{self.mentor.user.first_name} {self.mentor.user.last_name} has canceled your session'),
-            message=(f'{self.mentor.user.first_name} {self.mentor.user.last_name} has canceled the {self.session_length}-minute mentoring session with you at {session_time} EST on {session_date}.'),
+                f'{self.mentor.user.first_name} {self.mentor.user.last_name} '
+                f'has canceled your session'
+            ),
+            message=(
+                f'{self.mentor.user.first_name} {self.mentor.user.last_name} '
+                f'has canceled the {self.session_length}'
+                f'-minute mentoring session with you '
+                f'at {session_time} EST on {session_date}.'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentee.user.email],
         )
@@ -170,7 +211,12 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session in 60 Minutes'),
-            message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 60 minutes.'),
+            message=(
+                f'Your {self.session_length}-minute session with '
+                f'{self.mentee.user.first_name} and '
+                f'{self.mentor.user.first_name} '
+                f'at {session_time} EST is coming up in 60 minutes.'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email, self.mentee.user.email],
         )
@@ -189,7 +235,12 @@ class Session(models.Model):
 
         send_mail(
             subject=('Mentor Session in 15 Minutes'),
-            message=(f'Your {self.session_length}-minute session with {self.mentee.user.first_name} and {self.mentor.user.first_name} at {session_time} EST is coming up in 15 minutes.'),
+            message=(
+                f'Your {self.session_length}-minute session with '
+                f'{self.mentee.user.first_name} and '
+                f'{self.mentor.user.first_name} '
+                f'at {session_time} EST is coming up in 15 minutes.'
+            ),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.mentor.user.email, self.mentee.user.email],
         )

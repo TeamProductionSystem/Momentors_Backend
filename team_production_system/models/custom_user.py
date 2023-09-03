@@ -3,11 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.files.storage import default_storage
 import random
-from .notification import NotificationSettings
+from .notification_settings import NotificationSettings
+
 
 # Model for all users
-
-
 class CustomUser(AbstractUser):
     is_mentor = models.BooleanField(default=False)
     is_mentee = models.BooleanField(default=False)

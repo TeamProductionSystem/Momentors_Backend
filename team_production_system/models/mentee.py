@@ -1,5 +1,6 @@
 from django.db import models
-from .user import CustomUser
+from .custom_user import CustomUser
+
 
 # Model for mentees to input their team
 class Mentee(models.Model):
