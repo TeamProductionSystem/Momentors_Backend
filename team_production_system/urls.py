@@ -22,7 +22,11 @@ urlpatterns = [
          name='mentee-info-update'),
 
     # End points related to sessions
-    path('availability/', views.AvailabilityListCreateView.as_view(), name='availability'),
+    path(
+        'availability/',
+        views.AvailabilityListCreateView.as_view(),
+        name='availability'
+    ),
     # Delete availability
     path('availability/<int:pk>/', views.AvailabilityDeleteView.as_view(),
          name='availability-delete'),
@@ -35,6 +39,9 @@ urlpatterns = [
          name='session-detail'),
     path('sessionsignuplist/', views.SessionSignupListView.as_view(),
          name='session-signup-list'),
-    path('notificationsettings/<int:pk>/', views.NotificationSettingsView.as_view(),
-         name='notification-settings'),
+    path(
+        'notificationsettings/<int:pk>/',
+        views.NotificationSettingsView.as_view(),
+        name='notification-settings'
+    ),
 ]
