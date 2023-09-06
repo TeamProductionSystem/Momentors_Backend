@@ -9,14 +9,14 @@ from django.conf import settings
 from datetime import datetime, timedelta
 import boto3
 from django.http import Http404
-from .serializers import (AvailabilitySerializer,
-                          CustomUserSerializer,
-                          MenteeListSerializer,
-                          MenteeProfileSerializer,
-                          MentorListSerializer,
-                          MentorProfileSerializer,
-                          NotificationSettingsSerializer,
-                          SessionSerializer)
+from team_production_system.serializers import (AvailabilitySerializer,
+                                                CustomUserSerializer,
+                                                MenteeListSerializer,
+                                                MenteeProfileSerializer,
+                                                MentorListSerializer,
+                                                MentorProfileSerializer,
+                                                NotificationSettingsSerializer,
+                                                SessionSerializer)
 from .custom_permissions import (IsMentorMentee,
                                  IsOwnerOrAdmin,
                                  NotificationSettingsPermission)
@@ -47,7 +47,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         except Exception:
             return Response({
                 'error': 'An unexpected error occurred.'
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
@@ -78,10 +78,10 @@ class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.filter(
         is_mentor=True
-        ).select_related(
-            "mentor"
-        ).prefetch_related(
-            "mentor__mentor_availability")
+    ).select_related(
+        "mentor"
+    ).prefetch_related(
+        "mentor__mentor_availability")
     serializer_class = MentorListSerializer
 
     def list(self, request, *args, **kwargs):
