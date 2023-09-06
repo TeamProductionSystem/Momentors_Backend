@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'imagekit',
     'multiselectfield',
     "team_production_system",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -181,6 +182,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:3000",
     "http://localhost:3001",
+    "https://momentors.dev",
+
 
 
 ]
@@ -224,3 +227,7 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     traces_sample_rate=1.0,
 )
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_TIMEZONE = 'UTC'
