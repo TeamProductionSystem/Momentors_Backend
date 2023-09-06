@@ -26,7 +26,7 @@ class AvailabilityTestCase(TestCase):
 
         # Save an Availability object associated with the Mentor
         availability.save()
-        
+
         # Retrieve the saved Availability object
         saved_availability = Availability.objects.first()
 
@@ -34,6 +34,6 @@ class AvailabilityTestCase(TestCase):
         self.assertEqual(saved_availability.start_time, start_time)
         self.assertEqual(saved_availability.end_time, end_time)
         self.assertEqual(saved_availability.mentor, self.mentor)
-        self.assertEqual(str(saved_availability), f"{self.mentor} is available from {start_time} to {end_time}.")
-
-    # TODO: Add test for self reference
+        self.assertEqual(str(saved_availability),
+                         f"{self.mentor} is available from "
+                         f"{start_time} to {end_time}.")
