@@ -13,6 +13,15 @@ omit =
     team_production_system/admin.py
     team_production_system/urls.py
     team_production_system/migrations/*
+    momentors/tests/*
+    momentors/apps.py
+    momentors/manage.py
+    momentors/__init__.py
+    momentors/asgi.py
+    momentors/wsgi.py
+    momentors/admin.py
+    momentors/urls.py
+    momentors/migrations/*
 
 [report]
 # Exclude the same files from the coverage report
@@ -26,3 +35,12 @@ omit =
     team_production_system/admin.py
     team_production_system/urls.py
     team_production_system/migrations/*
+    momentors/tests/*
+    momentors/apps.py
+    momentors/manage.py
+    momentors/__init__.py
+    momentors/asgi.py
+    momentors/wsgi.py
+    momentors/admin.py
+    momentors/urls.py
+    momentors/migrations/*
