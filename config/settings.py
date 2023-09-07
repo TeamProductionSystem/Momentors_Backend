@@ -104,8 +104,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #TODO: get database2 working
 
 DATABASES = {
-    'default': env.db(),
-    'momentors': env('DATABASE2_URL')
+    'default': env.db()
 }
 
 # Password validation
