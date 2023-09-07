@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'imagekit',
     'multiselectfield',
     "team_production_system",
+    "momentors",
     "django_celery_beat",
 ]
 
@@ -100,10 +101,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': env.db()
-}
+#TODO: get database2 working
 
+DATABASES = {
+    'default': env.db(),
+    'momentors': env('DATABASE2_URL')
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
