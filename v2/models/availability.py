@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 
 # Allow mentors to set their avaliabiltiy in 30 minute increments
-class Availability(models.Model):
+class Availability(team_production_system.models.Availability):
     mentor = models.ForeignKey(
         Mentor, on_delete=models.CASCADE, related_name='mentor_availability')
     start_time = models.DateTimeField()

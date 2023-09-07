@@ -2,7 +2,7 @@ from rest_framework import serializers
 from team_production_system.models import Session
 
 
-class SessionSerializer(serializers.ModelSerializer):
+class SessionSerializer(team_production_system.serializers.SessionSerializer):
     mentor_first_name = serializers.SlugField(source='mentor.user.first_name',
                                               read_only=True)
     mentor_last_name = serializers.SlugField(source='mentor.user.last_name',

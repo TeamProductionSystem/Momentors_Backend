@@ -2,7 +2,7 @@ from rest_framework import serializers
 from team_production_system.models import NotificationSettings
 
 
-class NotificationSettingsSerializer(serializers.ModelSerializer):
+class NotificationSettingsSerializer(team_production_system.serializers.NotificationSettingsSerializer):
 
     class Meta:
         model = NotificationSettings

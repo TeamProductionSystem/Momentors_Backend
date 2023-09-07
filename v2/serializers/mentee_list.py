@@ -4,7 +4,7 @@ from .mentee_profile import MenteeProfileSerializer
 from .custom_user import CustomUserSerializer
 
 
-class MenteeListSerializer(serializers.ModelSerializer):
+class MenteeListSerializer(team_production_system.serializers.MenteeListSerializer):
     mentee_profile = MenteeProfileSerializer(read_only=True, source='mentee')
     user = CustomUserSerializer(read_only=True, source='customuser')
 

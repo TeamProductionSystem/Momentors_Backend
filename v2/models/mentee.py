@@ -1,9 +1,9 @@
 from django.db import models
-from .custom_user import CustomUser
+from team_production_system.models import CustomUser
 
 
 # Model for mentees to input their team
-class Mentee(models.Model):
+class Mentee(team_production_system.models.Mentee):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, primary_key=True)
     team_number = models.IntegerField(default=0)

@@ -7,7 +7,7 @@ from .notification_settings import NotificationSettings
 
 
 # Model for all users
-class CustomUser(AbstractUser):
+class CustomUser(team_production_system.models.CustomUser):
     is_mentor = models.BooleanField(default=False)
     is_mentee = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

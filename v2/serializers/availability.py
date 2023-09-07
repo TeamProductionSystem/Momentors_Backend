@@ -8,7 +8,7 @@ from team_production_system.models import (
 
 
 # The mentor availability serializer
-class AvailabilitySerializer(serializers.ModelSerializer):
+class AvailabilitySerializer(team_production_system.serializers.AvailabilitySerializer):
 
     class Meta:
         model = Availability

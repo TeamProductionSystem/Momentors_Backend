@@ -3,7 +3,7 @@ from .availability import AvailabilitySerializer
 from team_production_system.models import Mentor
 
 
-class MentorProfileSerializer(serializers.ModelSerializer):
+class MentorProfileSerializer(team_production_system.serializers.MentorProfileSerializer):
     availabilities = AvailabilitySerializer(
         many=True, read_only=True, source='mentor_availability')
     skills = fields.MultipleChoiceField(choices=Mentor.SKILLS_CHOICES)

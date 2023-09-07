@@ -3,7 +3,7 @@ from django.db import models
 
 # Notification settings model that allows users to choose to be alerted when
 # they have a session requested, confirmed, or canceled.
-class NotificationSettings(models.Model):
+class NotificationSettings(team_production_system.models.NotificationSettings):
     user = models.OneToOneField(
         "team_production_system.CustomUser",
         on_delete=models.CASCADE,

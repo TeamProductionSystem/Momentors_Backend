@@ -11,7 +11,7 @@ import pytz
 
 # The session model allows the mentee to setup a session and
 # allows both mentee and mentor see their sessions they have scheduled
-class Session(models.Model):
+class Session(team_production_system.models.Session):
     mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE,
                                related_name='mentor_session')
     mentor_availability = models.ForeignKey(

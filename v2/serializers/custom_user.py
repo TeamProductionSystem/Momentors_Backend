@@ -3,7 +3,7 @@ from team_production_system.models import CustomUser
 
 
 # The serializer for the user information
-class CustomUserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(team_production_system.serializers.CustomUserSerializer):
     profile_photo = serializers.ImageField()
 
     class Meta:

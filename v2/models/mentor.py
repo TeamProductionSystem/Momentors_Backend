@@ -5,7 +5,7 @@ from multiselectfield import MultiSelectField
 
 # The mentor model that allows the mentor to select skills
 # they know and information about them
-class Mentor(models.Model):
+class Mentor(team_production_system.models.Mentor):
 
     SKILLS_CHOICES = [
         ('AI', 'AI'),

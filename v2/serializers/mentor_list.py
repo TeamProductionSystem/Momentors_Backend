@@ -10,7 +10,7 @@ from team_production_system.models import (
 # Serializer to show a list of all users flagged as a mentor
 
 
-class MentorListSerializer(serializers.ModelSerializer):
+class MentorListSerializer(team_production_system.serializers.MentorListSerializer):
     about_me = serializers.SerializerMethodField('get_about_me')
     skills = serializers.SerializerMethodField('get_skills')
     availabilities = serializers.SerializerMethodField('get_availabilities')
