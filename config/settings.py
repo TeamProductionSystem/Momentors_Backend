@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'imagekit',
     'multiselectfield',
     "team_production_system",
-    "momentors",
+    "v2",
     "django_celery_beat",
 ]
 
