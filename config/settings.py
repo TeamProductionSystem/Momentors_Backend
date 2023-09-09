@@ -177,6 +177,7 @@ AUTH_USER_MODEL = 'team_production_system.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
     "https://momentum-mentors.netlify.app",
+    "https://staging-momentors.netlify.app",
     "https://team-production-system.onrender.com",
     "http://localhost:8080",
     "http://127.0.0.1:8000",
