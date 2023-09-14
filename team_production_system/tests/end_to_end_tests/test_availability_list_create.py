@@ -165,3 +165,26 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.assertEqual(str(response.data['end_time'][0]),
                          'End time must be in the future.')
         self.assertEqual(Availability.objects.count(), 2)
+
+    def test_create_availability_inside_existing_availability(self):
+        """
+        Test that a POST request to create a new Availability with a start time
+        and end time that are inside an existing Availability returns a status
+        code of 400 BAD REQUEST.
+        """
+        # Authenticate as the Mentor
+        self.client.force_authenticate(user=self.user)
+
+        availability_data = {
+            'start_time': self.availability1.start_time +
+            timezone.timedelta(minutes=15),
+            'end_time': self.availability1.end_time -
+            timezone.timedelta(minutes=15),
+            'mentor': self.mentor.pk
+        }
+        response = self.client.post('/availability/',
+                                    availability_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(str(response.data[0]),
+                         'Input overlaps with existing availability.')
+        self.assertEqual(Availability.objects.count(), 2)
