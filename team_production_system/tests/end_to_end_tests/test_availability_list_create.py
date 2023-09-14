@@ -72,7 +72,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         Test that a POST request to create a new Availability with valid data
         returns a status code of 201 CREATED.
         """
-        
+
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
 
