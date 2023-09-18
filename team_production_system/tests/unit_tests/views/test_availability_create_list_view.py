@@ -24,7 +24,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
             end_time=timezone.now() + timezone.timedelta(hours=2)
         )
 
-    @patch('team_production_system.views.timezone')
+    @patch('django.utils.timezone')
     def test_get_availability_list(self, mock_timezone):
         """
         Test that the get method returns a list of Availabilities
