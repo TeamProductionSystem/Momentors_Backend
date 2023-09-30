@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.utils import timezone
-from datetime import timedelta
 from team_production_system.models import (
     Mentor,
     Availability,
@@ -20,17 +19,38 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             user=self.context['request'].user)
         start_time = validated_data['start_time']
         end_time = validated_data['end_time']
-        overlapping_start = Availability.objects.filter(
+        # Check if start time is between a start time and end time of
+        # an existing availability
+        overlapping_condition1 = Availability.objects.filter(
             mentor=mentor,
-            start_time__lte=end_time,
-            start_time__gte=start_time + timedelta(minutes=1)
+            start_time__lt=start_time,
+            end_time__gt=start_time,
         ).exists()
-        overlapping_end = Availability.objects.filter(
+        # Check if end time is between a start time and end time of
+        # an existing availability
+        overlapping_condition2 = Availability.objects.filter(
             mentor=mentor,
-            end_time__gte=start_time + timedelta(minutes=1),
+            start_time__lt=end_time,
+            end_time__gt=end_time
+        ).exists()
+        # Check if start time is between the new start_time and new end_time
+        overlapping_condition3 = Availability.objects.filter(
+            mentor=mentor,
+            start_time__gte=start_time,
+            start_time__lt=end_time
+        ).exists()
+        # Check if end time is between the new start_time and new end_time
+        overlapping_condition4 = Availability.objects.filter(
+            mentor=mentor,
+            end_time__gt=start_time,
             end_time__lte=end_time
         ).exists()
-        availability_overlap = overlapping_start or overlapping_end
+
+        availability_overlap = (
+            overlapping_condition1
+            or overlapping_condition2
+            or overlapping_condition3
+            or overlapping_condition4)
         if not availability_overlap:
             availability = Availability.objects.create(
                 mentor=mentor, **validated_data)
