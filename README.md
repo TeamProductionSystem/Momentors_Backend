@@ -167,7 +167,7 @@ Branch names should be in the following format:
 
 **Type:** The type of branch. This should be one of the following:
 
-- feature - Adding a new feature
+- feat - Adding a new feature
 - bugfix - Fixing bugs in the code
 - hotfix - For emergency fixes
 - test - Experimental changes for testing purposes
@@ -181,20 +181,25 @@ Branch names should be in the following format:
 
 Commit messages should be in the following format:
 
-`<type>(<specific fix>): <description>`
+`<type>(<scope>): <description>`
 
-**Type:** The type of commit. This corrospoinds to the type of branch.
+**Type:** Represents the type of change that was made. This should be one of the following:
 
-**Specific Fix:** The specific fix that was made. This should be one of the following:
-
-- add - Adding new files or code
-- update - Updating existing files or code
-- remove - Removing files or code
+- feat - Adding a new feature
 - fix - Fixing bugs in the code
-- refactor - Refactoring existing code
-- styled - Formatting, missing semi colons, etc; no code change
+- docs - Changes to documentation
+- style - Changes to code style
+- refactor - Changes to code that neither fixes a bug nor adds a feature
+- perf - Changes to code that improves performance
+- test - Adding or updating tests
+- build - Changes to the build process or dependencies
+- ci - Changes to CI configuration files and scripts
+- chore - Miscellaneous changes, such as updating packages or bumping a version number
+- revert - Reverting a previous commit
 
-**Description:** A short description of the commit. This should be in lowercase and use dashes instead of spaces.
+**Scope:** This is optional but can provide additional contextual information. It describes the section or aspect of the codebase affected by the change. For example, auth for authentication-related changes or header for changes to a website's header component.
+
+**Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
 # API Reference
 
