@@ -6,7 +6,10 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 
 - [Features](#features)
 - [Run Locally](#run-locally)
+- [Running Celery and Redis Locally](#run-celery-and-redis-locally)
 - [Environment Variables](#environment-variables)
+- [Testing](#testing)
+- [Commiting Code](#
 - [API Reference](#api-reference)
 
 ## Contributing
@@ -131,27 +134,67 @@ CELERY_RESULT_BACKEND = local_redis_url
 
 # Testing
 
-For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting. 
+For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
 
 To run tests:
-```python manage.py test```
+`python manage.py test`
 
 To skip a test that isn't finished, add the following before the test class:
-```@unittest.skip("Test file is not ready yet")```
+`@unittest.skip("Test file is not ready yet")`
 
-To run coverage for test: 
-```coverage run manage.py test```
+To run coverage for test:
+`coverage run manage.py test`
 
 After you run tests you can get the report in command-line by running:
-```coverage report```
+`coverage report`
 
-For an interactive html report, run: 
-```coverage html```
+For an interactive html report, run:
+`coverage html`
 
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
 Here is some helpful information on testing in Django and Django REST Framework: https://www.rootstrap.com/blog/testing-in-django-django-rest-basics-useful-tools-good-practices
 
+# Submitting Code
+
+We use a pre-commit to check branch names and commit messages. Please follow the the following schema for branch names and commit messages:
+
+## Branch Names
+
+Branch names should be in the following format:
+
+`<type>/<issue-number>/<description>`
+
+**Type:** The type of branch. This should be one of the following:
+
+- feature - Adding a new feature
+- bugfix - Fixing bugs in the code
+- hotfix - For emergency fixes
+- test - Experimental changes for testing purposes
+- chore - Changes to the build process or auxiliary tools and libraries such as documentation generation
+
+**Issue Number:** The issue number associated with the branch. This should be the number of the issue in the GitHub repository or the trello board.
+
+**Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
+
+## Commit Messages
+
+Commit messages should be in the following format:
+
+`<type>(<specific fix>): <description>`
+
+**Type:** The type of commit. This corrospoinds to the type of branch.
+
+**Specific Fix:** The specific fix that was made. This should be one of the following:
+
+- add - Adding new files or code
+- update - Updating existing files or code
+- remove - Removing files or code
+- fix - Fixing bugs in the code
+- refactor - Refactoring existing code
+- styled - Formatting, missing semi colons, etc; no code change
+
+**Description:** A short description of the commit. This should be in lowercase and use dashes instead of spaces.
 
 # API Reference
 
