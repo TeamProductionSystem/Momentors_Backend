@@ -6,7 +6,10 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 
 - [Features](#features)
 - [Run Locally](#run-locally)
+- [Running Celery and Redis Locally](#run-celery-and-redis-locally)
 - [Environment Variables](#environment-variables)
+- [Testing](#testing)
+- [Submitting Code](#submitting-code)
 - [API Reference](#api-reference)
 
 ## Contributing
@@ -131,27 +134,72 @@ CELERY_RESULT_BACKEND = local_redis_url
 
 # Testing
 
-For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting. 
+For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
 
 To run tests:
-```python manage.py test```
+`python manage.py test`
 
 To skip a test that isn't finished, add the following before the test class:
-```@unittest.skip("Test file is not ready yet")```
+`@unittest.skip("Test file is not ready yet")`
 
-To run coverage for test: 
-```coverage run manage.py test```
+To run coverage for test:
+`coverage run manage.py test`
 
 After you run tests you can get the report in command-line by running:
-```coverage report```
+`coverage report`
 
-For an interactive html report, run: 
-```coverage html```
+For an interactive html report, run:
+`coverage html`
 
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
 Here is some helpful information on testing in Django and Django REST Framework: https://www.rootstrap.com/blog/testing-in-django-django-rest-basics-useful-tools-good-practices
 
+# Submitting Code
+
+We use a pre-commit to check branch names and commit messages. Please follow the the following schema for branch names and commit messages:
+
+## Branch Names
+
+Branch names should be in the following format:
+
+`<type>/<issue-number>/<description>`
+
+**Type:** The type of branch. This should be one of the following:
+
+- feat - Adding a new feature
+- bugfix - Fixing bugs in the code
+- hotfix - For emergency fixes
+- test - Experimental changes for testing purposes
+- chore - Changes to the build process or auxiliary tools and libraries such as documentation generation
+
+**Issue Number:** The issue number associated with the branch. This should be the number of the issue in the GitHub repository or the trello board.
+
+**Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
+
+## Commit Messages
+
+Commit messages should be in the following format:
+
+`<type>(<scope>): <description>`
+
+**Type:** Represents the type of change that was made. This should be one of the following:
+
+- feat - Adding a new feature
+- fix - Fixing bugs in the code
+- docs - Changes to documentation
+- style - Changes to code style
+- refactor - Changes to code that neither fixes a bug nor adds a feature
+- perf - Changes to code that improves performance
+- test - Adding or updating tests
+- build - Changes to the build process or dependencies
+- ci - Changes to CI configuration files and scripts
+- chore - Miscellaneous changes, such as updating packages or bumping a version number
+- revert - Reverting a previous commit
+
+**Scope:** This is optional but can provide additional contextual information. It describes the section or aspect of the codebase affected by the change. For example, auth for authentication-related changes or header for changes to a website's header component.
+
+**Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
 # API Reference
 

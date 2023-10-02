@@ -27,6 +27,7 @@ redis = "*"
 coverage = "*"
 celery = "*"
 django-celery-beat = "*"
+pre-commit = "*"
 
 [dev-packages]
 autopep8 = "*"
