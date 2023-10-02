@@ -13,8 +13,8 @@ RUN pip install -r /requirements.txt
 WORKDIR /app
 COPY . /app/
 
-RUN useradd -ms /bin/sh appuser
+EXPOSE 8080
 
-EXPOSE 8000
-
-ENTRYPOINT [ "/app/django.sh" ]
+CMD python manage.py makemigrations \
+    && python manage.py migrate \
+    && python manage.py runserver 0.0.0.0:8000
