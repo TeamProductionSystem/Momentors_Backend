@@ -1,0 +1,1654 @@
+openapi: 3.0.3
+info:
+  title: Momentum Mentors
+  version: 1.0.0
+  description: Connecting current students to available mentors
+paths:
+  /archivesession/:
+    get:
+      operationId: archivesession_list
+      tags:
+      - archivesession
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+          description: ''
+  /auth/token/login/:
+    post:
+      operationId: auth_token_login_create
+      description: Use this endpoint to obtain user authentication token.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenCreate'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenCreate'
+          description: ''
+  /auth/token/logout/:
+    post:
+      operationId: auth_token_logout_create
+      description: Use this endpoint to logout user (remove user authentication token).
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /auth/users/:
+    get:
+      operationId: auth_users_list
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: auth_users_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreatePasswordRetype'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreatePasswordRetype'
+          description: ''
+  /auth/users/{id}/:
+    get:
+      operationId: auth_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: auth_users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: auth_users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: auth_users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /auth/users/activation/:
+    post:
+      operationId: auth_users_activation_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Activation'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activation'
+          description: ''
+  /auth/users/me/:
+    get:
+      operationId: auth_users_me_retrieve
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: auth_users_me_update
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: auth_users_me_partial_update
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: auth_users_me_destroy
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /auth/users/resend_activation/:
+    post:
+      operationId: auth_users_resend_activation_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /auth/users/reset_password/:
+    post:
+      operationId: auth_users_reset_password_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /auth/users/reset_password_confirm/:
+    post:
+      operationId: auth_users_reset_password_confirm_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetConfirm'
+          description: ''
+  /auth/users/reset_username/:
+    post:
+      operationId: auth_users_reset_username_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /auth/users/reset_username_confirm/:
+    post:
+      operationId: auth_users_reset_username_confirm_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
+  /auth/users/set_password/:
+    post:
+      operationId: auth_users_set_password_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPassword'
+          description: ''
+  /auth/users/set_username/:
+    post:
+      operationId: auth_users_set_username_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUsername'
+          description: ''
+  /availability/:
+    get:
+      operationId: availability_list
+      tags:
+      - availability
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+          description: ''
+    post:
+      operationId: availability_create
+      tags:
+      - availability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Availability'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Availability'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Availability'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availability'
+          description: ''
+  /availability/{id}/:
+    delete:
+      operationId: availability_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - availability
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /mentee/:
+    get:
+      operationId: mentee_retrieve
+      tags:
+      - mentee
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /menteeinfo/:
+    get:
+      operationId: menteeinfo_list
+      tags:
+      - menteeinfo
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenteeProfile'
+          description: ''
+    post:
+      operationId: menteeinfo_create
+      tags:
+      - menteeinfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenteeProfile'
+          description: ''
+  /menteeinfoupdate/:
+    get:
+      operationId: menteeinfoupdate_retrieve
+      tags:
+      - menteeinfoupdate
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenteeProfile'
+          description: ''
+    put:
+      operationId: menteeinfoupdate_update
+      tags:
+      - menteeinfoupdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MenteeProfile'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenteeProfile'
+          description: ''
+    patch:
+      operationId: menteeinfoupdate_partial_update
+      tags:
+      - menteeinfoupdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMenteeProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMenteeProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMenteeProfile'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenteeProfile'
+          description: ''
+    delete:
+      operationId: menteeinfoupdate_destroy
+      tags:
+      - menteeinfoupdate
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /mentor/:
+    get:
+      operationId: mentor_list
+      tags:
+      - mentor
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MentorList'
+          description: ''
+  /mentor/{skills}/:
+    get:
+      operationId: mentor_retrieve
+      parameters:
+      - in: path
+        name: skills
+        schema:
+          type: string
+        required: true
+      tags:
+      - mentor
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /mentorinfo/:
+    get:
+      operationId: mentorinfo_list
+      tags:
+      - mentorinfo
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MentorProfile'
+          description: ''
+    post:
+      operationId: mentorinfo_create
+      tags:
+      - mentorinfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfile'
+          description: ''
+  /mentorinfoupdate/:
+    get:
+      operationId: mentorinfoupdate_retrieve
+      tags:
+      - mentorinfoupdate
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfile'
+          description: ''
+    put:
+      operationId: mentorinfoupdate_update
+      tags:
+      - mentorinfoupdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MentorProfile'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfile'
+          description: ''
+    patch:
+      operationId: mentorinfoupdate_partial_update
+      tags:
+      - mentorinfoupdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMentorProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMentorProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMentorProfile'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfile'
+          description: ''
+    delete:
+      operationId: mentorinfoupdate_destroy
+      tags:
+      - mentorinfoupdate
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /myprofile/:
+    get:
+      operationId: myprofile_retrieve
+      tags:
+      - myprofile
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    put:
+      operationId: myprofile_update
+      tags:
+      - myprofile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    patch:
+      operationId: myprofile_partial_update
+      tags:
+      - myprofile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    delete:
+      operationId: myprofile_destroy
+      tags:
+      - myprofile
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /notificationsettings/{id}/:
+    get:
+      operationId: notificationsettings_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - notificationsettings
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSettings'
+          description: ''
+    put:
+      operationId: notificationsettings_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - notificationsettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSettings'
+          description: ''
+    patch:
+      operationId: notificationsettings_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - notificationsettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationSettings'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotificationSettings'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSettings'
+          description: ''
+  /session/:
+    get:
+      operationId: session_list
+      tags:
+      - session
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+          description: ''
+  /sessionrequest/:
+    get:
+      operationId: sessionrequest_list
+      tags:
+      - sessionrequest
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+          description: ''
+    post:
+      operationId: sessionrequest_create
+      tags:
+      - sessionrequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Session'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Session'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Session'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+  /sessionrequest/{id}/:
+    get:
+      operationId: sessionrequest_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sessionrequest
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+    put:
+      operationId: sessionrequest_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sessionrequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Session'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Session'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Session'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+    patch:
+      operationId: sessionrequest_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sessionrequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSession'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+          description: ''
+    delete:
+      operationId: sessionrequest_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sessionrequest
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /sessionsignuplist/:
+    get:
+      operationId: sessionsignuplist_list
+      tags:
+      - sessionsignuplist
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+          description: ''
+components:
+  schemas:
+    Activation:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+      - token
+      - uid
+    Availability:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        mentor:
+          type: integer
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+      required:
+      - end_time
+      - mentor
+      - pk
+      - start_time
+    CustomUser:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 75
+        last_name:
+          type: string
+          maxLength: 75
+        email:
+          type: string
+          format: email
+          maxLength: 75
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 128
+        profile_photo:
+          type: string
+          format: uri
+        is_mentor:
+          type: boolean
+        is_mentee:
+          type: boolean
+        is_active:
+          type: boolean
+      required:
+      - email
+      - first_name
+      - last_name
+      - pk
+      - profile_photo
+      - username
+    MenteeProfile:
+      type: object
+      properties:
+        team_number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+    MentorList:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 75
+        last_name:
+          type: string
+          maxLength: 75
+        profile_photo:
+          type: string
+          format: uri
+          nullable: true
+        is_mentor:
+          type: boolean
+        about_me:
+          type: string
+          readOnly: true
+        skills:
+          type: string
+          readOnly: true
+        availabilities:
+          type: string
+          readOnly: true
+      required:
+      - about_me
+      - availabilities
+      - first_name
+      - last_name
+      - pk
+      - skills
+      - username
+    MentorProfile:
+      type: object
+      properties:
+        pk:
+          type: string
+          readOnly: true
+          title: User
+        about_me:
+          type: string
+          maxLength: 1000
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillsEnum'
+        availabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Availability'
+          readOnly: true
+      required:
+      - availabilities
+      - pk
+      - skills
+    NotificationSettings:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        user:
+          type: integer
+        session_requested:
+          type: boolean
+        session_confirmed:
+          type: boolean
+        session_canceled:
+          type: boolean
+        fifteen_minute_alert:
+          type: boolean
+        sixty_minute_alert:
+          type: boolean
+      required:
+      - pk
+      - user
+    PasswordResetConfirm:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+        new_password:
+          type: string
+      required:
+      - new_password
+      - token
+      - uid
+    PatchedCustomUser:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 75
+        last_name:
+          type: string
+          maxLength: 75
+        email:
+          type: string
+          format: email
+          maxLength: 75
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 128
+        profile_photo:
+          type: string
+          format: uri
+        is_mentor:
+          type: boolean
+        is_mentee:
+          type: boolean
+        is_active:
+          type: boolean
+    PatchedMenteeProfile:
+      type: object
+      properties:
+        team_number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+    PatchedMentorProfile:
+      type: object
+      properties:
+        pk:
+          type: string
+          readOnly: true
+          title: User
+        about_me:
+          type: string
+          maxLength: 1000
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillsEnum'
+        availabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Availability'
+          readOnly: true
+    PatchedNotificationSettings:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        user:
+          type: integer
+        session_requested:
+          type: boolean
+        session_confirmed:
+          type: boolean
+        session_canceled:
+          type: boolean
+        fifteen_minute_alert:
+          type: boolean
+        sixty_minute_alert:
+          type: boolean
+    PatchedSession:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        mentor_first_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentor_last_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentor_availability:
+          type: integer
+        mentee:
+          type: integer
+          readOnly: true
+        mentee_first_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentee_last_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        session_length:
+          allOf:
+          - $ref: '#/components/schemas/SessionLengthEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+    PatchedUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 75
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+    SendEmailReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    Session:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        mentor_first_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentor_last_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentor_availability:
+          type: integer
+        mentee:
+          type: integer
+          readOnly: true
+        mentee_first_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        mentee_last_name:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        session_length:
+          allOf:
+          - $ref: '#/components/schemas/SessionLengthEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+      required:
+      - end_time
+      - mentee
+      - mentee_first_name
+      - mentee_last_name
+      - mentor_availability
+      - mentor_first_name
+      - mentor_last_name
+      - pk
+      - start_time
+    SessionLengthEnum:
+      enum:
+      - 30
+      - 60
+      type: integer
+      description: |-
+        * `30` - 30 minutes
+        * `60` - 60 minutes
+    SetPassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+        current_password:
+          type: string
+      required:
+      - current_password
+      - new_password
+    SetUsername:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_username:
+          type: string
+          title: Username
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - current_password
+      - new_username
+    SkillsEnum:
+      enum:
+      - AWS S3
+      - Bootstrap
+      - CSS
+      - Django
+      - Git
+      - GitHub
+      - HTML
+      - Insomnia
+      - JavaScript
+      - MUI
+      - Other
+      - PostgreSQL
+      - Postico
+      - Python
+      - React
+      - SQL
+      - Time Management
+      type: string
+      description: |-
+        * `AWS S3` - AWS S3
+        * `Bootstrap` - Bootstrap
+        * `CSS` - CSS
+        * `Django` - Django
+        * `Git` - Git
+        * `GitHub` - GitHub
+        * `HTML` - HTML
+        * `Insomnia` - Insomnia
+        * `JavaScript` - JavaScript
+        * `MUI` - MUI
+        * `Other` - Other
+        * `PostgreSQL` - PostgreSQL
+        * `Postico` - Postico
+        * `Python` - Python
+        * `React` - React
+        * `SQL` - SQL
+        * `Time Management` - Time Management
+    StatusEnum:
+      enum:
+      - Pending
+      - Confirmed
+      - Canceled
+      - Completed
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Confirmed` - Confirmed
+        * `Canceled` - Canceled
+        * `Completed` - Completed
+    TokenCreate:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 75
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+      required:
+      - email
+      - id
+      - username
+    UserCreatePasswordRetype:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 75
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+      required:
+      - email
+      - id
+      - password
+      - re_password
+      - username
+    UsernameResetConfirm:
+      type: object
+      properties:
+        new_username:
+          type: string
+          title: Username
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - new_username
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
