@@ -9,6 +9,12 @@ from django.conf import settings
 from datetime import datetime, timedelta
 import boto3
 from django.http import Http404
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiResponse,
+    OpenApiExample,
+)
 from .serializers import (
     AvailabilitySerializer,
     CustomUserSerializer,
@@ -35,6 +41,35 @@ from .models import (
 
 
 # View to update the user profile information
+
+@extend_schema_view(
+    retrieve=extend_schema(
+        description="Get User Profile",
+        responses={
+            200: OpenApiResponse(
+                description='OK',
+                response=CustomUserSerializer,
+                examples=[
+                    OpenApiExample(
+                        name='Example',
+                        value={
+                            'pk': 6,
+                            'username': 'testusername',
+                            'first_name': 'Test',
+                            'last_name': 'User',
+                            'email': 'testuser@testemail.com',
+                            'phone_number': '555-123-4567',
+                            'profile_photo': 'null',
+                            'is_mentor': True,
+                            'is_mentee': False,
+                            'is_active': True,
+                        },
+                    ),
+                ],
+            )
+        }
+    )
+)
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
@@ -386,6 +421,37 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             serializer.save()
 
 
+@extend_schema_view(
+    retrieve=extend_schema(
+        description="Get Session",
+        responses={
+            200: OpenApiResponse(
+                description='OK',
+                response=SessionSerializer,
+                examples=[
+                    OpenApiExample(
+                        name='Example',
+                        value={
+                            'pk': 6,
+                            'mentor_first_name': 'Test',
+                            'mentor_last_name': 'Mentor',
+                            'username': 'testusername',
+                            'first_name': 'Test',
+                            'last_name': 'User',
+                            'email': 'testuser@testemail.com',
+                            'phone_number': '555-123-4567',
+                            'profile_photo': 'null',
+                            'is_mentor': True,
+                            'is_mentee': False,
+                            'is_active': True,
+                        },
+                        response_only=True,
+                    ),
+                ],
+            )
+        }
+    )
+)
 class SessionView(generics.ListAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer

@@ -19,6 +19,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                  - pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
   /auth/token/login/:
     post:
@@ -965,6 +980,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                  - pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
   /sessionrequest/:
     get:
@@ -981,6 +1011,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                  - pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
     post:
       operationId: sessionrequest_create
@@ -1006,6 +1051,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                    pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
   /sessionrequest/{id}/:
     get:
@@ -1026,6 +1086,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                    pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
     put:
       operationId: sessionrequest_update
@@ -1057,6 +1132,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                    pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
     patch:
       operationId: sessionrequest_partial_update
@@ -1087,6 +1177,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                    pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
     delete:
       operationId: sessionrequest_destroy
@@ -1118,6 +1223,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+              examples:
+                Example:
+                  value:
+                  - pk: 6
+                    mentor_first_name: Test
+                    mentor_last_name: Mentor
+                    username: testusername
+                    first_name: Test
+                    last_name: User
+                    email: testuser@testemail.com
+                    phone_number: 555-123-4567
+                    profile_photo: 'null'
+                    is_mentor: true
+                    is_mentee: false
+                    is_active: true
           description: ''
 components:
   schemas:
