@@ -11,7 +11,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ('pk', 'mentor', 'start_time', 'end_time',)
+        fields = ('pk', 'mentor', 'start_time', 'end_time', 'status')
         read_only_fields = ('mentor', 'pk',)
 
     def create(self, validated_data):
