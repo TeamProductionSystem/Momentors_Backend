@@ -10,19 +10,19 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps \
 COPY requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
-COPY .compose/local/django/entrypoint /entrypoint
+COPY ./compose/local/django/entrypoint.sh /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY ./compose/local/django/start /start
+COPY ./compose/local/django/start.sh /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-COPY ./compose/local/django/celery/worker/start /start-celeryworker
+COPY ./compose/local/django/celery/worker/start.sh /start-celeryworker
 RUN sed -i 's/\r$//g' /start-celeryworker
-RUN sed +x /start-celeryworker
+RUN chmod +x /start-celeryworker
 
-COPY ./compose/local/django/celery/beat/start /start-celerybeat
+COPY ./compose/local/django/celery/beat/start.sh /start-celerybeat
 RUN sed -i 's/\r$//g' /start-celerybeat
 RUN chmod +x /start-celerybeat
 
