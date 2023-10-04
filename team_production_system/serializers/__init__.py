@@ -1,6 +1,6 @@
 # flake8: noqa
 
-from .availability import AvailabilitySerializer
+from .availability import AvailabilitySerializer, AvailabilitySerializerV2
 from .custom_user import CustomUserSerializer
 from .mentor_profile import MentorProfileSerializer
 from .mentor_list import MentorListSerializer

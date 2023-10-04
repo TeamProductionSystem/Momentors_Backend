@@ -7,6 +7,7 @@ from team_production_system.models import (
 )
 
 
+# V1 API #
 # The mentor availability serializer
 class AvailabilitySerializer(serializers.ModelSerializer):
 
@@ -81,9 +82,11 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         return value
 
     # TODO: Add validation for start times
-    
 
-class AvailabilityV2Serializer(serializers.ModelSerializer):
+
+# V2 API #
+# The mentor availability serializer
+class AvailabilitySerializerV2(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
