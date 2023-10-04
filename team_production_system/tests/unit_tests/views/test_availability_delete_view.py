@@ -1,11 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.http import HttpRequest
 from rest_framework import status
 from rest_framework.test import APIClient
 from ....models import Availability, Mentor, CustomUser
-from ....serializers import AvailabilitySerializer 
-from ....views import AvailabilityDeleteView
 
 
 class AvailabilityDeleteViewTestCase(TestCase):
