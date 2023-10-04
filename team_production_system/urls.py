@@ -55,6 +55,6 @@ urlpatterns = [
      path(
           'v2/availability/',
           views.AvailabilityListCreateViewV2.as_view(),
-          name='availability-v2'
+          name='availability-list-create-v2'
      ),
      ]
