@@ -9,7 +9,7 @@ class Availability(models.Model):
     STATUS_CHOICES = [
         ('Open', 'Open'),
         ('Requested', 'Requested'),
-        ('Closed', 'Closed'),
+        ('Confirmed', 'Confirmed'),
     ]
 
     mentor = models.ForeignKey(
