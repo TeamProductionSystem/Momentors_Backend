@@ -4,23 +4,7 @@ from rest_framework import serializers
 from ....serializers import AvailabilitySerializerV2
 
 
-# class AvailabilitySerializerV2TestCase(TestCase):
-#     def test_validate(self):
-#         serializer = AvailabilitySerializerV2()
-#         start_time = timezone.now() - timezone.timedelta(hours=1)
-#         end_time = timezone.now() + timezone.timedelta(hours=1)
-#         data = {
-#             'start_time': start_time,
-#             'end_time': end_time,
-#         }
-#         with self.assertRaises(serializers.ValidationError) as context:
-#             serializer.validate(data)
-#         self.assertEqual(
-#             str(context.exception.detail[0]),
-#             'Start time must be in the future.'
-#         )
-
-class AvailabilitySerializerTestCase(TestCase):
+class AvailabilitySerializerV2TestCase(TestCase):
     def test_validate(self):
         serializer = AvailabilitySerializerV2()
         start_time = timezone.now() + timezone.timedelta(hours=1)
