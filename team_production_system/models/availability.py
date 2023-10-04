@@ -19,12 +19,12 @@ class Availability(models.Model):
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='Open')
 
-
     class Meta:
         constraints = [
             UniqueConstraint(
                 fields=['mentor', 'start_time'],
-                name='availability_constraint')
+                name='availability_constraint',
+                violation_error_message='Availability already exists.')
         ]
 
     def __str__(self):
