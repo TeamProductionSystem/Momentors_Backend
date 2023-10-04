@@ -7,7 +7,7 @@ from team_production_system.models import Mentor, Availability
 
 # Create and view all availabilities
 class AvailabilityListCreateView(generics.ListCreateAPIView):
-    serializer_class = AvailabilitySerializer
+    serializer_class = AvailabilityV2Serializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
