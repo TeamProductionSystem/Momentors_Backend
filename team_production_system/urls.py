@@ -16,7 +16,6 @@ urlpatterns = [
      path('mentorinfoupdate/', views.MentorInfoUpdateView.as_view(),
           name='mentor-info-update'),
 
-
      # Mentee endpoints
      path('mentee/', views.MenteeList.as_view(), name='mentee-list'),
      path('menteeinfo/', views.MenteeInfoView.as_view(), name='mentee-info'),
