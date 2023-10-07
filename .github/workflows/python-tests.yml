@@ -14,7 +14,6 @@ jobs:
         python-version: ['3.10']
 
     steps:
-    
       - uses: actions/checkout@v2
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -29,8 +28,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Set DJANGO_SETTINGS_MODULE environment variable
-        run: echo "DJANGO_SETTINGS_MODULE=config.settings" >> $GITHUB_ENV
+        run: 
+            echo "DJANGO_SETTINGS_MODULE=config.settings" >> $GITHUB_ENV
 
       - name: Run tests with pytest
-        run: |
-          pytest
+        run: pytest
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
