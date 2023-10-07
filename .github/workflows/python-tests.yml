@@ -35,3 +35,7 @@ jobs:
         run: pytest
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Debug environment variables
+        run: echo $DATABASE_URL | awk '{print substr($0, 1, 4)}'
