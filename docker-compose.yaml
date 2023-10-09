@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
+    command: /start.sh
     # this volume is used to map the files and folders on the host to the container
     # so if we change code on the host, code in the docker container will also be changed
     volumes:
@@ -14,6 +15,12 @@ services:
     # env_file is used to manage the env variables of our project
     env_file:
       - ./config/.env
+    environment:
+      - DATABASE_NAME=mentors
+      - DATABASE_USER=mentors
+      - DATABASE_PASSWORD=mentors
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
     depends_on:
       - redis
       - db
@@ -26,6 +33,8 @@ services:
       - POSTGRES_DB=mentors
       - POSTGRES_USER=mentors
       - POSTGRES_PASSWORD=mentors
+    ports:
+      - 5432:5432
 
   redis:
     image: redis:7-alpine
@@ -34,8 +43,12 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    image: mentors_celery_worker
-    command: /start-celeryworker
+    command: celery -A celery.config worker -l INFO
+    environment:
+      - SQL_DATABASE=mentors
+      - SQL_USER=mentors
+      - SQL_PASSWORD=mentors
+      - SQL_HOST=db
     volumes:
       - .:/app
     depends_on:
@@ -46,8 +59,12 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    image: mentors_celery_beat
-    command: /start-celerybeat
+    command: celery -A celery.config beat -l debug
+    environment:
+      - SQL_DATABASE=mentors
+      - SQL_USER=mentors
+      - SQL_PASSWORD=mentors
+      - SQL_HOST=db
     volumes:
       - .:/app
     depends_on:

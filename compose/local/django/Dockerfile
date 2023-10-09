@@ -1,31 +1,25 @@
 FROM python:3.10-alpine
 
+WORKDIR /usr/src/app
+
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONWRITEBYTECODE 1
 
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
     gcc libc-dev linux-headers postgresql-dev \
-    && apk add libffi-dev
+    && apk add libffi-dev \
+    && apk add --no-cache bash
 
-COPY requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install --upgrade pip
+COPY requirements.txt /usr/src/app/requirements.txt
+RUN pip install -r /usr/src/app/requirements.txt
 
-COPY ./compose/local/django/entrypoint.sh /entrypoint
-RUN sed -i 's/\r$//g' /entrypoint
-RUN chmod +x /entrypoint
+COPY ./compose/local/django/entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
 
-COPY ./compose/local/django/start.sh /start
-RUN sed -i 's/\r$//g' /start
-RUN chmod +x /start
-
-COPY ./compose/local/django/celery/worker/start.sh /start-celeryworker
-RUN sed -i 's/\r$//g' /start-celeryworker
-RUN chmod +x /start-celeryworker
-
-COPY ./compose/local/django/celery/beat/start.sh /start-celerybeat
-RUN sed -i 's/\r$//g' /start-celerybeat
-RUN chmod +x /start-celerybeat
+COPY ./compose/local/django/start.sh /start.sh
+RUN chmod +x /start.sh
 
 WORKDIR /app
 
-ENTRYPOINT [ "/entrypoint" ]
+ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
