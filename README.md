@@ -102,9 +102,14 @@ celery -A config.celery beat -l debug
 2.  Open the .env file in a text editor and set your environment variables in the following format:
     'VARIABLE_NAME=value'
 
-        For example:
+    For example:
 
-```DATABASE_URL=postgres://username:password@localhost/mydatabase
+```
+DATABASE_PASSWORD=mentors
+DATABASE_NAME=mentors
+DATABASE_USER=mentors
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
 SECRET_KEY=my_secret_key
 DEBUG=True
 DJANGO_SUPERUSER_USERNAME=admin
