@@ -1069,6 +1069,50 @@ Host: https://team-production-system.onrender.com
 
 ---
 
+## V2: Add Mentor Availabilty (User Authentication **Required**)
+
+- Add mentor availabilty
+- Availability saves to database in 30 min chunks
+
+```http
+POST - https://team-production-system.onrender.com/v2/availabilty/
+```
+
+| Body         | Type        | Description                                      |
+| :----------- | :---------- | :----------------------------------------------- |
+| `pk`         | `int`       | The pk of the availabilty                        |
+| `mentor`     | `int`       | The pk of the mentor attached to the availabilty |
+| `start_time` | `date-time` | Start time of the availabilty                    |
+| `end_time`   | `date-time` | Start time of the availabilty                    |
+
+#### Request Sample:
+
+```
+POST /v2/availabilty/
+Content-Type: json
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T15:30:00Z"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+{
+	"pk": 23,
+	"mentor": 4,
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T14:30:00Z"
+}
+```
+
+---
+
 ## Delete Mentor Availabilty (User Authentication **Required**)
 
 - Delete a mentor availabilty
