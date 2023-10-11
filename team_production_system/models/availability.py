@@ -18,6 +18,8 @@ class Availability(models.Model):
     end_time = models.DateTimeField()
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='Open')
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         constraints = [

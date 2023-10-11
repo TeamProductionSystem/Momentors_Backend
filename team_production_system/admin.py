@@ -8,6 +8,12 @@ from .models import (
     NotificationSettings
 )
 
+class AvailabilityAdmin(admin.ModelAdmin):
+    readonly_fields = ("created_at", "modified_at")
+
+class SessionAdmin(admin.ModelAdmin):
+    readonly_fields = ("created_at", "modified_at")
+
 # admin.site.register(UserAdmin)
 admin.site.register(CustomUser)
 admin.site.register(Mentor)
