@@ -81,10 +81,9 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             )
         return value
 
-    # TODO: Add validation for start times
-
 
 # V2 API #
+# TODO: update to namespace v2 in future
 # The mentor availability serializer
 class AvailabilitySerializerV2(serializers.ModelSerializer):
 
