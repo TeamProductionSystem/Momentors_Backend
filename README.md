@@ -261,6 +261,7 @@ Host: https://team-production-system.onrender.com
 ## Token Authentication / User Login
 
 - Create a user token.
+- Username must be lowercase
 
 ```http
 POST - https://team-production-system.onrender.com/auth/token/login/
@@ -268,7 +269,7 @@ POST - https://team-production-system.onrender.com/auth/token/login/
 
 | Body       | Type     | Description             |
 | :--------- | :------- | :---------------------- |
-| `username` | `string` | Username                |
+| `username` | `string` | Username (lowercase)    |
 | `password` | `string` | User generated password |
 
 #### Request Sample:
@@ -280,7 +281,7 @@ Authorization: N/A
 Host: https://team-production-system.onrender.com
 
 {
-	"username": "TestUserLogin" ,
+	"username": "testuserlogin" ,
 	"password": "TestUserPassword"
 }
 
@@ -1028,7 +1029,7 @@ Host: https://team-production-system.onrender.com
 
 ## Add Mentor Availabilty (User Authentication **Required**)
 
-- Add mentor availabilty (This endpoint filters out any expired availabilty. Only shows availabilty that is in the future.)
+- Add mentor availabilty
 
 ```http
 POST - https://team-production-system.onrender.com/availabilty/
