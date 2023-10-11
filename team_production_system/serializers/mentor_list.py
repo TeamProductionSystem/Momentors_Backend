@@ -14,12 +14,13 @@ class MentorListSerializer(serializers.ModelSerializer):
     about_me = serializers.SerializerMethodField('get_about_me')
     skills = serializers.SerializerMethodField('get_skills')
     availabilities = serializers.SerializerMethodField('get_availabilities')
+    team_number = serializers.SerializerMethodField('get_team_number')
 
     class Meta:
         model = CustomUser
         fields = ('pk', 'username', 'first_name',
                   'last_name', 'profile_photo', 'is_mentor', 'about_me',
-                  'skills', 'availabilities')
+                  'skills', 'availabilities', 'team_number')
 
     def get_about_me(self, obj):
         try:
@@ -42,5 +43,12 @@ class MentorListSerializer(serializers.ModelSerializer):
             serializer = AvailabilitySerializer(
                 instance=availabilities, many=True)
             return serializer.data
+        except Mentor.DoesNotExist:
+            return None
+
+    def get_team_number(self, obj):
+        try:
+            mentor = Mentor.objects.get(user=obj.pk)
+            return mentor.team_number
         except Mentor.DoesNotExist:
             return None
