@@ -43,12 +43,17 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    command: celery -A celery.config worker -l INFO
+    command: celery -A config.celery_settings worker -l info
+    env_file:
+      - ./config/.env
     environment:
-      - SQL_DATABASE=mentors
-      - SQL_USER=mentors
-      - SQL_PASSWORD=mentors
-      - SQL_HOST=db
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_RESULT_BACKEND=redis://redis:6379
+      - DATABASE_NAME=mentors
+      - DATABASE_USER=mentors
+      - DATABASE_PASSWORD=mentors
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
     volumes:
       - .:/app
     depends_on:
@@ -59,12 +64,17 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    command: celery -A celery.config beat -l debug
+    command: celery -A config.celery_settings beat -l debug
+    env_file:
+      - ./config/.env
     environment:
-      - SQL_DATABASE=mentors
-      - SQL_USER=mentors
-      - SQL_PASSWORD=mentors
-      - SQL_HOST=db
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_RESULT_BACKEND=redis://redis:6379
+      - DATABASE_NAME=mentors
+      - DATABASE_USER=mentors
+      - DATABASE_PASSWORD=mentors
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
     volumes:
       - .:/app
     depends_on:
