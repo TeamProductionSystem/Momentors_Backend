@@ -7,6 +7,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Features](#features)
 - [Run Locally](#run-locally)
 - [Running Celery and Redis Locally](#run-celery-and-redis-locally)
+- [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
 - [Testing](#testing)
 - [Submitting Code](#submitting-code)
