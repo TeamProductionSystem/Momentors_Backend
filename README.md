@@ -96,6 +96,32 @@ Start the Celery Beat server:
 celery -A config.celery beat -l debug
 ```
 
+## Run Locally via Docker Containers
+
+**Note:** Docker and Docker Desktop are required for this method.
+
+Update `requirements.txt` with any newly added installs:
+```bash
+pipenv requirements > requirements.txt
+```
+
+Build docker images:
+```bash
+docker compose build
+```
+
+Spin up docker containers:
+```bash
+docker compose up
+```
+
+The app should now be running at http://localhost:8000/
+
+To stop running the containers, hit Ctrl+C, then spin down the containers:
+```bash
+docker compose down
+```
+
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
