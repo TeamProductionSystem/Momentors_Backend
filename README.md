@@ -99,7 +99,8 @@ celery -A config.celery beat -l debug
 
 ## Run Locally via Docker Containers
 
-**Note:** Docker and Docker Desktop are required for this method.
+**Note:** Docker and Docker Desktop are required to be installed on your machine for this method.
+You will also need to have your .env file set up.
 
 Update `requirements.txt` with any newly added installs:
 ```bash
@@ -118,10 +119,31 @@ docker compose up
 
 The app should now be running at http://localhost:8000/
 
+If you want to connect to the container database via an app like Postico 2, the settings needed are:
+
+	- Host: localhost
+	- Port: 5433
+	- Database: mentors
+	- User: mentors
+	- Password: mentors
+
 To stop running the containers, hit Ctrl+C, then spin down the containers:
 ```bash
 docker compose down
 ```
+
+The database is persistant. If you want to reset it, follow these 2 steps once the containers are no longer running:
+
+- Remove the persistant volume:
+```bash
+docker volume rm team_production_system_be_postgres_data
+``` 
+- Rebuild the docker images:
+```bash
+docker compose build
+```
+
+The next time you spin up the docker containers, the database will be empty again.
 
 ## Environment Variables
 
