@@ -102,9 +102,10 @@ celery -A config.celery beat -l debug
 2.  Open the .env file in a text editor and set your environment variables in the following format:
     'VARIABLE_NAME=value'
 
-        For example:
+    For example:
 
-```DATABASE_URL=postgres://username:password@localhost/mydatabase
+```
+DATABASE_URL=postgres://username:password@localhost/mydatabase
 SECRET_KEY=my_secret_key
 DEBUG=True
 DJANGO_SUPERUSER_USERNAME=admin
@@ -217,6 +218,7 @@ API URL - https://team-production-system.onrender.com
 ## User Create
 
 - Create a new user
+- **Note: the username will automatically be converted to all lowercase letters**
 
 ```http
   POST https://team-production-system.onrender.com/auth/users/
@@ -231,14 +233,14 @@ API URL - https://team-production-system.onrender.com
 
 #### Request Sample:
 
-```
+```JSON
 POST /auth/users/
 Content-Type: json
 Authorization: N/A
 Host: https://team-production-system.onrender.com
 {
-	"username": "TestUserLogin" ,
-	"email": "testemail@fake.com"
+	"username": "TestUserLogin",
+	"email": "testemail@fake.com",
 	"password": "TestUserPassword",
 	"re_password": "TestUserPassword",
 }
@@ -247,10 +249,10 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 {
 	"email": "testemail@fake.com",
-	"username": "TestUserLogin",
+	"username": "testuserlogin",
 	"id": 5
 }
 
@@ -273,14 +275,14 @@ POST - https://team-production-system.onrender.com/auth/token/login/
 
 #### Request Sample:
 
-```
+```JSON
 POST /auth/token/login/
 Content-Type: json
 Authorization: N/A
 Host: https://team-production-system.onrender.com
 
 {
-	"username": "TestUserLogin" ,
+	"username": "testuserlogin" ,
 	"password": "TestUserPassword"
 }
 
@@ -288,7 +290,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"auth_token": "****************************************"
 }
@@ -312,14 +314,14 @@ POST - https://team-production-system.onrender.com/auth/token/logout/
 
 #### Request Sample:
 
-```
+```JSON
 POST /auth/token/logout/
 Content-Type: json
 Authorization: Required
 Host: https://team-production-system.onrender.com
 
 {
-	"username": "TestUserLogin" ,
+	"username": "testuserlogin" ,
 	"password": "TestUserPassword",
 }
 
@@ -327,7 +329,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (204 No Content)
 
-```
+```JSON
 No body returned for response
 
 ```
@@ -356,7 +358,7 @@ GET - https://team-production-system.onrender.com/myprofile/
 
 #### Request Sample:
 
-```
+```JSON
 GET /myprofile/
 Content-Type: json
 Authorization: Required
@@ -370,7 +372,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"pk": 6,
 	"username": "testusername",
@@ -411,7 +413,7 @@ PATCH - https://team-production-system.onrender.com/myprofile/
 
 #### Request Sample:
 
-```
+```JSON
 PATCH /myprofile/
 Content-Type: Multipart/form-data
 Authorization: Required
@@ -435,7 +437,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"pk": 6,
 	"username": "testusername",
@@ -480,7 +482,7 @@ GET - https://team-production-system.onrender.com/mentor/
 
 #### Request Sample:
 
-```
+```JSON
 GET /mentor/
 Content-Type: json
 Authorization: Required
@@ -494,7 +496,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"pk": 6,
@@ -540,7 +542,7 @@ POST - https://team-production-system.onrender.com/mentorinfo/
 
 #### Request Sample:
 
-```
+```JSON
 POST /mentorinfo/
 Content-Type: json
 Authorization: Required
@@ -555,7 +557,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 {
 	"about_me": "Hi, I am so and so and do such and such",
 	"skills": "CSS"
@@ -586,7 +588,7 @@ GET - https://team-production-system.onrender.com/mentorinfo/
 
 #### Request Sample:
 
-```
+```JSON
 GET /mentorinfo/
 Content-Type: json
 Authorization: Required
@@ -600,7 +602,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"about_me": "Hi, I am so and so and do such and such",
 	"skills": "CSS"
@@ -634,7 +636,7 @@ PATCH - https://team-production-system.onrender.com/mentorinfoupdate/
 
 #### Request Sample:
 
-```
+```JSON
 PATCH /mentorinfoupdate/
 Content-Type: json
 Authorization: Required
@@ -648,7 +650,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"about_me": "Hi, I am so and so and do such and such",
 	"skills": "Python"
@@ -673,7 +675,7 @@ DELETE - https://team-production-system.onrender.com/mentorinfoupdate/
 
 #### Request Sample:
 
-```
+```JSON
 DELETE /mentorinfoupdate/
 Content-Type: json
 Authorization: Required
@@ -687,7 +689,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (204 No Content)
 
-```
+```JSON
 
 No body returned to response
 
@@ -710,7 +712,7 @@ GET - https://team-production-system.onrender.com/mentor/<str:skills>/
 
 #### Request Sample:
 
-```
+```JSON
 GET mentor/<str:skills>/
 Content-Type: json
 Authorization: Required
@@ -724,7 +726,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 Ok)
 
-```
+```JSON
 [
 	{
 		"pk": 2,
@@ -778,7 +780,7 @@ Nested Information:
 
 #### Request Sample:
 
-```
+```JSON
 GET /mentee/
 Content-Type: json
 Authorization: Required
@@ -792,7 +794,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"pk": 4,
@@ -824,7 +826,7 @@ POST - https://team-production-system.onrender.com/menteeinfo/
 
 #### Request Sample:
 
-```
+```JSON
 POST /menteeinfo/
 Content-Type: json
 Authorization: Required
@@ -838,7 +840,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 [
 	{
 		"team_number": 4
@@ -863,7 +865,7 @@ GET - https://team-production-system.onrender.com/menteeinfo/
 
 #### Request Sample:
 
-```
+```JSON
 GET /menteeinfo/
 Content-Type: json
 Authorization: Required
@@ -877,7 +879,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"team_number": 4
@@ -902,7 +904,7 @@ PATCH - https://team-production-system.onrender.com/menteeinfoupdate/
 
 #### Request Sample:
 
-```
+```JSON
 PATCH /menteeinfoupdate/
 Content-Type: json
 Authorization: Required
@@ -918,7 +920,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"team_number": 5
 }
@@ -941,7 +943,7 @@ DELETE - https://team-production-system.onrender.com/menteeinfoupdate/
 
 #### Request Sample:
 
-```
+```JSON
 DELETE /menteeinfoupdate/
 Content-Type: json
 Authorization: Required
@@ -955,7 +957,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (204 No Content)
 
-```
+```JSON
 
 No body returned to response
 
@@ -981,7 +983,7 @@ GET - https://team-production-system.onrender.com/availabilty/
 
 #### Request Sample:
 
-```
+```JSON
 GET /availabilty/
 Content-Type: json
 Authorization: Required
@@ -995,7 +997,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"pk": 19,
@@ -1043,7 +1045,7 @@ POST - https://team-production-system.onrender.com/availabilty/
 
 #### Request Sample:
 
-```
+```JSON
 POST /availabilty/
 Content-Type: json
 Authorization: Required
@@ -1058,7 +1060,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 {
 	"pk": 23,
 	"mentor": 4,
@@ -1083,7 +1085,7 @@ DELETE - https://team-production-system.onrender.com/availabilty/<int:pk>/
 
 #### Request Sample:
 
-```
+```JSON
 DELETE /availabilty/<int:pk>/
 Content-Type: json
 Authorization: Required
@@ -1097,13 +1099,11 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (204 No Content)
 
-```
+```JSON
 No body returned to response
 ```
 
 ---
-
-````http
 
 ## Sessions (User Authentication **Required**)
 
@@ -1111,7 +1111,7 @@ No body returned to response
 
 ```http
 GET - https://team-production-system.onrender.com/session/
-````
+```
 
 | Body                 | Type        | Description                                      |
 | :------------------- | :---------- | :----------------------------------------------- |
@@ -1128,7 +1128,7 @@ GET - https://team-production-system.onrender.com/session/
 
 #### Request Sample:
 
-```
+```JSON
 GET /session/
 Content-Type: json
 Authorization: Required
@@ -1142,7 +1142,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"pk": 5,
@@ -1216,7 +1216,7 @@ GET - https://team-production-system.onrender.com/archivesession/
 
 #### Request Sample:
 
-```
+```JSON
 GET /archivesession/
 Content-Type: json
 Authorization: Required
@@ -1230,7 +1230,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 [
 	{
 		"pk": 1,
@@ -1274,7 +1274,7 @@ POST - https://team-production-system.onrender.com/sessionrequest/
 
 #### Request Sample:
 
-```
+```JSON
 POST /sessionrequest/
 Content-Type: json
 Authorization: Required
@@ -1290,7 +1290,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 {
 	"pk": 8,
 	"mentor_first_name": "testuser",
@@ -1332,7 +1332,7 @@ PATCH - https://team-production-system.onrender.com/sessionrequest/<int:pk>
 
 #### Request Sample:
 
-```
+```JSON
 PATCH /sessionrequest/<int:pk>
 Content-Type: json
 Authorization: Required
@@ -1346,7 +1346,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (201 Created)
 
-```
+```JSON
 {
 	"pk": 8,
 	"mentor_first_name": "testuser",
@@ -1382,7 +1382,7 @@ PATCH - https://team-production-system.onrender.com/notificationsettings/<int:pk
 
 #### Request Sample:
 
-```
+```JSON
 PATCH /notificationsettings/<int:pk>
 Content-Type: json
 Authorization: Required
@@ -1396,7 +1396,7 @@ Host: https://team-production-system.onrender.com
 
 #### Response Example (200 OK)
 
-```
+```JSON
 {
 	"pk": 4,
 	"user": 3,
