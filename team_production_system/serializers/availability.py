@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from django.utils import timezone
-from datetime import timedelta, datetime
-from django.utils.dateparse import parse_datetime
 from team_production_system.models import (
     Mentor,
     Availability,
@@ -85,14 +83,13 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
 # V2 API #
 # TODO: update to namespace v2 in future
-
+# The mentor availability list serializer for bulk creation
 class AvailabilityListSerializerV2(serializers.ListSerializer):
     child = 'AvailabilitySerializerV2'
 
     class Meta:
         model = Availability
         fields = ['pk', 'mentor', 'start_time', 'end_time', 'status']
-
 
     def create(self, validated_data):
         for data in validated_data:
@@ -121,54 +118,6 @@ class AvailabilityListSerializerV2(serializers.ListSerializer):
 
         raise serializers.ValidationError(
             "Input overlaps with existing availability.")
-
-    # def update(self, instance, validated_data):
-    #     # Map for id->instance
-    #     availability_mapping = {availability.pk: availability for availability in instance}
-
-    #     # Create a list of updated Availability objects
-    #     updated_availabilities = []
-    #     for availability_data in validated_data:
-
-    #         pk = availability_data.get('pk', None)
-    #         availability = availability_mapping.get(pk, None)
-    #         if availability is not None:
-    #             start_time = availability_data.get('start_time', availability.start_time)
-    #             end_time = availability_data.get('end_time', availability.end_time)
-    #             status = availability_data.get('status', availability.status)
-
-    #             mentor = Mentor.objects.select_related('user').get(
-    #                 user=self.context['request'].user)
-
-    #             availability_overlap = self.check_availability_overlap(
-    #                 mentor, start_time, end_time, availability.pk)
-
-    #             if not availability_overlap:
-    #                 start_time_valid = self.check_start_time(start_time)
-    #                 end_time_valid = self.check_end_time(end_time)
-
-    #                 if start_time_valid and end_time_valid:
-    #                     availability.mentor = mentor
-    #                     availability.start_time = start_time
-    #                     availability.end_time = end_time
-    #                     availability.status = status
-    #                     availability.modified_at = datetime.now()
-    #                     updated_availabilities.append(availability)
-    #                 else:
-    #                     raise serializers.ValidationError(
-    #                         "Invalid start or end time.")
-    #             else:
-    #                 raise serializers.ValidationError(
-    #                     "Input overlaps with existing availability.")
-
-    #     # Use bulk_update to update all of the Availability objects in a single query
-    #     Availability.objects.bulk_update(updated_availabilities, ['mentor', 'start_time', 'end_time', 'status', 'modified_at'])
-
-    #     # Refresh the instance queryset to reflect the updated data
-    #     instance = Availability.objects.filter(pk__in=[availability.pk for availability in updated_availabilities])
-
-    #     return instance
-
 
     def check_availability_overlap(self, mentor, start_time, end_time):
         # Check if start time is between a start time and end time of
@@ -204,7 +153,7 @@ class AvailabilityListSerializerV2(serializers.ListSerializer):
             or overlapping_condition3
             or overlapping_condition4)
         return availability_overlap
-    
+
     def check_start_time(self, data):
         """
         Check that the start_time is before the end_time and in future.
