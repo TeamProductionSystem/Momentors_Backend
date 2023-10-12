@@ -28,7 +28,6 @@ coverage = "*"
 celery = "*"
 django-celery-beat = "*"
 pre-commit = "*"
-drf-spectacular = "*"
 
 [dev-packages]
 autopep8 = "*"
