@@ -107,6 +107,12 @@ Update `requirements.txt` with any newly added installs:
 pipenv requirements > requirements.txt
 ```
 
+**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
+You can update it with the following command:
+```bash
+pip install --user --upgrade pipenv
+```
+
 Build docker images:
 ```bash
 docker compose build
