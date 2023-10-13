@@ -82,7 +82,6 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
 
 # V2 API #
-# TODO: update to namespace v2 in future
 # The mentor availability list serializer for bulk creation
 class AvailabilityListSerializerV2(serializers.ListSerializer):
     child = 'AvailabilitySerializerV2'
