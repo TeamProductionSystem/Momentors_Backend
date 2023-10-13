@@ -7,6 +7,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Features](#features)
 - [Run Locally](#run-locally)
 - [Running Celery and Redis Locally](#run-celery-and-redis-locally)
+- [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
 - [Testing](#testing)
 - [Submitting Code](#submitting-code)
@@ -96,6 +97,60 @@ Start the Celery Beat server:
 celery -A config.celery beat -l debug
 ```
 
+## Run Locally via Docker Containers
+
+**Note:** Docker and Docker Desktop are required to be installed on your machine for this method.
+You will also need to have your .env file set up.
+
+Update `requirements.txt` with any newly added installs:
+```bash
+pipenv requirements > requirements.txt
+```
+
+**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
+You can update it with the following command:
+```bash
+pip install --user --upgrade pipenv
+```
+
+Build docker images:
+```bash
+docker compose build
+```
+
+Spin up docker containers:
+```bash
+docker compose up
+```
+
+The app should now be running at http://localhost:8000/
+
+If you want to connect to the container database via an app like Postico 2, the settings needed are:
+
+	- Host: localhost
+	- Port: 5433
+	- Database: mentors
+	- User: mentors
+	- Password: mentors
+
+To stop running the containers, hit Ctrl+C, then spin down the containers:
+```bash
+docker compose down
+```
+
+The database is persistant. If you want to reset it, follow these 2 steps once the containers are no longer running:
+
+- Remove the persistant volume:
+```bash
+docker volume rm team_production_system_be_postgres_data
+``` 
+- Rebuild the docker images:
+```bash
+docker compose build
+```
+
+The next time you spin up the docker containers, the database will be empty again.
+
 ## Environment Variables
 
 1.  Create a file named .env in the root directory of your project. This file will contain your environment variables.
@@ -105,7 +160,11 @@ celery -A config.celery beat -l debug
     For example:
 
 ```
-DATABASE_URL=postgres://username:password@localhost/mydatabase
+DATABASE_PASSWORD=mentors
+DATABASE_NAME=mentors
+DATABASE_USER=mentors
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
 SECRET_KEY=my_secret_key
 DEBUG=True
 DJANGO_SUPERUSER_USERNAME=admin
