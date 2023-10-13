@@ -125,6 +125,9 @@ docker compose up
 
 The app should now be running at http://localhost:8000/
 
+You can also view the Django admin UI at the /admin/ endpoint.
+Use the DJANGO_SUPERUSER credentials you set in the .env file.
+
 If you want to connect to the container database via an app like Postico 2, the settings needed are:
 
 	- Host: localhost
