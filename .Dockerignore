@@ -1,0 +1,11 @@
+.github
+.coveragerc
+.gitignore
+build.sh
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+example.env
+Pipfile
+Pipefile.lock
+README.md
+schema.yml
