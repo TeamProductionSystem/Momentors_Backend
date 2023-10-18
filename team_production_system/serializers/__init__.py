@@ -2,8 +2,7 @@
 
 from .availability import (
   AvailabilitySerializer,
-  AvailabilitySerializerV2,
-  AvailabilityListSerializerV2
+  AvailabilitySerializerV2
 )
 from .custom_user import CustomUserSerializer
 from .mentor_profile import MentorProfileSerializer
