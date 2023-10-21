@@ -4,7 +4,6 @@ from team_production_system import views
 
 urlpatterns = [
 
-     # V1 API #
      # User endpoints
      path('myprofile/', views.UserProfile.as_view(), name='my-profile'),
 
