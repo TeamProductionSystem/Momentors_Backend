@@ -2,10 +2,7 @@
 
 from .archive_session_list import ArchiveSessionView
 from .availability_delete import AvailabilityDeleteView
-from .availability_list_create import (
-  AvailabilityListCreateView, 
-  AvailabilityListCreateViewV2
-)
+from .availability_list_create import (AvailabilityListCreateView)
 from .mentee_info_list_create import MenteeInfoView
 from .mentee_info_update import MenteeInfoUpdateView
 from .mentee_list import MenteeList
