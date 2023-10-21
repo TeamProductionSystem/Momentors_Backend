@@ -16,11 +16,7 @@ services:
     env_file:
       - ./config/.env
     environment:
-      - DATABASE_NAME=mentors
-      - DATABASE_USER=mentors
-      - DATABASE_PASSWORD=mentors
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_URL=postgres://mentors:mentors@db:5432/mentors
     depends_on:
       - redis
       - db
@@ -49,11 +45,7 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379
       - CELERY_RESULT_BACKEND=redis://redis:6379
-      - DATABASE_NAME=mentors
-      - DATABASE_USER=mentors
-      - DATABASE_PASSWORD=mentors
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_URL=postgres://mentors:mentors@db:5432/mentors
     volumes:
       - .:/app
     depends_on:
@@ -70,11 +62,7 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379
       - CELERY_RESULT_BACKEND=redis://redis:6379
-      - DATABASE_NAME=mentors
-      - DATABASE_USER=mentors
-      - DATABASE_PASSWORD=mentors
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_URL=postgres://mentors:mentors@db:5432/mentors
     volumes:
       - .:/app
     depends_on:
