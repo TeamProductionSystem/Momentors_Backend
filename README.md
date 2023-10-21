@@ -136,20 +136,27 @@ If you want to connect to the container database via an app like Postico 2, the 
 	- User: mentors
 	- Password: mentors
 
+While running, the Django server will automatically detect changes made and
+reload, just as if it was running in your local environment.
+Certain file changes, such as to a model, won't trigger this behavior.
+In these cases, stop then restart the containers.
+
 To stop running the containers, hit Ctrl+C, then spin down the containers:
 ```bash
 docker compose down
 ```
 
-The database is persistant. If you want to reset it, follow these 2 steps once the containers are no longer running:
+The database is persistant. If you make changes to a model, run makemigrations
+before resetting the the database.
+Follow these 2 steps once the containers are no longer running:
 
 - Remove the persistant volume:
 ```bash
 docker volume rm team_production_system_be_postgres_data
 ``` 
-- Rebuild the docker images:
+- Rebuild the docker images without the cached data:
 ```bash
-docker compose build
+docker compose build --no-cache
 ```
 
 The next time you spin up the docker containers, the database will be empty again.
@@ -597,10 +604,18 @@ Host: https://team-production-system.onrender.com
 POST - https://team-production-system.onrender.com/mentorinfo/
 ```
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body          | Type		 | Description                |
+| :------------ | :------- | :------------------------- |
+| `pk`          | `int`    | The mentor pk              |
+| `about_me`    | `string` | Information about the user |
+| `skills`      | `array`  | Skills the user has        |
+| `team_number` | `int`    | Mentor's team number       |
+
+**Nested Information:**
+
+| Body             | Type    | Description                   |
+| :--------------- | :------ | :---------------------------- |
+| `availabilities` | `array` | Availabilities the mentor has |
 
 #### Request Sample:
 
@@ -612,7 +627,8 @@ Host: https://team-production-system.onrender.com
 
 {
 	"about_me": "Hi, I am so and so and do such and such",
-	"skills": "CSS"
+	"skills": ["CSS"],
+	"team_number": 10,
 }
 
 ```
@@ -621,8 +637,13 @@ Host: https://team-production-system.onrender.com
 
 ```JSON
 {
+	"pk": 1,
 	"about_me": "Hi, I am so and so and do such and such",
-	"skills": "CSS"
+	"skills": [
+		"CSS"
+	],
+	"availabilities": [],
+	"team_number": 10
 }
 
 ```
@@ -637,10 +658,12 @@ Host: https://team-production-system.onrender.com
 GET - https://team-production-system.onrender.com/mentorinfo/
 ```
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body          | Type     | Description                |
+| :------------ | :------- | :------------------------- |
+| `pk`          | `int`    | The mentor pk              |
+| `about_me` 		| `string` | Information about the user |
+| `skills`   		| `string` | Skills the user has        |
+| `team_number` | `int`    | Mentor's team number       |
 
 **Nested Information:**
 
@@ -666,8 +689,11 @@ Host: https://team-production-system.onrender.com
 
 ```JSON
 {
+	"pk": 1,
 	"about_me": "Hi, I am so and so and do such and such",
-	"skills": "CSS"
+	"skills": [
+		"CSS"
+	],
 	"availabilities": [
 			{
 				"pk": 1,
@@ -675,8 +701,8 @@ Host: https://team-production-system.onrender.com
 				"start_time": "2023-04-12T14:30:00Z",
 				"end_time": "2023-04-12T15:30:00Z"
 			}
-		]
-
+	],
+	"team_number": 10
 }
 
 ```
@@ -691,10 +717,18 @@ Host: https://team-production-system.onrender.com
 PATCH - https://team-production-system.onrender.com/mentorinfoupdate/
 ```
 
-| Body       | Type     | Description                |
-| :--------- | :------- | :------------------------- |
-| `about_me` | `string` | Information about the user |
-| `skills`   | `string` | Skills the user has        |
+| Body          | Type		 | Description                |
+| :------------ | :------- | :------------------------- |
+| `pk`          | `int`    | The mentor pk              |
+| `about_me`    | `string` | Information about the user |
+| `skills`      | `array`  | Skills the user has        |
+| `team_number` | `int`    | Mentor's team number       |
+
+**Nested Information:**
+
+| Body             | Type    | Description                   |
+| :--------------- | :------ | :---------------------------- |
+| `availabilities` | `array` | Availabilities the mentor has |
 
 #### Request Sample:
 
@@ -714,8 +748,20 @@ Host: https://team-production-system.onrender.com
 
 ```JSON
 {
+	"pk": 1,
 	"about_me": "Hi, I am so and so and do such and such",
-	"skills": "Python"
+	"skills": [
+		"Python"
+	],
+	"availabilities": [
+			{
+				"pk": 1,
+				"mentor": 2,
+				"start_time": "2023-04-12T14:30:00Z",
+				"end_time": "2023-04-12T15:30:00Z"
+			}
+	],
+	"team_number": 10
 }
 
 ```
