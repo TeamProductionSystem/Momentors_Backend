@@ -27,6 +27,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
             start_time=timezone.now() + timezone.timedelta(hours=1),
             end_time=timezone.now() + timezone.timedelta(hours=2)
         )
+        self.url = reverse('availability')
 
     @patch('django.utils.timezone')
     def test_get_availability_list(self, mock_timezone):
@@ -42,10 +43,8 @@ class AvailabilityListCreateViewTestCase(TestCase):
         # Set up the mock timezone to return a fixed datetime
         mock_timezone.now.return_value = timezone.datetime(2022, 1, 1,
                                                            tzinfo=timezone.utc)
-
         # Make a GET request to the AvailabilityList view
         response = self.client.get('/availability/', format='json')
-
         # Check that the response status code is 200 OK
         self.assertEqual(response.status_code, 200)
 
@@ -55,7 +54,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
                          self.availability.start_time.isoformat().replace(
                             '+00:00', 'Z'))
 
-    def test_create_availability(self):
+    def test_create_availability_v1(self):
         """
         Test that a POST request to create a new Availability returns a status
         code of 201 CREATED and the new Availability.
@@ -71,8 +70,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
             'end_time': timezone.now() + timezone.timedelta(hours=4)
         }
 
-        url = reverse('availability')
-        response = client.post(url, data, format='json')
+        response = client.post(self.url, data, format='json')
 
         # Check that the response has a status code of 201 CREATED
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -83,7 +81,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.data['start_time'],
                          serializer.data['start_time'])
 
-    def test_create_availability_with_invalid_data(self):
+    def test_create_availability_v1_with_invalid_data(self):
         """
         Test that a POST request to create a new Availability with invalid data
         returns a status code of 400 BAD REQUEST and an error message.
@@ -98,8 +96,8 @@ class AvailabilityListCreateViewTestCase(TestCase):
             'start_time': timezone.now() + timezone.timedelta(hours=2),
             'end_time': timezone.now() + timezone.timedelta(hours=1)
         }
-        url = reverse('availability')
-        response = client.post(url, data, format='json')
+
+        response = client.post(self.url, data, format='json')
 
         # Check that the response has a status code of 400 BAD REQUEST
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -108,66 +106,65 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.data['non_field_errors'][0],
                          'End time must be after start time.')
 
-
-class AvailabilityListCreateViewV2TestCase(TestCase):
-    def setUp(self):
+    def test_create_availability_v2(self):
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(
-            username='testuser', password='testpass')
-        self.mentor = Mentor.objects.create(user=self.user)
         self.client.force_authenticate(user=self.user)
 
-    def test_create_availability(self):
-        url = reverse('availability-list-create-v2')
-        start_time = timezone.now() + timedelta(hours=1)
-        end_time = start_time + timedelta(hours=2)
+        start_time = timezone.now() + timedelta(hours=5)
+        end_time = start_time + timedelta(hours=1)
         data = {
             'start_time': start_time,
             'end_time': end_time,
         }
-        response = self.client.post(url, data, format='json')
+        headers = {'HTTP_ACCEPT': 'application/json; version=v2'}
+        response = self.client.post(self.url, data, format='json', **headers)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Availability.objects.count(), 4)
-        availability = Availability.objects.first()
-        self.assertEqual(availability.start_time, start_time)
+        self.assertEqual(Availability.objects.count(), 3)
+        availability = Availability.objects.last()
         self.assertEqual(
-            availability.end_time,
-            start_time + timedelta(minutes=30))
+            availability.start_time, end_time - timedelta(minutes=30))
+        self.assertEqual(availability.end_time, end_time)
         self.assertEqual(availability.mentor, self.mentor)
 
-    def test_create_availability_with_overlap(self):
-        url = reverse('availability-list-create-v2')
-        start_time = timezone.now() + timedelta(hours=1)
-        end_time = start_time + timedelta(hours=2)
+    def test_create_availability_v2_with_overlap(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+        start_time = timezone.now() + timedelta(hours=7)
+        end_time = start_time + timedelta(hours=8)
         Availability.objects.create(
             mentor=self.mentor, start_time=start_time, end_time=end_time)
         data = {
             'start_time': start_time,
             'end_time': end_time,
         }
-        response = self.client.post(url, data, format='json')
+        headers = {'HTTP_ACCEPT': 'application/json; version=v2'}
+        response = self.client.post(self.url, data, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Availability.objects.count(), 1)
+        self.assertEqual(Availability.objects.count(), 2)
 
-    def test_create_availability_with_past_end_time(self):
-        url = reverse('availability-list-create-v2')
+    def test_create_availability_v2_with_past_end_time(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
         start_time = timezone.now() + timedelta(hours=1)
         end_time = timezone.now() - timedelta(hours=1)
         data = {
             'start_time': start_time,
             'end_time': end_time,
         }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Availability.objects.count(), 0)
 
-    def test_list_availabilities(self):
-        url = reverse('availability-list-create-v2')
-        start_time = timezone.now() + timedelta(hours=1)
-        end_time = start_time + timedelta(hours=2)
-        Availability.objects.create(
-            mentor=self.mentor, start_time=start_time, end_time=end_time)
-        response = self.client.get(url)
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Availability.objects.count(), 1)
+
+    def test_list_availabilities_v2(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+        headers = {'HTTP_ACCEPT': 'application/json; version=v2'}
+        response = self.client.get(self.url, format='json', **headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         availabilities = Availability.objects.filter(mentor=self.mentor)
         serializer = AvailabilitySerializerV2(availabilities, many=True)

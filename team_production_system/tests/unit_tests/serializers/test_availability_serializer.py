@@ -34,7 +34,7 @@ class AvailabilitySerializerTestCase(TestCase):
 
     def test_contains_expected_fields(self):
         data = self.serializer.data
-        expected_keys = ['pk', 'mentor', 'start_time', 'end_time', 'status']
+        expected_keys = ['pk', 'mentor', 'start_time', 'end_time']
         self.assertCountEqual(data.keys(), expected_keys)
 
     def test_mentor_field_content(self):
