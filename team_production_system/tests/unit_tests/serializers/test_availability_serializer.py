@@ -6,6 +6,7 @@ from rest_framework import serializers
 from ....serializers import AvailabilitySerializer, AvailabilitySerializerV2
 from ....models import Mentor, CustomUser, Availability
 
+
 class AvailabilitySerializerTestCase(TestCase):
     def setUp(self):
         self.user = CustomUser.objects.create_user(
@@ -13,8 +14,10 @@ class AvailabilitySerializerTestCase(TestCase):
         self.mentor = Mentor.objects.create(user=self.user)
         self.availability_attributes = {
             'mentor': self.mentor,
-            'start_time': datetime.now(timezone.utc)  + timezone.timedelta(hours=4),
-            'end_time': datetime.now(timezone.utc) + timezone.timedelta(hours=5),
+            'start_time': datetime.now(
+                timezone.utc) + timezone.timedelta(hours=4),
+            'end_time': datetime.now(
+                timezone.utc) + timezone.timedelta(hours=5),
         }
         self.serializer_data = {
             'mentor': self.mentor.pk,
@@ -31,7 +34,8 @@ class AvailabilitySerializerTestCase(TestCase):
 
     def test_contains_expected_fields(self):
         data = self.serializer.data
-        self.assertCountEqual(data.keys(), ['pk', 'mentor', 'start_time', 'end_time', 'status'])
+        expected_keys = ['pk', 'mentor', 'start_time', 'end_time', 'status']
+        self.assertCountEqual(data.keys(), expected_keys)
 
     def test_mentor_field_content(self):
         data = self.serializer.data
@@ -41,16 +45,18 @@ class AvailabilitySerializerTestCase(TestCase):
         data = self.serializer.data
         self.assertEqual(
             data['start_time'],
-            self.serializer_data['start_time'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            self.serializer_data[
+                'start_time'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         )
 
     def test_end_time_field_content(self):
         data = self.serializer.data
         self.assertEqual(
-            data['end_time'], 
-            self.serializer_data['end_time'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            data['end_time'],
+            self.serializer_data[
+                'end_time'].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         )
-        
+
     def test_create(self):
         start_time = datetime.now(timezone.utc) + timezone.timedelta(hours=5)
         end_time = datetime.now(timezone.utc) + timezone.timedelta(hours=6)
@@ -91,9 +97,9 @@ class AvailabilitySerializerV2TestCase(TestCase):
         self.availability = Availability.objects.create(
             **self.availability_attributes)
         self.serializer = AvailabilitySerializerV2(
-            instance=self.availability, 
+            instance=self.availability,
             context={'request': self.request})
-    
+
     # Test that the serializer contains the expected fields
     def test_contains_expected_fields(self):
         data = self.serializer.data
@@ -105,8 +111,10 @@ class AvailabilitySerializerV2TestCase(TestCase):
 
     # Test validate method
     def test_validate(self):
-        serializer = AvailabilitySerializerV2(context={'request': self.request})
-        start_time = datetime.now(timezone.utc) + timezone.timedelta(hours=1)
+        serializer = AvailabilitySerializerV2(
+            context={'request': self.request})
+        start_time = datetime.now(
+            timezone.utc) + timezone.timedelta(hours=1)
         end_time = timezone.now() + timezone.timedelta(hours=2)
         data = {
             'start_time': start_time,

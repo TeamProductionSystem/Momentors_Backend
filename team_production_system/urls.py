@@ -23,7 +23,7 @@ urlpatterns = [
      path('menteeinfoupdate/', views.MenteeInfoUpdateView.as_view(),
           name='mentee-info-update'),
 
-      # Availability endpoints
+     # Availability endpoints
      path(
           'availability/',
           views.AvailabilityListCreateView.as_view(),
@@ -31,7 +31,7 @@ urlpatterns = [
      ),
      path('availability/<int:pk>/', views.AvailabilityDeleteView.as_view(),
           name='availability-delete'),
- 
+
      # Session endpoints
      path('session/', views.SessionView.as_view(), name='session'),
      path('archivesession/', views.ArchiveSessionView.as_view(),
@@ -42,7 +42,7 @@ urlpatterns = [
           name='session-detail'),
      path('sessionsignuplist/', views.SessionSignupListView.as_view(),
           name='session-signup-list'),
- 
+
      # Notification endpoints
      path(
             'notificationsettings/<int:pk>/',
@@ -52,9 +52,9 @@ urlpatterns = [
 
      # V2 API #
      # Availability endpoints
-     path(
-          'v2/availability/',
-          views.AvailabilityListCreateViewV2.as_view(),
-          name='availability-list-create-v2'
-     ),
+     # path(
+     #      'v2/availability/',
+     #      views.AvailabilityListCreateViewV2.as_view(),
+     #      name='availability-list-create-v2'
+     # ),
      ]
