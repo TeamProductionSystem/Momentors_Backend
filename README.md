@@ -10,6 +10,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
 - [Testing](#testing)
+- [Linting](#linting)
 - [Submitting Code](#submitting-code)
 - [API Reference](#api-reference)
 
@@ -103,22 +104,26 @@ celery -A config.celery beat -l debug
 You will also need to have your .env file set up.
 
 Update `requirements.txt` with any newly added installs:
+
 ```bash
 pipenv requirements > requirements.txt
 ```
 
 **Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
+
 ```bash
 pip install --user --upgrade pipenv
 ```
 
 Build docker images:
+
 ```bash
 docker compose build
 ```
 
 Spin up docker containers:
+
 ```bash
 docker compose up
 ```
@@ -130,13 +135,14 @@ Use the DJANGO_SUPERUSER credentials you set in the .env file.
 
 If you want to connect to the container database via an app like Postico 2, the settings needed are:
 
-	- Host: localhost
-	- Port: 5433
-	- Database: mentors
-	- User: mentors
-	- Password: mentors
+    - Host: localhost
+    - Port: 5433
+    - Database: mentors
+    - User: mentors
+    - Password: mentors
 
 To stop running the containers, hit Ctrl+C, then spin down the containers:
+
 ```bash
 docker compose down
 ```
@@ -144,10 +150,13 @@ docker compose down
 The database is persistant. If you want to reset it, follow these 2 steps once the containers are no longer running:
 
 - Remove the persistant volume:
+
 ```bash
 docker volume rm team_production_system_be_postgres_data
-``` 
+```
+
 - Rebuild the docker images:
+
 ```bash
 docker compose build
 ```
@@ -217,6 +226,14 @@ For an interactive html report, run:
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
 Here is some helpful information on testing in Django and Django REST Framework: https://www.rootstrap.com/blog/testing-in-django-django-rest-basics-useful-tools-good-practices
+
+# Linting
+
+To keep our code easy to read and use please make sure it passes flake8 linting before submitting your code. To run in terminal:
+
+`flake8`
+
+Each error will show the file name and line to find the error. The command can be run over and over again until errors are cleared.
 
 # Submitting Code
 
