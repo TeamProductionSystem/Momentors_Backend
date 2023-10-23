@@ -4,4 +4,7 @@ exclude =
     *migrations*
     ./config/settings.py
     ./team_production_system/management/commands/add_superuser.py
-
+max-line-length = 80
+extend-ignore = E501
+extend-select = B950
+dictionaries = en_US,python,technical,django
