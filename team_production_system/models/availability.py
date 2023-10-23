@@ -13,11 +13,15 @@ class Availability(models.Model):
     ]
 
     mentor = models.ForeignKey(
-        Mentor, on_delete=models.CASCADE, related_name='mentor_availability')
+        Mentor, on_delete=models.CASCADE, related_name='mentor_availability'
+        )
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     status = models.CharField(
-        max_length=10, choices=STATUS_CHOICES, default='Open')
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='Open'
+        )
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -26,7 +30,8 @@ class Availability(models.Model):
             UniqueConstraint(
                 fields=['mentor', 'start_time'],
                 name='availability_constraint',
-                violation_error_message='Availability already exists.')
+                violation_error_message='Availability already exists.'
+                )
         ]
 
     def __str__(self):

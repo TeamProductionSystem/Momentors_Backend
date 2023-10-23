@@ -56,7 +56,4 @@ def is_valid_end_time(start_time, end_time):
     """
     Check that the end_time is after the start_time.
     """
-    if end_time > start_time:
-        return True
-    else:
-        return False
+    return end_time > start_time

@@ -18,7 +18,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ['pk', 'mentor', 'start_time', 'end_time']
-        read_only_fields = ('mentor', 'pk',)
+        read_only_fields = ('mentor', 'pk')
 
     def create(self, validated_data):
         mentor = Mentor.objects.select_related('user').get(
@@ -92,7 +92,13 @@ class AvailabilitySerializerV2(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ['pk', 'mentor', 'start_time', 'end_time', 'status']
+        fields = [
+            'pk',
+            'mentor',
+            'start_time',
+            'end_time',
+            'status'
+            ]
         read_only_fields = ('pk',)
 
     def validate(self, data):
