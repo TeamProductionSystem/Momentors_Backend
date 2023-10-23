@@ -180,6 +180,7 @@ The next time you spin up the docker containers, the database will be empty agai
     For example:
 
 ```
+ENVIRONMENT=dev
 DATABASE_PASSWORD=mentors
 DATABASE_NAME=mentors
 DATABASE_USER=mentors

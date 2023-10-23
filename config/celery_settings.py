@@ -1,23 +1,35 @@
 from __future__ import absolute_import
 import os
-# import ssl
+import environ
+import ssl
 from celery import Celery
 from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-# for production
-# app = Celery(
-#     "config",
-#     broker_use_ssl={
-#         'ssl_cert_reqs': ssl.CERT_NONE
-#     },
-#     redis_backend_use_ssl={
-#         'ssl_cert_reqs': ssl.CERT_NONE
-#     }
-# )
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    USE_S3=(bool, False),
+    RENDER=(bool, False)
+)
 
-# for development
-app = Celery('config')
+environ.Env.read_env()
+
+your_env = env('ENVIRONMENT')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
+if your_env == 'prod':
+    app = Celery(
+        "config",
+        broker_use_ssl={
+            'ssl_cert_reqs': ssl.CERT_NONE
+        },
+        redis_backend_use_ssl={
+            'ssl_cert_reqs': ssl.CERT_NONE
+        }
+    )
+else:
+    app = Celery('config')
 
 app.conf.beat_schedule = {
     'notify-every-5-min': {
