@@ -28,8 +28,10 @@ if your_env == 'prod':
             'ssl_cert_reqs': ssl.CERT_NONE
         }
     )
-else:
+elif your_env == 'dev':
     app = Celery('config')
+else:
+    raise ValueError('ENVIRONMENT in .env file should be either "dev" or "prod".')
 
 app.conf.beat_schedule = {
     'notify-every-5-min': {

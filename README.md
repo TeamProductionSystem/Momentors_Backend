@@ -89,13 +89,13 @@ redis-server
 Start the Celery server:
 
 ```bash
-celery -A config.celery worker --loglevel=info
+celery -A config.celery_settings worker --loglevel=info
 ```
 
 Start the Celery Beat server:
 
 ```bash
-celery -A config.celery beat -l debug
+celery -A config.celery_settings beat -l debug
 ```
 
 ## Run Locally via Docker Containers
@@ -194,6 +194,9 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 CELERY_BROKER_URL = local_redis_url
 CELERY_RESULT_BACKEND = local_redis_url
 ```
+
+- ENVIRONMENT: This should be either `dev` or `prod`, depending on what environment the app is running in.
+As long as your are running locally, use the value `dev`.
 
 - DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port.
 
