@@ -18,9 +18,18 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('pk', 'username', 'first_name',
-                  'last_name', 'profile_photo', 'is_mentor', 'about_me',
-                  'skills', 'availabilities', 'team_number')
+        fields = (
+            'pk',
+            'username',
+            'first_name',
+            'last_name',
+            'profile_photo',
+            'is_mentor',
+            'about_me',
+            'skills',
+            'availabilities',
+            'team_number',
+        )
 
     def get_about_me(self, obj):
         try:

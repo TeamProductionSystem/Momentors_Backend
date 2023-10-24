@@ -10,5 +10,11 @@ class MenteeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('user', 'pk', 'username', 'first_name',
-                  'last_name', 'is_mentee', 'mentee_profile')
+        fields = (
+            'user',
+            'pk', 'username',
+            'first_name',
+            'last_name',
+            'is_mentee',
+            'mentee_profile'
+        )

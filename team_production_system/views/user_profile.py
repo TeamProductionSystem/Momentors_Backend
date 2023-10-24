@@ -34,8 +34,15 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         user = self.request.user
 
-        fields = ['first_name', 'last_name', 'email',
-                  'phone_number', 'is_mentor', 'is_mentee', 'is_active']
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone_number',
+            'is_mentor',
+            'is_mentee',
+            'is_active',
+        ]
 
         for field in fields:
             if field in request.data:

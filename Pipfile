@@ -20,7 +20,7 @@ django-imagekit = "*"
 django-storages = "*"
 django-multiselectfield = "*"
 boto3 = "*"
-sentry-sdk = {extras = ["django"], version = "*"}
+sentry-sdk = {extras = ["django"] }
 pytz = "*"
 flake8 = "*"
 redis = "*"
@@ -37,6 +37,7 @@ flake8-spellcheck = "*"
 flake8-eradicate = "*"
 black = "*"
 flake8-clean-block = "*"
+flake8-multiline-containers = "*"
 
 [requires]
 python_version = "3.10"
