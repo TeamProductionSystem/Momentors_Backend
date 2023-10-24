@@ -7,7 +7,7 @@ regex="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z]+\)
 
 if [[ ! $commit_msg =~ $regex ]]; then
     echo "Error: Commit message does not match the required format!"
-     echo "Expected Format: <category(scope): description>"
+    echo "Expected Format: <category(scope): description>"
     echo "Example: chore(test): setup test"
     exit 1
 fi
