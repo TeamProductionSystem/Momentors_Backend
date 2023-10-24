@@ -23,15 +23,15 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
             return Availability.objects.filter(
                 mentor=mentor,
                 end_time__gte=timezone.now()
-                ).select_related('mentor__user').order_by('start_time')
+            ).select_related('mentor__user').order_by('start_time')
         else:
             # Get the Mentor instance for the logged in user
             mentor = Mentor.objects.get(user=self.request.user)
             # Exclude any availability that has an end time in the past
             # and filter availabilities belonging to the logged in mentor
             return Availability.objects.filter(
-                    mentor=mentor, end_time__gte=timezone.now()
-                    ).select_related('mentor__user')
+                mentor=mentor, end_time__gte=timezone.now()
+            ).select_related('mentor__user')
 
     def create(self, request, *args, **kwargs):
         if request.version == 'v2':
@@ -55,15 +55,14 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
                 serializer.data,
                 status=status.HTTP_201_CREATED,
                 headers=headers)
-        else:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED,
-                headers=headers)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers)
 
     def get_serializer_class(self):
         if self.request.version == 'v2':
