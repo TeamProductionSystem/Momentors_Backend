@@ -38,7 +38,7 @@ urlpatterns = [
           name='session'),
      path('sessionrequest/<int:pk>/', views.SessionRequestDetailView.as_view(),
           name='session-detail'),
-     path('sessionsignuplist/', views.SessionSignupListView.as_view(),
+     path('sessionsignuplist/', views.SessionSignUpListView.as_view(),
           name='session-signup-list'),
 
      # Notification endpoints

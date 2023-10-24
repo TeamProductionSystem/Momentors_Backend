@@ -3,7 +3,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.db import models
 
 
-# Allow mentors to set their avaliabiltiy
+# Allow mentors to set their availability
 class Availability(models.Model):
 
     STATUS_CHOICES = [

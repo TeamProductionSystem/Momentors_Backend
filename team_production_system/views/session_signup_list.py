@@ -6,8 +6,8 @@ from team_production_system.serializers import SessionSerializer
 from team_production_system.models import Session
 
 
-# View to show mentor timeslots a mentee can sign up for
-class SessionSignupListView(generics.ListAPIView):
+# View to show mentor time slots a mentee can sign up for
+class SessionSignUpListView(generics.ListAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     permission_classes = [IsAuthenticated]
