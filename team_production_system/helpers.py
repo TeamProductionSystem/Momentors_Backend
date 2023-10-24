@@ -8,7 +8,6 @@ from django.utils.dateparse import parse_datetime
 
 
 # Create a list of Availability objects in 30 mins chunks for a time range
-# TODO: Refactor this to not create 30 min times outside of the range provided
 def create_30_min_availabilities(start_time_str, end_time_str, mentor):
     chunk_size = timedelta(minutes=30)
     start_time = parse_datetime(start_time_str)
@@ -17,6 +16,8 @@ def create_30_min_availabilities(start_time_str, end_time_str, mentor):
     availabilities = []
     while start_time < end_time:
         end_time_new = start_time + chunk_size
+        if end_time_new > end_time:
+            break
         availability = {
             'start_time': start_time,
             'end_time': end_time_new,
@@ -25,7 +26,6 @@ def create_30_min_availabilities(start_time_str, end_time_str, mentor):
         }
         availabilities.append(availability)
         start_time += chunk_size
-
     return availabilities
 
 
