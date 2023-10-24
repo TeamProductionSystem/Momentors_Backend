@@ -52,7 +52,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['start_time'],
                          self.availability.start_time.isoformat().replace(
-                            '+00:00', 'Z'))
+            '+00:00', 'Z'))
 
     def test_create_availability_v1(self):
         """
@@ -158,6 +158,27 @@ class AvailabilityListCreateViewTestCase(TestCase):
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Availability.objects.count(), 1)
+
+    def test_create_availability_v2_with_time_not_divisible_by_30(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+        start_time = timezone.now() + timedelta(hours=2)
+        end_time = timezone.now() + timedelta(hours=3, minutes=15)
+        data = {
+            'start_time': start_time,
+            'end_time': end_time,
+        }
+        headers = {'HTTP_ACCEPT': 'application/json; version=v2'}
+        response = self.client.post(self.url, data, format='json', **headers)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response.data), 2)
+        availability_1 = Availability.objects.get(pk=response.data[0]['pk'])
+        availability_2 = Availability.objects.get(pk=response.data[1]['pk'])
+        self.assertEqual(availability_1.end_time,
+                         start_time + timedelta(minutes=30))
+        self.assertNotEqual(availability_2.end_time, end_time)
+        self.assertEqual(availability_1.mentor, self.mentor)
 
     def test_list_availabilities_v2(self):
         self.client = APIClient()
