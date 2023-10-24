@@ -20,6 +20,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
         if not user.is_authenticated:
             return Response({'error': 'User is not authenticated.'},
                             status=status.HTTP_401_UNAUTHORIZED)
+
         try:
             return user
         except CustomUser.DoesNotExist:
