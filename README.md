@@ -181,11 +181,7 @@ The next time you spin up the docker containers, the database will be empty agai
 
 ```
 ENVIRONMENT=dev
-DATABASE_PASSWORD=mentors
-DATABASE_NAME=mentors
-DATABASE_USER=mentors
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
+DATABASE_URL=postgres://mentors:mentors@localhost:5432/mentors
 SECRET_KEY=my_secret_key
 DEBUG=True
 DJANGO_SUPERUSER_USERNAME=admin
@@ -198,7 +194,7 @@ CELERY_RESULT_BACKEND = local_redis_url
 - ENVIRONMENT: This should be either `dev` or `prod`, depending on what environment the app is running in.
 As long as your are running locally, use the value `dev`.
 
-- DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port.
+- DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port. When using a local PostgreSQL database, it should take the form `postgres://<username>:<password>@localhost:5432/<db-name>`
 
 - SECRET_KEY: This should be set to a secret key that is used for cryptographic signing in Django. It is important that this value is kept secret and is not shared publicly.
 
