@@ -4,7 +4,6 @@ from team_production_system.models import NotificationSettings
 
 
 class NotificationSettingsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = NotificationSettings
         fields = (
