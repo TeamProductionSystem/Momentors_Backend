@@ -30,7 +30,6 @@ django-celery-beat = "*"
 pre-commit = "*"
 
 [dev-packages]
-autopep8 = "*"
 flake8-bugbear = "*"
 pep8-naming = "*"
 flake8-spellcheck = "*"

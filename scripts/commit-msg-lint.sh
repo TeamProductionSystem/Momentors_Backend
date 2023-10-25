@@ -3,7 +3,7 @@
 commit_msg_file=$1
 commit_msg=$(cat $commit_msg_file)
 
-regex="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z]+\): .+$"
+regex="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert): .+$"
 
 if [[ ! $commit_msg =~ $regex ]]; then
     echo "Error: Commit message does not match the required format!"
