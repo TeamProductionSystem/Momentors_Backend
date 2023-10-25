@@ -333,7 +333,7 @@ Host: https://team-production-system.onrender.com
 	"username": "TestUserLogin",
 	"email": "testemail@fake.com",
 	"password": "TestUserPassword",
-	"re_password": "TestUserPassword",
+	"re_password": "TestUserPassword"
 }
 
 ```
@@ -414,7 +414,7 @@ Host: https://team-production-system.onrender.com
 
 {
 	"username": "testuserlogin" ,
-	"password": "TestUserPassword",
+	"password": "TestUserPassword"
 }
 
 ```
@@ -729,7 +729,6 @@ Host: https://team-production-system.onrender.com
 	],
 	"team_number": 10
 }
-
 ```
 
 ---
