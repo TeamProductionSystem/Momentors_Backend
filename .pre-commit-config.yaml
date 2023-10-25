@@ -3,14 +3,17 @@ repos:
     rev: "5.12.0"
     hooks:
     -   id: isort
+        stages: [pre-commit]
 -   repo: https://github.com/psf/black
     rev: "23.10.1"
     hooks:
     -   id: black
+        stages: [pre-commit]
 -   repo: https://github.com/PyCQA/flake8
     rev: "6.1.0"
     hooks:
     -   id: flake8
+        stages: [pre-commit]
         additional_dependencies:
         -   "flake8-bugbear"
         -   "pep8-naming"
@@ -29,6 +32,7 @@ repos:
         language: script
         always_run: true
         pass_filenames: false
+        stages: [pre-commit]
     -   id: commit-msg-lint
         name: 'Commit Message Lint'
         entry: ./scripts/commit-msg-lint.sh
