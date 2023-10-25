@@ -247,13 +247,66 @@ Each error will show the file name and line to find the error. The command can b
 
 # Submitting Code
 
-We use a pre-commit to check branch names and commit messages. Please follow the the following schema for branch names and commit messages:
+We use a pre-commit hook to lint code and branch names, and automatically format
+code using black and isort.
+We also use a commit-msg hook to lint the commit message.
+These checks will run whenever you attempt to make a commit.
+Below, we go over how to set up and use these hooks, the linting plugins used,
+and the schemas for Branch Names and Commit Messages.
 
-## Branch Names
+## Pre-Commit Setup
+These steps assume you have already entered a pipenv shell and installed all
+dependencies.
+Below are the commands and expected outputs:
+
+```bash
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+
+$ pre-commit install --hook-type commit-msg
+pre-commit installed at .git/hooks/commit-msg
+```
+
+To check your code before making a commit, run the following command.
+The output assumes no changes are needed:
+
+```bash
+$ pre-commit run --all-files
+isort....................................................................Passed
+black....................................................................Passed
+flake8...................................................................Passed
+Branch Name Lint.........................................................Passed
+```
+
+If isort or black catch any errors, they will automatically alter the files to fix them.
+This will prevent making a commit, and you will need to stage the new changes.
+flake8 errors need to be fixed manually.
+
+## Code Linting
+
+We ensure code consistancy by linting with flake8. The following flake8 plugins
+are used:
+
+	- flake8-bugbear: additional rules to catch bugs and design problems
+	- pep8-naming: check the PEP-8 naming conventions
+	- flake8-spellcheck: spellcheck variables, classnames, comments, docstrings etc.
+	- flake8-eradicate: finds commented out or dead code
+	- flake8-clean-block: enforces a blank line after if/for/while/with/try blocks
+	- flake8-multiline: ensures a consistent format for multiline containers
+	- flake8-secure-coding-standard: enforces some secure coding standards for Python
+	- flake8-comprehensions: helps you write better list/set/dict comprehensions
+	- flake8-quotes: extension for checking quotes in Python
+	- flake8-isort: wrapper for isort
+
+**Note:** If the spellcheck plugin gets caught on a name that you did not set,
+add it to `whitelist.txt`.
+**DO NOT ADD NAMES THAT YOU CREATE!!!**
+
+## Branch Name Schema
 
 Branch names should be in the following format:
 
-`<type>/<issue-number>/<description>`
+`<type>/issue-<number>/<description>`
 
 **Type:** The type of branch. This should be one of the following:
 
@@ -267,7 +320,7 @@ Branch names should be in the following format:
 
 **Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
 
-## Commit Messages
+## Commit Message Schema
 
 Commit messages should be in the following format:
 
