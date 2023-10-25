@@ -339,6 +339,9 @@ Branch names should be in the following format:
 
 **Example:** `feat/issue-66/remove-jedi`
 
+**NOTE:** The linter for this schema prevents you from committing changes during a rebase.
+In this case, use the `--no-verify` flag to make your commit.
+
 ## Commit Message Schema
 
 Commit messages should be in the following format:
