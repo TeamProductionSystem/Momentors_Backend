@@ -337,6 +337,8 @@ Branch names should be in the following format:
 
 **Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
 
+**Example:** `feat/issue-66/remove-jedi`
+
 ## Commit Message Schema
 
 Commit messages should be in the following format:
