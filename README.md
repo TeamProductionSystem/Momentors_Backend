@@ -284,19 +284,23 @@ flake8 errors need to be fixed manually.
 
 ## Code Linting
 
-We ensure code consistancy by linting with flake8. The following flake8 plugins
-are used:
+We ensure code consistancy by linting with flake8.
+Errors found by flake 8 will be listed in the following format:
+```bash
+<File Path>:<Line>:<Column>: <Error Code> <Error Message>
+```
+Error codes from flake8 will have a prefix of F.
+The flake8 plugins used are listed below, along with their error code prefix:
 
-	- flake8-bugbear: additional rules to catch bugs and design problems
-	- pep8-naming: check the PEP-8 naming conventions
-	- flake8-spellcheck: spellcheck variables, classnames, comments, docstrings etc.
-	- flake8-eradicate: finds commented out or dead code
-	- flake8-clean-block: enforces a blank line after if/for/while/with/try blocks
-	- flake8-multiline: ensures a consistent format for multiline containers
-	- flake8-secure-coding-standard: enforces some secure coding standards for Python
-	- flake8-comprehensions: helps you write better list/set/dict comprehensions
-	- flake8-quotes: extension for checking quotes in Python
-	- flake8-isort: wrapper for isort
+	- flake8-bugbear (B): additional rules to catch bugs and design problems
+	- pep8-naming (N): check the PEP-8 naming conventions
+	- flake8-spellcheck (SC): spellcheck variables, classnames, comments, docstrings etc.
+	- flake8-eradicate (E): finds commented out or dead code
+	- flake8-clean-block (CLB): enforces a blank line after if/for/while/with/try blocks
+	- flake8-multiline (JS): ensures a consistent format for multiline containers
+	- flake8-secure-coding-standard (SCS): enforces some secure coding standards for Python
+	- flake8-comprehensions (C): helps you write better list/set/dict comprehensions
+	- flake8-quotes (Q): extension for checking quotes in Python
 
 **Note:** If the spellcheck plugin gets caught on a name that you did not set,
 add it to `whitelist.txt`.
