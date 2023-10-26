@@ -206,8 +206,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+DOMAIN = 'momentors.dev'
+SITE_NAME = 'Momentors'
+
 DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
