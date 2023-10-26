@@ -103,7 +103,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check that the response data contains an error message
-        self.assertEqual(response.data['non_field_errors'][0],
+        self.assertEqual(str(response.data[0]),
                          'End time must be after start time.')
 
     def test_create_availability_v2(self):
