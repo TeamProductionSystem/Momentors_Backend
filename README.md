@@ -240,7 +240,9 @@ Here is some helpful information on testing in Django and Django REST Framework:
 
 To keep our code easy to read and use please make sure it passes flake8 linting before submitting your code. To run in terminal:
 
-`flake8`
+```bash
+flake8
+```
 
 Each error will show the file name and line to find the error. The command can be run over and over again until errors are cleared.
 
