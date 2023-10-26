@@ -10,6 +10,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
 - [Testing](#testing)
+- [Linting](#linting)
 - [Submitting Code](#submitting-code)
 - [API Reference](#api-reference)
 
@@ -166,7 +167,7 @@ docker volume rm team_production_system_be_postgres_data
 
 ```bash
 docker compose build --no-cache
-```
+````
 
 The next time you spin up the docker containers, the database will be empty again.
 
@@ -233,6 +234,16 @@ For an interactive html report, run:
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
 Here is some helpful information on testing in Django and Django REST Framework: https://www.rootstrap.com/blog/testing-in-django-django-rest-basics-useful-tools-good-practices
+
+# Linting
+
+To keep our code easy to read and use please make sure it passes flake8 linting before submitting your code. To run in terminal:
+
+```bash
+flake8
+```
+
+Each error will show the file name and line to find the error. The command can be run over and over again until errors are cleared.
 
 # Submitting Code
 
