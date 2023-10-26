@@ -15,6 +15,14 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
     serializer_class = AvailabilitySerializer
     permission_classes = [IsAuthenticated]
 
+    def handle_exception(self, exc):
+        response = super().handle_exception(exc)
+
+        if isinstance(response.data, dict) and 'non_field_errors' in response.data:
+            response.data = response.data['non_field_errors']
+
+        return response
+
     def get_queryset(self):
         if self.request.version == 'v2':
             # Get the Mentor instance for the logged in user
