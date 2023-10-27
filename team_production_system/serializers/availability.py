@@ -4,15 +4,21 @@ from team_production_system.models import (
     Mentor,
     Availability,
 )
+from team_production_system.helpers import (
+    is_overlapping_availabilities,
+    is_valid_start_time,
+    is_valid_end_time
+)
 
 
+# V1 API #
 # The mentor availability serializer
 class AvailabilitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ('pk', 'mentor', 'start_time', 'end_time',)
-        read_only_fields = ('mentor', 'pk',)
+        fields = ['pk', 'mentor', 'start_time', 'end_time']
+        read_only_fields = ('mentor', 'pk')
 
     def create(self, validated_data):
         mentor = Mentor.objects.select_related('user').get(
@@ -79,4 +85,38 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             )
         return value
 
-    # TODO: Add validation for start times
+
+# V2 API #
+# The mentor availability serializer
+class AvailabilitySerializerV2(serializers.ModelSerializer):
+
+    class Meta:
+        model = Availability
+        fields = [
+            'pk',
+            'mentor',
+            'start_time',
+            'end_time',
+            'status'
+            ]
+        read_only_fields = ('pk',)
+
+    def validate(self, data):
+        mentor = Mentor.objects.select_related('user').get(
+            user=self.context['request'].user)
+        start_time = data.get('start_time')
+        end_time = data.get('end_time')
+
+        if not is_valid_start_time(start_time):
+            raise serializers.ValidationError(
+                'Start time must be in the future.')
+
+        if not is_valid_end_time(start_time, end_time):
+            raise serializers.ValidationError(
+                'End time must be after start time.')
+
+        if is_overlapping_availabilities(mentor, data):
+            raise serializers.ValidationError(
+                'Availability overlaps with existing availability.')
+
+        return data

@@ -22,7 +22,6 @@ class Session(models.Model):
     project = models.CharField(max_length=500)
     help_text = models.TextField(max_length=500)
     git_link = models.URLField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
     confirmed = models.BooleanField(default=False)
     status_choices = [
         ('Pending', 'Pending'),
@@ -39,6 +38,8 @@ class Session(models.Model):
     ]
     session_length = models.IntegerField(
         choices=session_length_choices, default=30)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def end_time(self):
         return self.start_time + timedelta(minutes=self.session_length)

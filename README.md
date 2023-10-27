@@ -160,12 +160,11 @@ Follow these 2 steps once the containers are no longer running:
 
 ```bash
 docker volume rm team_production_system_be_postgres_data
+
 ```
 
-- Rebuild the docker images:
-
-````
 - Rebuild the docker images without the cached data:
+
 ```bash
 docker compose build --no-cache
 ````
@@ -298,12 +297,14 @@ API URL - https://team-production-system.onrender.com
 
 ## Quck Links:
 
-- [User Endpoints](#user-create)
-- [Mentor Endpoints](#view-mentors-list-user-authentication-required)
-- [Mentee Endpoints](#view-mentee-list-user-authentication-required)
-- [Availability Endpoints](#mentors-availabilty-user-authentication-required)
-- [Session Endpoints](#sessions-user-authentication-required)
-- [Notification Endpoints](#update-notification-settings-user-authentication-required)
+- [User Endpoints](#user-endpoints)
+- [Mentor Endpoints](#mentor-endpoints)
+- [Mentee Endpoints](#mentee-endpoints)
+- [Availability Endpoints](#availability-endpoints)
+- [Session Endpoints](#session-endpoints)
+- [Notification Endpoints](#notification-endpoints)
+
+## User Endpoints
 
 ## User Create
 
@@ -353,6 +354,7 @@ Host: https://team-production-system.onrender.com
 ## Token Authentication / User Login
 
 - Create a user token.
+- Username must be lowercase
 
 ```http
 POST - https://team-production-system.onrender.com/auth/token/login/
@@ -360,7 +362,7 @@ POST - https://team-production-system.onrender.com/auth/token/login/
 
 | Body       | Type     | Description             |
 | :--------- | :------- | :---------------------- |
-| `username` | `string` | Username                |
+| `username` | `string` | Username (lowercase)    |
 | `password` | `string` | User generated password |
 
 #### Request Sample:
@@ -544,6 +546,8 @@ Host: https://team-production-system.onrender.com
 ```
 
 ---
+
+## Mentor Endpoints
 
 ## View Mentors List (User Authentication **Required**)
 
@@ -884,6 +888,8 @@ Host: https://team-production-system.onrender.com
 
 ---
 
+## Mentee Endpoints
+
 ## View Mentee List (User Authentication **Required**)
 
 - View a list of all user with the mentee flag set to true
@@ -1094,7 +1100,9 @@ No body returned to response
 
 ---
 
-## Mentors Availabilty (User Authentication **Required**)
+## Availability Endpoints
+
+## V1 | Get Mentors Availabilty (User Authentication **Required**)
 
 - Get mentor availabilty
 - This endpoint filters out any expired availabilty. Only shows availabilty that is in the future.
@@ -1157,9 +1165,79 @@ Host: https://team-production-system.onrender.com
 
 ---
 
-## Add Mentor Availabilty (User Authentication **Required**)
+## V2 | View Mentor Availabilty List (User Authentication **Required**, Version Header **Required**)
 
-- Add mentor availabilty (This endpoint filters out any expired availabilty. Only shows availabilty that is in the future.)
+- Get mentor availabilty
+- This endpoint filters out any expired availabilty
+- Only shows availabilty with end_time in future.
+- Availability reponse ordered from present to future
+- Must pass version number in headers.
+
+```http
+GET - https://team-production-system.onrender.com/availabilty/
+```
+
+| Body         | Type        | Description                                      |
+| :----------- | :---------- | :----------------------------------------------- |
+| `pk`         | `int`       | The pk of the availabilty                        |
+| `mentor`     | `int`       | The pk of the mentor attached to the availabilty |
+| `start_time` | `date-time` | Start time of the availabilty                    |
+| `end_time`   | `date-time` | Start time of the availabilty                    |
+| `status`     | `string`    | Status of the availability                       |
+
+#### Request Sample:
+
+```JSON
+GET /availabilty/
+Content-Type: json
+Accept: version=v2
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	""
+}
+
+```
+
+#### Response Example (200 OK)
+
+```JSON
+[
+	{
+		"pk": 19,
+		"mentor": 4,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:30:00Z"
+	},
+	{
+		"pk": 20,
+		"mentor": 5,
+		"start_time": "1999-12-31T15:30:00Z",
+		"end_time": "1999-12-31T16:30:00Z"
+	},
+	{
+		"pk": 21,
+		"mentor": 4,
+		"start_time": "1999-12-31T16:30:00Z",
+		"end_time": "1999-12-31T18:30:00Z"
+	},
+	{
+		"pk": 22,
+		"mentor": 7,
+		"start_time": "1999-12-31T18:30:00Z",
+		"end_time": "1999-12-31T19:30:00Z"
+	}
+]
+```
+
+---
+
+## V1 | Add Mentor Availabilty (User Authentication **Required**)
+
+- Add mentor availabilty
+- Start time must be in the future
+- End time must be after start time
 
 ```http
 POST - https://team-production-system.onrender.com/availabilty/
@@ -1200,6 +1278,65 @@ Host: https://team-production-system.onrender.com
 
 ---
 
+## V2 | Add Mentor Availabilty (User Authentication **Required**, Version Header **Required**)
+
+- Add mentor availabilty
+- Availability saves to database in 30 min chunks
+- Status defaults to 'Open'
+- Must pass version number in headers.
+
+```http
+POST - https://team-production-system.onrender.com/v2/availabilty/
+```
+
+| Body         | Type        | Description                                      |
+| :----------- | :---------- | :----------------------------------------------- |
+| `pk`         | `int`       | The pk of the availabilty                        |
+| `mentor`     | `int`       | The pk of the mentor attached to the availabilty |
+| `start_time` | `date-time` | Start time of the availabilty                    |
+| `end_time`   | `date-time` | Start time of the availabilty                    |
+| `status`     | `string`    | Status of the availability                       |
+
+#### Request Sample:
+
+```
+POST /v2/availabilty/
+Content-Type: json
+Accept: version=v2
+Authorization: Required
+Host: https://team-production-system.onrender.com
+
+{
+	"start_time": "1999-12-31T14:30:00Z",
+	"end_time": "1999-12-31T15:30:00Z"
+}
+
+```
+
+#### Response Example (201 Created)
+
+```
+[
+	{
+		"pk": 23,
+		"mentor": 1,
+		"start_time": "1999-12-31T14:30:00Z",
+		"end_time": "1999-12-31T15:00:00Z",
+		"status": "Open"
+	},
+	{
+		"pk": 24,
+		"mentor": 1,
+		"start_time": "1999-12-31T15:00:00Z",
+		"end_time": "1999-12-31T15:30:00Z",
+		"status": "Open"
+	},
+
+]
+```
+
+---
+
 ## Delete Mentor Availabilty (User Authentication **Required**)
 
 - Delete a mentor availabilty
@@ -1233,6 +1370,8 @@ No body returned to response
 ```
 
 ---
+
+## Session Endpoints
 
 ## Sessions (User Authentication **Required**)
 
@@ -1491,6 +1630,8 @@ Host: https://team-production-system.onrender.com
 ```
 
 ---
+
+## Notification Endpoints
 
 ## Update Notification Settings (User Authentication **Required**)
 
