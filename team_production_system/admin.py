@@ -10,14 +10,13 @@ from .models import (
 
 
 class AvailabilityAdmin(admin.ModelAdmin):
-    readonly_fields = ("created_at", "modified_at")
+    readonly_fields = ('created_at', 'modified_at')
 
 
 class SessionAdmin(admin.ModelAdmin):
-    readonly_fields = ("created_at", "modified_at")
+    readonly_fields = ('created_at', 'modified_at')
 
 
-# admin.site.register(UserAdmin)
 admin.site.register(CustomUser)
 admin.site.register(Mentor)
 admin.site.register(Mentee)
