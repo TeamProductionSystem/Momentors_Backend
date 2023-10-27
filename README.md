@@ -24,12 +24,14 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 ## Features
 
 - Users can setup profiles as a mentor or mentee.
-- Mentors can set their skill set and avalibilty.
-- Mentees can schedule sessions with the menots, filtered by skills and avalibilty
+- Mentors can set their skill set and availabilty.
+- Mentees can schedule sessions with the mentors, filtered by skills and availabilty
 - Mentors can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
-# Run Locally
+# Running Locally
+
+## Local Setup
 
 Clone the project:
 
@@ -61,11 +63,17 @@ Install the project dependencies:
 $ pipenv install
 ```
 
+## Running without Containers
+
 Set up the database by running the migrations:
 
 ```bash
 $ python manage.py migrate
 ```
+
+💡**Note:** If this command throws an error, you might not have
+[setup your database](#setting-up-a-postgresql-database),
+or [configured your DATABASE_URL env variable properly](#environment-variables).
 
 Start the development server:
 
@@ -75,9 +83,10 @@ $ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
-## Run Celery and Redis locally
+### Run Celery and Redis locally
 
-Only needed if you want 15/60 minute reminders of scheduled sessions.
+These servers are only needed if you want 15/60 minute reminders of scheduled sessions.
+Run each of the following commands in its own terminal window at the project root.
 
 Start the Redis server:
 
@@ -114,7 +123,7 @@ Update `requirements.txt` with any newly added installs:
 $ pipenv requirements > requirements.txt
 ```
 
-**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
+💡**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
 
 ```bash
@@ -263,7 +272,7 @@ To run tests:
 $ python manage.py test
 ```
 
-To skip a test that isn't finished, add the following before the test class:
+💡**Note:** To skip a test that isn't finished, add the following before the test class:
 `@unittest.skip("Test file is not ready yet")`
 
 To run coverage for test:
@@ -334,6 +343,32 @@ Commit messages should be in the following format:
 
 **Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
+## Setting Up a PostgreSQL Database
+
+💡**Note:** This guide assumes you are using a macOS. If you are using a different
+operating system, only the installation step should be different. Here are guides
+for [Windows](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/)
+and [Linux](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql-linux/).
+
+Install PostgreSQL on your machine, then run it as a background service:
+
+```bash
+$ brew install postgresql@15
+$ brew services start postgresql@15
+```
+
+Next, create a user:
+
+```bash
+$ createuser -d <username>
+```
+
+Then, create a database:
+
+```bash
+$ createdb -U <username> <dbname>
+```
+
 # API Reference
 
 API URL - https://team-production-system.onrender.com
@@ -350,7 +385,7 @@ API URL - https://team-production-system.onrender.com
 ## User Create
 
 - Create a new user
-- **Note: the username will automatically be converted to all lowercase letters**
+- 💡**Note: the username will automatically be converted to all lowercase letters**
 
 ```http
   POST https://team-production-system.onrender.com/auth/users/
@@ -525,7 +560,7 @@ Host: https://team-production-system.onrender.com
 ## Edit User Profile (User Authentication **Required**)
 
 - Update the users profile information.
-- **Note: This endpoint has multipart/form-data content type.**
+- 💡**Note: This endpoint has multipart/form-data content type.**
 
 ```http
 PATCH - https://team-production-system.onrender.com/myprofile/
