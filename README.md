@@ -35,43 +35,43 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 Clone the project:
 
 ```bash
-git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
+$ git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
 ```
 
 Navigate to the project directory:
 
 ```bash
-cd Team_Production_System_BE
+$ cd Team_Production_System_BE
 ```
 
 Set up a virtual environment for the project using pipenv. If you don't have pipenv installed, you can install it using pip:
 
 ```bash
-pip install pipenv
+$ pip install pipenv
 ```
 
 Then, activate the virtual environment by running:
 
 ```bash
-pipenv shell
+$ pipenv shell
 ```
 
 Install the project dependencies:
 
 ```bash
-pipenv install
+$ pipenv install
 ```
 
 Set up the database by running the migrations:
 
 ```bash
-python manage.py migrate
+$ python manage.py migrate
 ```
 
 Start the development server:
 
 ```bash
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 The app should now be running at http://localhost:8000/
@@ -83,19 +83,19 @@ Only needed if you want 15/60 minute reminders of scheduled sessions.
 Start the Redis server:
 
 ```bash
-redis-server
+$ redis-server
 ```
 
 Start the Celery server:
 
 ```bash
-celery -A config.celery_settings worker --loglevel=info
+$ celery -A config.celery_settings worker --loglevel=info
 ```
 
 Start the Celery Beat server:
 
 ```bash
-celery -A config.celery_settings beat -l debug
+$ celery -A config.celery_settings beat -l debug
 ```
 
 ## Run Locally via Docker Containers
@@ -106,26 +106,26 @@ You will also need to have your .env file set up.
 Update `requirements.txt` with any newly added installs:
 
 ```bash
-pipenv requirements > requirements.txt
+$ pipenv requirements > requirements.txt
 ```
 
 **Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
 
 ```bash
-pip install --user --upgrade pipenv
+$ pip install --user --upgrade pipenv
 ```
 
 Build docker images:
 
 ```bash
-docker compose build
+$ docker compose build
 ```
 
 Spin up docker containers:
 
 ```bash
-docker compose up
+$ docker compose up
 ```
 
 The app should now be running at http://localhost:8000/
@@ -149,7 +149,7 @@ In these cases, stop then restart the containers.
 To stop running the containers, hit Ctrl+C, then spin down the containers:
 
 ```bash
-docker compose down
+$ docker compose down
 ```
 
 The database is persistant. If you make changes to a model, run makemigrations
@@ -159,15 +159,20 @@ Follow these 2 steps once the containers are no longer running:
 - Remove the persistant volume:
 
 ```bash
+<<<<<<< HEAD
 docker volume rm team_production_system_be_postgres_data
 
 ```
 
+=======
+$ docker volume rm team_production_system_be_postgres_data
+``` 
+>>>>>>> bd63514 (docs: adding $ to shell commands)
 - Rebuild the docker images without the cached data:
 
 ```bash
-docker compose build --no-cache
-````
+$ docker compose build --no-cache
+```
 
 The next time you spin up the docker containers, the database will be empty again.
 
@@ -217,19 +222,27 @@ As long as your are running locally, use the value `dev`.
 For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
 
 To run tests:
-`python manage.py test`
+```bash
+$ python manage.py test
+```
 
 To skip a test that isn't finished, add the following before the test class:
 `@unittest.skip("Test file is not ready yet")`
 
 To run coverage for test:
-`coverage run manage.py test`
+```bash
+$ coverage run manage.py test
+```
 
 After you run tests you can get the report in command-line by running:
-`coverage report`
+```bash
+$ coverage report
+```
 
 For an interactive html report, run:
-`coverage html`
+```bash
+$ coverage html
+```
 
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
