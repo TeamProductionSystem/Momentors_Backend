@@ -6,7 +6,6 @@ from .mentor import Mentor
 
 # Allow mentors to set their availability
 class Availability(models.Model):
-
     STATUS_CHOICES = [
         ('Open', 'Open'),
         ('Requested', 'Requested'),
@@ -18,11 +17,7 @@ class Availability(models.Model):
     )
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default='Open'
-        )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Open')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -31,8 +26,8 @@ class Availability(models.Model):
             UniqueConstraint(
                 fields=['mentor', 'start_time'],
                 name='availability_constraint',
-                violation_error_message='Availability already exists.'
-                )
+                violation_error_message='Availability already exists.',
+            )
         ]
 
     def __str__(self):

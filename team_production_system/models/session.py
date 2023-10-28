@@ -35,14 +35,9 @@ class Session(models.Model):
         ('Completed', 'Completed'),
     ]
     # The mentee will be able to schedule a 30 minute or 60 minute session.
-    status = models.CharField(
-        max_length=10, choices=status_choices, default='Pending')
-    session_length_choices = [
-        (30, '30 minutes'),
-        (60, '60 minutes')
-    ]
-    session_length = models.IntegerField(
-        choices=session_length_choices, default=30)
+    status = models.CharField(max_length=10, choices=status_choices, default='Pending')
+    session_length_choices = [(30, '30 minutes'), (60, '60 minutes')]
+    session_length = models.IntegerField(choices=session_length_choices, default=30)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

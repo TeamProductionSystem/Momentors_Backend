@@ -1,16 +1,14 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from datetime import timedelta
 from rest_framework import status
 from rest_framework.test import APIClient
-from ....models import Mentor, Availability, CustomUser
-from ....serializers import (
-    AvailabilitySerializer,
-    AvailabilitySerializerV2
-)
+
+from ....models import Availability, CustomUser, Mentor
+from ....serializers import AvailabilitySerializer, AvailabilitySerializerV2
 
 
 class AvailabilityListCreateViewTestCase(TestCase):
@@ -105,8 +103,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check that the response data contains an error message
-        self.assertEqual(str(response.data[0]),
-                         'End time must be after start time.')
+        self.assertEqual(str(response.data[0]), 'End time must be after start time.')
 
     def test_create_availability_v2(self):
         self.client = APIClient()
@@ -124,8 +121,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Availability.objects.count(), 3)
         availability = Availability.objects.last()
-        self.assertEqual(
-            availability.start_time, end_time - timedelta(minutes=30))
+        self.assertEqual(availability.start_time, end_time - timedelta(minutes=30))
         self.assertEqual(availability.end_time, end_time)
         self.assertEqual(availability.mentor, self.mentor)
 
@@ -136,7 +132,8 @@ class AvailabilityListCreateViewTestCase(TestCase):
         start_time = timezone.now() + timedelta(hours=7)
         end_time = start_time + timedelta(hours=8)
         Availability.objects.create(
-            mentor=self.mentor, start_time=start_time, end_time=end_time)
+            mentor=self.mentor, start_time=start_time, end_time=end_time
+        )
         data = {
             'start_time': start_time,
             'end_time': end_time,
@@ -177,8 +174,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(len(response.data), 2)
         availability_1 = Availability.objects.get(pk=response.data[0]['pk'])
         availability_2 = Availability.objects.get(pk=response.data[1]['pk'])
-        self.assertEqual(availability_1.end_time,
-                         start_time + timedelta(minutes=30))
+        self.assertEqual(availability_1.end_time, start_time + timedelta(minutes=30))
         self.assertNotEqual(availability_2.end_time, end_time)
         self.assertEqual(availability_1.mentor, self.mentor)
 

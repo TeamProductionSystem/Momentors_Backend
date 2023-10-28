@@ -2,14 +2,16 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from ....models import Availability, Mentor, CustomUser
+
+from ....models import Availability, CustomUser, Mentor
 
 
 class AvailabilityDeleteViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(
-            username='testuser', password='testpass')
+            username='testuser', password='testpass'
+        )
         self.mentor = Mentor.objects.create(user=self.user)
         self.client.force_authenticate(user=self.user)
 
@@ -18,7 +20,7 @@ class AvailabilityDeleteViewTestCase(TestCase):
         availability = Availability.objects.create(
             mentor=self.mentor,
             start_time='2022-01-01T00:00:00Z',
-            end_time='2022-01-01T01:00:00Z'
+            end_time='2022-01-01T01:00:00Z',
         )
 
         # Test that get_object returns the correct Availability instance
