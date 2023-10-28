@@ -35,30 +35,30 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         end_time = validated_data['end_time']
         # Check if start time is between a start time and end time of
         # an existing availability
-        overlapping_condition1 = Availability.objects.filter(
+        overlapping_condition_1 = Availability.objects.filter(
             mentor=mentor,
             start_time__lt=start_time,
             end_time__gt=start_time,
         ).exists()
         # Check if end time is between a start time and end time of
         # an existing availability
-        overlapping_condition2 = Availability.objects.filter(
+        overlapping_condition_2 = Availability.objects.filter(
             mentor=mentor, start_time__lt=end_time, end_time__gt=end_time
         ).exists()
         # Check if start time is between the new start_time and new end_time
-        overlapping_condition3 = Availability.objects.filter(
+        overlapping_condition_3 = Availability.objects.filter(
             mentor=mentor, start_time__gte=start_time, start_time__lt=end_time
         ).exists()
         # Check if end time is between the new start_time and new end_time
-        overlapping_condition4 = Availability.objects.filter(
+        overlapping_condition_4 = Availability.objects.filter(
             mentor=mentor, end_time__gt=start_time, end_time__lte=end_time
         ).exists()
 
         availability_overlap = (
-            overlapping_condition1
-            or overlapping_condition2
-            or overlapping_condition3
-            or overlapping_condition4
+            overlapping_condition_1
+            or overlapping_condition_2
+            or overlapping_condition_3
+            or overlapping_condition_4
         )
         if not availability_overlap:
             availability = Availability.objects.create(mentor=mentor, **validated_data)

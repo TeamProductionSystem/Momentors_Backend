@@ -16,12 +16,12 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.mentor = Mentor.objects.create(user=self.user)
 
         # Create two Availability objects associated with the Mentor
-        self.availability1 = Availability.objects.create(
+        self.availability_1 = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now(),
             end_time=timezone.now() + timezone.timedelta(hours=1),
         )
-        self.availability2 = Availability.objects.create(
+        self.availability_2 = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now() + timezone.timedelta(days=1),
             end_time=timezone.now() + timezone.timedelta(days=1, hours=1),
@@ -107,7 +107,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         """
         data = {
             'mentor': self.mentor.pk,
-            'start_time': self.availability1.start_time,
+            'start_time': self.availability_1.start_time,
             'end_time': timezone.now() + timezone.timedelta(hours=2),
         }
         url = reverse('availability')
@@ -132,8 +132,8 @@ class AvailabilityListCreateTestCase(APITestCase):
         # start and end times
         data = {
             'mentor': self.mentor.pk,
-            'start_time': self.availability1.start_time,
-            'end_time': self.availability1.end_time,
+            'start_time': self.availability_1.start_time,
+            'end_time': self.availability_1.end_time,
         }
         url = reverse('availability')
         response = self.client.post(url, data, format='json')
@@ -174,9 +174,9 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         availability_data = {
-            'start_time': self.availability1.start_time
+            'start_time': self.availability_1.start_time
             + timezone.timedelta(minutes=15),
-            'end_time': self.availability1.end_time - timezone.timedelta(minutes=15),
+            'end_time': self.availability_1.end_time - timezone.timedelta(minutes=15),
             'mentor': self.mentor.pk,
         }
         response = self.client.post('/availability/', availability_data, format='json')
