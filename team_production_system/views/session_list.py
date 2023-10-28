@@ -1,9 +1,10 @@
+from django.db.models import Q
+from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from django.utils import timezone
-from django.db.models import Q
-from team_production_system.serializers import SessionSerializer
+
 from team_production_system.models import Session
+from team_production_system.serializers import SessionSerializer
 
 
 class SessionView(generics.ListAPIView):

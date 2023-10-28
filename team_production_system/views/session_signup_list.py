@@ -1,9 +1,11 @@
-from rest_framework import generics
 from datetime import timedelta
+
 from django.utils import timezone
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from team_production_system.serializers import SessionSerializer
+
 from team_production_system.models import Session
+from team_production_system.serializers import SessionSerializer
 
 
 # View to show mentor time slots a mentee can sign up for

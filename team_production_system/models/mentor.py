@@ -1,6 +1,7 @@
 from django.db import models
-from .custom_user import CustomUser
 from multiselectfield import MultiSelectField
+
+from .custom_user import CustomUser
 
 
 # The mentor model that allows the mentor to select skills

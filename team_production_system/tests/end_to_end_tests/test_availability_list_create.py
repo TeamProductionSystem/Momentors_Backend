@@ -1,8 +1,9 @@
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
-from ...models import Availability, Mentor, CustomUser
+from rest_framework.test import APIClient, APITestCase
+
+from ...models import Availability, CustomUser, Mentor
 from ...serializers import AvailabilitySerializer
 
 

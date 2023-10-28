@@ -1,6 +1,7 @@
-from .mentor import Mentor
-from django.db.models.constraints import UniqueConstraint
 from django.db import models
+from django.db.models.constraints import UniqueConstraint
+
+from .mentor import Mentor
 
 
 # Allow mentors to set their availability

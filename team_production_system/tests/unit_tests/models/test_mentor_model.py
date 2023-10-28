@@ -1,5 +1,6 @@
 from django.test import TestCase
-from ....models import Mentor, CustomUser
+
+from ....models import CustomUser, Mentor
 
 
 class MentorModelTest(TestCase):

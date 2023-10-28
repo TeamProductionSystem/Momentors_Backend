@@ -1,11 +1,12 @@
+import boto3
+from django.conf import settings
 from rest_framework import generics, status
-from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
-from django.conf import settings
-import boto3
-from team_production_system.serializers import CustomUserSerializer
+from rest_framework.response import Response
+
 from team_production_system.models import CustomUser
+from team_production_system.serializers import CustomUserSerializer
 
 # View to update the user profile information
 

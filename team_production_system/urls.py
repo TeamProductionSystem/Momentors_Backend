@@ -1,6 +1,6 @@
 from django.urls import path
-from team_production_system import views
 
+from team_production_system import views
 
 urlpatterns = [
 

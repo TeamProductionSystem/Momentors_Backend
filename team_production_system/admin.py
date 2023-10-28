@@ -1,11 +1,12 @@
 from django.contrib import admin
+
 from .models import (
-    Mentor,
-    Mentee,
-    CustomUser,
-    Session,
     Availability,
-    NotificationSettings
+    CustomUser,
+    Mentee,
+    Mentor,
+    NotificationSettings,
+    Session
 )
 
 

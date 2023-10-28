@@ -36,8 +36,11 @@ pep8-naming = "*"
 flake8-spellcheck = "*"
 flake8-eradicate = "*"
 black = "*"
-flake8-clean-block = "*"
 flake8-multiline-containers = "*"
+flake8-clean-block = "*"
+flake8-secure-coding-standard = "*"
+isort = "*"
+flake8-comprehensions = "*"
 
 [requires]
 python_version = "3.10"

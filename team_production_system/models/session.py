@@ -1,12 +1,14 @@
-from django.db import models
+import secrets
+from datetime import timedelta
+
+import pytz
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import models
+
+from .availability import Availability
 from .mentee import Mentee
 from .mentor import Mentor
-from .availability import Availability
-from datetime import timedelta
-import secrets
-import pytz
 
 
 # The session model allows the mentee to setup a session and

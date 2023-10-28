@@ -1,15 +1,16 @@
+from unittest.mock import patch
+
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
 from rest_framework import status
 from rest_framework.test import APIClient
-from django.test import TestCase
 from ....models import Mentor, Availability, CustomUser
 from ....serializers import (
     AvailabilitySerializer,
     AvailabilitySerializerV2
 )
-from unittest.mock import patch
 
 
 class AvailabilityListCreateViewTestCase(TestCase):

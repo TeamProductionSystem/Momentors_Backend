@@ -1,8 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
-from django.core.files.storage import default_storage
 import random
+
+from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
+from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 from .notification_settings import NotificationSettings
 
 

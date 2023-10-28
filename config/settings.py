@@ -10,12 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import environ
 from pathlib import Path
-from corsheaders.defaults import default_headers
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+import environ
+import sentry_sdk
+from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env(
     # set casting, default value

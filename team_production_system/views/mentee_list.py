@@ -1,8 +1,9 @@
 from rest_framework import generics, status
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from team_production_system.serializers import MenteeListSerializer
+from rest_framework.response import Response
+
 from team_production_system.models import CustomUser
+from team_production_system.serializers import MenteeListSerializer
 
 
 class MenteeList(generics.ListAPIView):

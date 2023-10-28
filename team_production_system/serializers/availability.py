@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from django.utils import timezone
 from team_production_system.models import (
     Mentor,
@@ -9,9 +8,10 @@ from team_production_system.helpers import (
     is_valid_start_time,
     is_valid_end_time
 )
+from rest_framework import serializers
 
 
-# V1 API #
+# V_1 API #
 # The mentor availability serializer
 class AvailabilitySerializer(serializers.ModelSerializer):
 
@@ -63,7 +63,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             return availability
 
         raise serializers.ValidationError(
-            "Input overlaps with existing availability.")
+            'Input overlaps with existing availability.')
 
     def validate(self, data):
         """
@@ -101,7 +101,7 @@ class AvailabilitySerializerV2(serializers.ModelSerializer):
             'start_time',
             'end_time',
             'status'
-            ]
+        ]
         read_only_fields = ('pk',)
 
     def validate(self, data):

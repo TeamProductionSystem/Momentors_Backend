@@ -1,11 +1,9 @@
-from rest_framework import serializers
 from django.utils import timezone
+from rest_framework import serializers
+
+from team_production_system.models import Availability, CustomUser, Mentor
+
 from .availability import AvailabilitySerializer
-from team_production_system.models import (
-    CustomUser,
-    Mentor,
-    Availability,
-    )
 
 # Serializer to show a list of all users flagged as a mentor
 

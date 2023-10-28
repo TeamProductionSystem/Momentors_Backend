@@ -1,6 +1,8 @@
-from celery import shared_task
 from datetime import datetime, timedelta
+
+from celery import shared_task
 from django.utils import timezone
+
 from .models import Session
 
 

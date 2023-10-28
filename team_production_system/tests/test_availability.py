@@ -1,10 +1,12 @@
 # flake8: noqa
 
+import unittest
+from datetime import timedelta
+
 from django.test import TestCase
 from django.utils import timezone
-from datetime import timedelta
-from ..models import CustomUser, Mentor, Availability
-import unittest
+
+from ..models import Availability, CustomUser, Mentor
 
 
 @unittest.skip("Test file is not ready yet")

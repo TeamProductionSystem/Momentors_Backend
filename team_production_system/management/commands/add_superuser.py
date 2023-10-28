@@ -1,9 +1,10 @@
 
 import os
+
 from django.core.management.base import BaseCommand
 
-from team_production_system.models import CustomUser 
-from config import settings 
+from config import settings
+from team_production_system.models import CustomUser
 
 
 # To run this management command:

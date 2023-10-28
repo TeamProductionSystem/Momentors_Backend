@@ -1,13 +1,13 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from datetime import datetime, timedelta
+
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from datetime import datetime, timedelta
 from django.utils import timezone
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from team_production_system.models import Availability, Mentee, Session
 from team_production_system.serializers import SessionSerializer
-from team_production_system.models import (Availability,
-                                           Mentee,
-                                           Session)
 
 
 def time_convert(time, minutes):

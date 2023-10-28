@@ -1,7 +1,9 @@
 from __future__ import absolute_import
+
 import os
-import environ
 import ssl
+
+import environ
 from celery import Celery
 from django.conf import settings
 

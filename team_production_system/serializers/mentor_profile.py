@@ -1,6 +1,8 @@
-from rest_framework import serializers, fields
-from .availability import AvailabilitySerializer
+from rest_framework import fields, serializers
+
 from team_production_system.models import Mentor
+
+from .availability import AvailabilitySerializer
 
 
 class MentorProfileSerializer(serializers.ModelSerializer):

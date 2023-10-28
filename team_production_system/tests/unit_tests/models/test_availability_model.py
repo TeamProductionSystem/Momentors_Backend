@@ -1,6 +1,8 @@
-from django.test import TestCase
 from datetime import datetime, timedelta, timezone
-from ....models import Availability, Mentor, CustomUser
+
+from django.test import TestCase
+
+from ....models import Availability, CustomUser, Mentor
 
 
 class AvailabilityTestCase(TestCase):

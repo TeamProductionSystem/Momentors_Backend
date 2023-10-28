@@ -1,7 +1,9 @@
 from rest_framework import serializers
+
 from team_production_system.models import CustomUser
-from .mentee_profile import MenteeProfileSerializer
+
 from .custom_user import CustomUserSerializer
+from .mentee_profile import MenteeProfileSerializer
 
 
 class MenteeListSerializer(serializers.ModelSerializer):

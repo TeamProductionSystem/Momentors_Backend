@@ -1,9 +1,10 @@
+from django.http import Http404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from django.http import Http404
-from team_production_system.serializers import AvailabilitySerializer
-from team_production_system.models import Availability
+
 from team_production_system.custom_permissions import IsOwnerOrAdmin
+from team_production_system.models import Availability
+from team_production_system.serializers import AvailabilitySerializer
 
 
 class AvailabilityDeleteView(generics.DestroyAPIView):
