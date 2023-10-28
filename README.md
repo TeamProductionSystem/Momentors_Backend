@@ -159,15 +159,9 @@ Follow these 2 steps once the containers are no longer running:
 - Remove the persistant volume:
 
 ```bash
-<<<<<<< HEAD
-docker volume rm team_production_system_be_postgres_data
-
+$ docker volume rm team_production_system_be_postgres_data
 ```
 
-=======
-$ docker volume rm team_production_system_be_postgres_data
-``` 
->>>>>>> bd63514 (docs: adding $ to shell commands)
 - Rebuild the docker images without the cached data:
 
 ```bash

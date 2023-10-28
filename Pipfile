@@ -22,7 +22,6 @@ django-multiselectfield = "*"
 boto3 = "*"
 sentry-sdk = {extras = ["django"] }
 pytz = "*"
-flake8 = "*"
 redis = "*"
 coverage = "*"
 celery = "*"
@@ -30,6 +29,7 @@ django-celery-beat = "*"
 pre-commit = "*"
 
 [dev-packages]
+flake8 = "*"
 flake8-bugbear = "*"
 pep8-naming = "*"
 flake8-spellcheck = "*"
