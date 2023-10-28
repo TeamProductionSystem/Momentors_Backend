@@ -19,18 +19,22 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         user = self.request.user
         if not user.is_authenticated:
-            return Response({'error': 'User is not authenticated.'},
-                            status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {'error': 'User is not authenticated.'},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         try:
             return user
         except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception:
-            return Response({
-                'error': 'An unexpected error occurred.'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An unexpected error occurred.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
@@ -53,8 +57,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
             if user.profile_photo:
                 s3 = boto3.client('s3')
                 s3.delete_object(
-                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                    Key=user.profile_photo.name)
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name
+                )
 
             user.profile_photo = request.FILES['profile_photo']
 

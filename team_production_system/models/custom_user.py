@@ -16,10 +16,8 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=75)
     last_name = models.CharField(max_length=75)
     email = models.EmailField(max_length=75, unique=True)
-    phone_number = PhoneNumberField(
-        null=True, blank=True, unique=True, default=None)
-    profile_photo = models.ImageField(
-        upload_to='profile_photo', blank=True, null=True)
+    phone_number = PhoneNumberField(null=True, blank=True, unique=True, default=None)
+    profile_photo = models.ImageField(upload_to='profile_photo', blank=True, null=True)
 
     def __str__(self):
         return self.username

@@ -47,4 +47,4 @@ urlpatterns = [
             views.NotificationSettingsView.as_view(),
             name='notification-settings'
      ),
-     ]
+]

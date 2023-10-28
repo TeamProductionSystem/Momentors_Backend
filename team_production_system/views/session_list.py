@@ -16,7 +16,7 @@ class SessionView(generics.ListAPIView):
         # Get sessions for the logged in user
         # Exclude sessions that have already ended and
         # order by sessions that are coming up next first.
-        return Session.objects.filter(Q(mentor__user=self.request.user) |
-                                      Q(mentee__user=self.request.user),
-                                      start_time__gt=timezone.now()
-                                      ).order_by('start_time')
+        return Session.objects.filter(
+            Q(mentor__user=self.request.user) | Q(mentee__user=self.request.user),
+            start_time__gt=timezone.now(),
+        ).order_by('start_time')

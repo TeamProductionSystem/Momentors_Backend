@@ -11,9 +11,7 @@ class AvailabilityListCreateTestCase(APITestCase):
     def setUp(self):
         # Create a Mentor object
         self.user = CustomUser.objects.create_user(
-            username='mentor',
-            email='mentor@example.com',
-            password='password'
+            username='mentor', email='mentor@example.com', password='password'
         )
         self.mentor = Mentor.objects.create(user=self.user)
 
@@ -21,12 +19,12 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.availability1 = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now(),
-            end_time=timezone.now() + timezone.timedelta(hours=1)
+            end_time=timezone.now() + timezone.timedelta(hours=1),
         )
         self.availability2 = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now() + timezone.timedelta(days=1),
-            end_time=timezone.now() + timezone.timedelta(days=1, hours=1)
+            end_time=timezone.now() + timezone.timedelta(days=1, hours=1),
         )
         # Create a Client
         self.client = APIClient()
@@ -61,8 +59,7 @@ class AvailabilityListCreateTestCase(APITestCase):
 
         # Check that the response data matches the serialized Availability obj
         availabilities = Availability.objects.filter(
-            mentor=self.mentor,
-            end_time__gte=timezone.now()
+            mentor=self.mentor, end_time__gte=timezone.now()
         ).select_related('mentor__user')
         serializer = AvailabilitySerializer(availabilities, many=True)
         self.assertEqual(response.data, serializer.data)
@@ -81,7 +78,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': timezone.now() + timezone.timedelta(days=2),
-            'end_time': timezone.now() + timezone.timedelta(days=2, hours=1)
+            'end_time': timezone.now() + timezone.timedelta(days=2, hours=1),
         }
         url = reverse('availability')
         response = self.client.post(url, data, format='json')
@@ -109,7 +106,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': self.availability1.start_time,
-            'end_time': timezone.now() + timezone.timedelta(hours=2)
+            'end_time': timezone.now() + timezone.timedelta(hours=2),
         }
         url = reverse('availability')
         response = self.client.post(url, data, format='json')
@@ -118,8 +115,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check that the response data contains an error message
-        self.assertEqual(response.data[0],
-                         'Input overlaps with existing availability.')
+        self.assertEqual(response.data[0], 'Input overlaps with existing availability.')
 
     def test_create_availability_with_duplicate_start_and_end_times(self):
         """
@@ -135,7 +131,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': self.availability1.start_time,
-            'end_time': self.availability1.end_time
+            'end_time': self.availability1.end_time,
         }
         url = reverse('availability')
         response = self.client.post(url, data, format='json')
@@ -144,8 +140,7 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check that the response data contains an error message
-        self.assertEqual(response.data[0],
-                         'Input overlaps with existing availability.')
+        self.assertEqual(response.data[0], 'Input overlaps with existing availability.')
 
     def test_create_availability_with_end_time_before_start_time(self):
         """
@@ -158,13 +153,13 @@ class AvailabilityListCreateTestCase(APITestCase):
         availability_data = {
             'start_time': '2022-01-01T14:00:00Z',
             'end_time': '2022-01-01T12:00:00Z',
-            'mentor': self.mentor.pk
+            'mentor': self.mentor.pk,
         }
-        response = self.client.post('/availability/',
-                                    availability_data, format='json')
+        response = self.client.post('/availability/', availability_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(str(response.data['end_time'][0]),
-                         'End time must be in the future.')
+        self.assertEqual(
+            str(response.data['end_time'][0]), 'End time must be in the future.'
+        )
         self.assertEqual(Availability.objects.count(), 2)
 
     def test_create_availability_inside_existing_availability(self):
@@ -177,15 +172,14 @@ class AvailabilityListCreateTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         availability_data = {
-            'start_time': self.availability1.start_time +
-            timezone.timedelta(minutes=15),
-            'end_time': self.availability1.end_time -
-            timezone.timedelta(minutes=15),
-            'mentor': self.mentor.pk
+            'start_time': self.availability1.start_time
+            + timezone.timedelta(minutes=15),
+            'end_time': self.availability1.end_time - timezone.timedelta(minutes=15),
+            'mentor': self.mentor.pk,
         }
-        response = self.client.post('/availability/',
-                                    availability_data, format='json')
+        response = self.client.post('/availability/', availability_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(str(response.data[0]),
-                         'Input overlaps with existing availability.')
+        self.assertEqual(
+            str(response.data[0]), 'Input overlaps with existing availability.'
+        )
         self.assertEqual(Availability.objects.count(), 2)

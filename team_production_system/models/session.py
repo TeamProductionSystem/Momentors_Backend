@@ -14,12 +14,15 @@ from .mentor import Mentor
 # The session model allows the mentee to setup a session and
 # allows both mentee and mentor see their sessions they have scheduled
 class Session(models.Model):
-    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE,
-                               related_name='mentor_session')
+    mentor = models.ForeignKey(
+        Mentor, on_delete=models.CASCADE, related_name='mentor_session'
+    )
     mentor_availability = models.ForeignKey(
-        Availability, on_delete=models.CASCADE, related_name='mentor_session')
+        Availability, on_delete=models.CASCADE, related_name='mentor_session'
+    )
     mentee = models.ForeignKey(
-        Mentee, on_delete=models.CASCADE, related_name='mentee_session')
+        Mentee, on_delete=models.CASCADE, related_name='mentee_session'
+    )
     start_time = models.DateTimeField()
     project = models.CharField(max_length=500)
     help_text = models.TextField(max_length=500)
@@ -29,7 +32,7 @@ class Session(models.Model):
         ('Pending', 'Pending'),
         ('Confirmed', 'Confirmed'),
         ('Canceled', 'Canceled'),
-        ('Completed', 'Completed')
+        ('Completed', 'Completed'),
     ]
     # The mentee will be able to schedule a 30 minute or 60 minute session.
     status = models.CharField(
@@ -116,7 +119,7 @@ class Session(models.Model):
                 f'Here is the link to your session: {meeting_link}'
             ),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentee.user.email]
+            recipient_list=[self.mentee.user.email],
         )
 
     # Notify the mentor when the requested session has been confirmed
@@ -142,7 +145,7 @@ class Session(models.Model):
                 f'Here is the link to your session: {meeting_link}'
             ),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentor.user.email]
+            recipient_list=[self.mentor.user.email],
         )
 
     # Notify a mentor that a mentee has canceled a scheduled session

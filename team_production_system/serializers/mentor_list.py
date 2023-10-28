@@ -46,9 +46,9 @@ class MentorListSerializer(serializers.ModelSerializer):
     def get_availabilities(self, obj):
         try:
             availabilities = Availability.objects.filter(
-                mentor=obj.pk, end_time__gte=timezone.now())
-            serializer = AvailabilitySerializer(
-                instance=availabilities, many=True)
+                mentor=obj.pk, end_time__gte=timezone.now()
+            )
+            serializer = AvailabilitySerializer(instance=availabilities, many=True)
             return serializer.data
         except Mentor.DoesNotExist:
             return None

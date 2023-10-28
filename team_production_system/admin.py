@@ -6,7 +6,7 @@ from .models import (
     Mentee,
     Mentor,
     NotificationSettings,
-    Session
+    Session,
 )
 
 

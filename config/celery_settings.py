@@ -11,7 +11,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     USE_S3=(bool, False),
-    RENDER=(bool, False)
+    RENDER=(bool, False),
 )
 
 environ.Env.read_env()
@@ -23,12 +23,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 if your_env == 'prod':
     app = Celery(
         "config",
-        broker_use_ssl={
-            'ssl_cert_reqs': ssl.CERT_NONE
-        },
-        redis_backend_use_ssl={
-            'ssl_cert_reqs': ssl.CERT_NONE
-        }
+        broker_use_ssl={'ssl_cert_reqs': ssl.CERT_NONE},
+        redis_backend_use_ssl={'ssl_cert_reqs': ssl.CERT_NONE},
     )
 elif your_env == 'dev':
     app = Celery('config')

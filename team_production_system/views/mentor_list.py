@@ -10,20 +10,20 @@ from team_production_system.serializers import MentorListSerializer
 
 class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = CustomUser.objects.filter(
-        is_mentor=True
-    ).select_related(
-        "mentor"
-    ).prefetch_related(
-        "mentor__mentor_availability")
+    queryset = (
+        CustomUser.objects.filter(is_mentor=True)
+        .select_related("mentor")
+        .prefetch_related("mentor__mentor_availability")
+    )
     serializer_class = MentorListSerializer
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
         if not queryset:
-            return Response({"message": "No mentors found."},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "No mentors found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

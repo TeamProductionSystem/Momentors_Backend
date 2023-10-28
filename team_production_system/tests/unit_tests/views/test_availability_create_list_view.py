@@ -17,16 +17,15 @@ class AvailabilityListCreateViewTestCase(TestCase):
     def setUp(self):
         # Create a Mentor instance for the test
         self.user = CustomUser.objects.create_user(
-            username='testuser',
-            email='testuser@fake.com',
-            password='testpass')
+            username='testuser', email='testuser@fake.com', password='testpass'
+        )
         self.mentor = Mentor.objects.create(user=self.user)
 
         # Create an Availability instance for the test
         self.availability = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now() + timezone.timedelta(hours=1),
-            end_time=timezone.now() + timezone.timedelta(hours=2)
+            end_time=timezone.now() + timezone.timedelta(hours=2),
         )
         self.url = reverse('availability')
 
@@ -42,8 +41,10 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.client.force_authenticate(user=self.user)
 
         # Set up the mock timezone to return a fixed datetime
-        mock_timezone.now.return_value = timezone.datetime(2022, 1, 1,
-                                                           tzinfo=timezone.utc)
+        mock_timezone.now.return_value = timezone.datetime(
+            2022, 1, 1, tzinfo=timezone.utc
+        )
+
         # Make a GET request to the AvailabilityList view
         response = self.client.get('/availability/', format='json')
         # Check that the response status code is 200 OK
@@ -51,9 +52,10 @@ class AvailabilityListCreateViewTestCase(TestCase):
 
         # Check that the response data contains the expected Availability
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['start_time'],
-                         self.availability.start_time.isoformat().replace(
-            '+00:00', 'Z'))
+        self.assertEqual(
+            response.data[0]['start_time'],
+            self.availability.start_time.isoformat().replace('+00:00', 'Z'),
+        )
 
     def test_create_availability_v1(self):
         """
@@ -68,7 +70,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': timezone.now() + timezone.timedelta(hours=3),
-            'end_time': timezone.now() + timezone.timedelta(hours=4)
+            'end_time': timezone.now() + timezone.timedelta(hours=4),
         }
 
         response = client.post(self.url, data, format='json')
@@ -79,8 +81,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         # Check that the response data is the new Availability
         availability = Availability.objects.last()
         serializer = AvailabilitySerializer(availability)
-        self.assertEqual(response.data['start_time'],
-                         serializer.data['start_time'])
+        self.assertEqual(response.data['start_time'], serializer.data['start_time'])
 
     def test_create_availability_v1_with_invalid_data(self):
         """
@@ -95,7 +96,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': timezone.now() + timezone.timedelta(hours=2),
-            'end_time': timezone.now() + timezone.timedelta(hours=1)
+            'end_time': timezone.now() + timezone.timedelta(hours=1),
         }
 
         response = client.post(self.url, data, format='json')

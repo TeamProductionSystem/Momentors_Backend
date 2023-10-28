@@ -14,8 +14,9 @@ class AvailabilityDeleteView(generics.DestroyAPIView):
     def get_object(self):
         try:
             # Get the Availability instance for the logged in user
-            availability = Availability.objects.select_related(
-                'mentor__user').get(id=self.kwargs['pk'])
+            availability = Availability.objects.select_related('mentor__user').get(
+                id=self.kwargs['pk']
+            )
             self.check_object_permissions(self.request, availability)
             return availability
         except Availability.DoesNotExist:

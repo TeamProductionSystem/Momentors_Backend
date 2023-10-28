@@ -7,7 +7,8 @@ from .availability import AvailabilitySerializer
 
 class MentorProfileSerializer(serializers.ModelSerializer):
     availabilities = AvailabilitySerializer(
-        many=True, read_only=True, source='mentor_availability')
+        many=True, read_only=True, source='mentor_availability'
+    )
     skills = fields.MultipleChoiceField(choices=Mentor.SKILLS_CHOICES)
     team_number = serializers.IntegerField(required=False)
 
