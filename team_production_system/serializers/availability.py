@@ -64,7 +64,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             availability = Availability.objects.create(mentor=mentor, **validated_data)
             return availability
 
-        raise serializers.ValidationError("Input overlaps with existing availability.")
+        raise serializers.ValidationError('Input overlaps with existing availability.')
 
     def validate(self, data):
         """

@@ -17,7 +17,7 @@ class MentorFilteredList(generics.ListAPIView):
 
         if not queryset.exists():
             return Response(
-                {"message": "No mentors found."}, status=status.HTTP_404_NOT_FOUND
+                {'message': 'No mentors found.'}, status=status.HTTP_404_NOT_FOUND
             )
 
         serializer = MentorProfileSerializer(queryset, many=True)

@@ -10,7 +10,7 @@ from .models import Session
 # Redis will run this every 5 minutes
 def notify():
     now = datetime.now(timezone.utc)
-    sessions = Session.objects.filter(status="Confirmed")
+    sessions = Session.objects.filter(status='Confirmed')
     for session in sessions:
         start_time = session.start_time
 

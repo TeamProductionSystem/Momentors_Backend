@@ -101,8 +101,10 @@ class AvailabilityListCreateTestCase(APITestCase):
         # Authenticate as the Mentor
         self.client.force_authenticate(user=self.user)
 
-        '''Send a POST request to create a new Availability with
-        a start time that has already been used'''
+        """
+        Send a POST request to create a new Availability with
+        a start time that has already been used.
+        """
         data = {
             'mentor': self.mentor.pk,
             'start_time': self.availability1.start_time,

@@ -22,7 +22,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 if your_env == 'prod':
     app = Celery(
-        "config",
+        'config',
         broker_use_ssl={'ssl_cert_reqs': ssl.CERT_NONE},
         redis_backend_use_ssl={'ssl_cert_reqs': ssl.CERT_NONE},
     )

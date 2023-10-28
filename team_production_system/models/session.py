@@ -51,8 +51,8 @@ class Session(models.Model):
 
     def __str__(self):
         return (
-            f"{self.mentor_availability.mentor.user.username} "
-            f"session with {self.mentee.user.username} is ({self.status})"
+            f'{self.mentor_availability.mentor.user.username} '
+            f'session with {self.mentee.user.username} is ({self.status})'
         )
 
     # Notify a mentor that a mentee has requested a session

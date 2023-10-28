@@ -36,6 +36,4 @@ class Availability(models.Model):
         ]
 
     def __str__(self):
-        return (
-            f'{self.mentor} is available from ' f'{self.start_time} to {self.end_time}.'
-        )
+        return f'{self.mentor} is available from {self.start_time} to {self.end_time}.'

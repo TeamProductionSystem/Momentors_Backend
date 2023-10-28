@@ -20,4 +20,4 @@ class AvailabilityDeleteView(generics.DestroyAPIView):
             self.check_object_permissions(self.request, availability)
             return availability
         except Availability.DoesNotExist:
-            raise Http404("No Availability matches the given query.")
+            raise Http404('No Availability matches the given query.')

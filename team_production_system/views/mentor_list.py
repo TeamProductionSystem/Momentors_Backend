@@ -12,8 +12,8 @@ class MentorList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = (
         CustomUser.objects.filter(is_mentor=True)
-        .select_related("mentor")
-        .prefetch_related("mentor__mentor_availability")
+        .select_related('mentor')
+        .prefetch_related('mentor__mentor_availability')
     )
     serializer_class = MentorListSerializer
 
@@ -22,7 +22,7 @@ class MentorList(generics.ListAPIView):
 
         if not queryset:
             return Response(
-                {"message": "No mentors found."}, status=status.HTTP_404_NOT_FOUND
+                {'message': 'No mentors found.'}, status=status.HTTP_404_NOT_FOUND
             )
 
         serializer = self.get_serializer(queryset, many=True)

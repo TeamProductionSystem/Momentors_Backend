@@ -12,17 +12,17 @@ class MenteeList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         try:
             queryset = CustomUser.objects.filter(is_mentee=True).select_related(
-                "mentee"
+                'mentee'
             )
         except Exception:
             return Response(
-                {"error": "Failed to retrieve mentee list."},
+                {'error': 'Failed to retrieve mentee list.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         if not queryset.exists():
             return Response(
-                {"message": "No mentees found."}, status=status.HTTP_404_NOT_FOUND
+                {'message': 'No mentees found.'}, status=status.HTTP_404_NOT_FOUND
             )
 
         serializer = MenteeListSerializer(queryset, many=True)

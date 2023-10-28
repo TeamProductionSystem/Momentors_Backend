@@ -35,5 +35,5 @@ class AvailabilityTestCase(TestCase):
         self.assertEqual(saved_availability.mentor, self.mentor)
         self.assertEqual(
             str(saved_availability),
-            f"{self.mentor} is available from " f"{start_time} to {end_time}.",
+            f'{self.mentor} is available from {start_time} to {end_time}.',
         )
