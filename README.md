@@ -340,7 +340,7 @@ In this case, use the `--no-verify` flag to make your commit.
 
 Commit messages should be in the following format:
 
-`<type>: <description>`
+`<type>(<scope>): <description>`
 
 **Type:** Represents the type of change that was made. This should be one of the following:
 
@@ -356,7 +356,12 @@ Commit messages should be in the following format:
 - chore - Miscellaneous changes, such as updating packages or bumping a version number
 - revert - Reverting a previous commit
 
-**Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
+**Scope:** This is optional but can provide additional contextual information.
+It describes the section or aspect of the codebase affected by the change.
+For example, auth for authentication-related changes or header for changes to a website's header component.
+
+**Description:** A concise description of the changes.
+Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
 # API Reference
 
