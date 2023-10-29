@@ -20,7 +20,7 @@ django-imagekit = "*"
 django-storages = "*"
 django-multiselectfield = "*"
 boto3 = "*"
-sentry-sdk = {extras = ["django"] }
+sentry-sdk = {extras = ["django"], version = "*"}
 pytz = "*"
 redis = "*"
 coverage = "*"
