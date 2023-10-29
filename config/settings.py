@@ -170,8 +170,20 @@ if env("RENDER"):
         'CacheControl': 'max-age=86400',
     }
 
+if env("DEBUG") == False:
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if env("DEBUG") == True:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "django.core.files.storage.FileSystemStorage",
+#     },
+#     "staticfiles": {
+#         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+#     },
+# }
 
 AUTH_USER_MODEL = 'team_production_system.CustomUser'
 
