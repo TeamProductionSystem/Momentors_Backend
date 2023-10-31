@@ -98,13 +98,13 @@ $ redis-server
 Start the Celery server:
 
 ```bash
-$ celery -A config.celery worker --loglevel=info
+$ celery -A config.celery_settings worker --loglevel=info
 ```
 
 Start the Celery Beat server:
 
 ```bash
-$ celery -A config.celery beat -l debug
+$ celery -A config.celery_settings beat -l debug
 ```
 
 ## Run Locally via Docker Containers
@@ -190,7 +190,7 @@ Follow these 2 steps once the containers are no longer running:
 
 ```bash
 $ docker volume rm team_production_system_be_postgres_data
-``` 
+```
 
 - Rebuild the docker images without the cached data:
 
@@ -209,8 +209,8 @@ The next time you spin up the docker containers, the database will be empty agai
     For example:
 
 ```
+ENVIRONMENT=dev
 DATABASE_URL=postgres://mentors:mentors@localhost:5432/mentors
-
 SECRET_KEY=my_secret_key
 DEBUG=True
 
@@ -231,6 +231,9 @@ EMAIL_HOST_PASSWORD=do-not-share
 
 SENTRY_DSN=not-necessary-for-running-locally
 ```
+
+- ENVIRONMENT: This should be either `dev` or `prod`, depending on what environment the app is running in.
+As long as your are running locally, use the value `dev`.
 
 - DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port. When using a local PostgreSQL database, it should take the form `postgres://<username>:<password>@localhost:5432/<db-name>`
 
@@ -311,13 +314,79 @@ Each error will show the file name and line to find the error. The command can b
 
 # Submitting Code
 
-We use a pre-commit to check branch names and commit messages. Please follow the the following schema for branch names and commit messages:
+We use several [git hooks](https://git-scm.com/docs/githooks) to ensure code quality
+and consistency. These are run using the [pre-commit](https://pre-commit.com/)
+Python package.
 
-## Branch Names
+Here are the processes we run for each hook:
+- **[Pre-Commit](https://git-scm.com/docs/githooks#_pre_commit):**
+	- linting code with Flake8
+	- autoformatting code with isort and black
+- **[Commit-Msg](https://git-scm.com/docs/githooks#_commit_msg):**
+	- linting commit message
+- **[Pre-Push](https://git-scm.com/docs/githooks#_pre_push):**
+	- linting branch name
+	- running all tests
+
+Below, we go over how to set up and use these hooks, the linting plugins used,
+and the schemas for Branch Names and Commit Messages.
+
+## Pre-Commit Setup
+These steps assume you have already entered a pipenv shell and installed all
+dependencies.
+Below are the commands and expected outputs:
+
+```bash
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+
+$ pre-commit install --hook-type commit-msg
+pre-commit installed at .git/hooks/commit-msg
+```
+
+To run the pre-commit checks before making a commit, run the following command.
+The output underneath assumes no changes are needed:
+
+```bash
+$ pre-commit run --all-files
+isort....................................................................Passed
+black....................................................................Passed
+flake8...................................................................Passed
+```
+
+If isort or black catch any errors, they will automatically alter the files to fix them.
+This will prevent making a commit, and you will need to stage the new changes.
+flake8 errors need to be fixed manually.
+
+## Code Linting
+
+We ensure code consistancy by linting with flake8.
+Errors found by flake 8 will be listed in the following format:
+```bash
+<File Path>:<Line>:<Column>: <Error Code> <Error Message>
+```
+Error codes from flake8 will have a prefix of F.
+The flake8 plugins used are listed below, along with their error code prefix:
+
+	- flake8-bugbear (B): additional rules to catch bugs and design problems
+	- pep8-naming (N): check the PEP-8 naming conventions
+	- flake8-spellcheck (SC): spellcheck variables, classnames, comments, docstrings etc.
+	- flake8-eradicate (E): finds commented out or dead code
+	- flake8-clean-block (CLB): enforces a blank line after if/for/while/with/try blocks
+	- flake8-multiline (JS): ensures a consistent format for multiline containers
+	- flake8-secure-coding-standard (SCS): enforces some secure coding standards for Python
+	- flake8-comprehensions (C): helps you write better list/set/dict comprehensions
+	- flake8-quotes (Q): extension for checking quotes in Python
+
+💡**Note:** If the spellcheck plugin gets caught on a name that you did not set,
+add it to `whitelist.txt`.
+**DO NOT ADD NAMES THAT YOU CREATE!!!**
+
+## Branch Name Schema
 
 Branch names should be in the following format:
 
-`<type>/<issue-number>/<description>`
+`<type>/issue-<number>/<description>`
 
 **Type:** The type of branch. This should be one of the following:
 
@@ -331,7 +400,9 @@ Branch names should be in the following format:
 
 **Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
 
-## Commit Messages
+**Example:** `feat/issue-66/remove-jedi`
+
+## Commit Message Schema
 
 Commit messages should be in the following format:
 
@@ -351,9 +422,12 @@ Commit messages should be in the following format:
 - chore - Miscellaneous changes, such as updating packages or bumping a version number
 - revert - Reverting a previous commit
 
-**Scope:** This is optional but can provide additional contextual information. It describes the section or aspect of the codebase affected by the change. For example, auth for authentication-related changes or header for changes to a website's header component.
+**Scope:** This is optional but can provide additional contextual information.
+It describes the section or aspect of the codebase affected by the change.
+For example, auth for authentication-related changes or header for changes to a website's header component.
 
-**Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
+**Description:** A concise description of the changes.
+Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
 ## Setting Up a PostgreSQL Database
 
@@ -423,7 +497,7 @@ Host: https://team-production-system.onrender.com
 	"username": "TestUserLogin",
 	"email": "testemail@fake.com",
 	"password": "TestUserPassword",
-	"re_password": "TestUserPassword",
+	"re_password": "TestUserPassword"
 }
 
 ```
@@ -504,7 +578,7 @@ Host: https://team-production-system.onrender.com
 
 {
 	"username": "testuserlogin" ,
-	"password": "TestUserPassword",
+	"password": "TestUserPassword"
 }
 
 ```
@@ -819,7 +893,6 @@ Host: https://team-production-system.onrender.com
 	],
 	"team_number": 10
 }
-
 ```
 
 ---

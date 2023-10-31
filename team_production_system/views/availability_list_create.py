@@ -1,13 +1,14 @@
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.utils import timezone
+
+from team_production_system.helpers import create_30_min_availabilities
+from team_production_system.models import Availability, Mentor
 from team_production_system.serializers import (
     AvailabilitySerializer,
-    AvailabilitySerializerV2
+    AvailabilitySerializerV2,
 )
-from team_production_system.models import Mentor, Availability
-from team_production_system.helpers import create_30_min_availabilities
 
 
 # Create and view all availabilities
@@ -26,12 +27,12 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         if self.request.version == 'v2':
             # Get the Mentor instance for the logged in user
-            mentor = Mentor.objects.select_related('user').get(
-                user=self.request.user)
-            return Availability.objects.filter(
-                mentor=mentor,
-                end_time__gte=timezone.now()
-            ).select_related('mentor__user').order_by('start_time')
+            mentor = Mentor.objects.select_related('user').get(user=self.request.user)
+            return (
+                Availability.objects.filter(mentor=mentor, end_time__gte=timezone.now())
+                .select_related('mentor__user')
+                .order_by('start_time')
+            )
         else:
             # Get the Mentor instance for the logged in user
             mentor = Mentor.objects.get(user=self.request.user)
@@ -51,7 +52,7 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
             availabilities = create_30_min_availabilities(
                 request.data['start_time'],
                 request.data['end_time'],
-                request.user.mentor
+                request.user.mentor,
             )
             # Serialize and save 30 min availabilities
             serializer = self.get_serializer(data=availabilities, many=True)
@@ -60,17 +61,16 @@ class AvailabilityListCreateView(generics.ListCreateAPIView):
 
             headers = self.get_success_headers(serializer.data)
             return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED,
-                headers=headers)
+                serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            )
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED,
-            headers=headers)
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def get_serializer_class(self):
         if self.request.version == 'v2':

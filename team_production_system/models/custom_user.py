@@ -1,8 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
-from django.core.files.storage import default_storage
 import random
+
+from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
+from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 from .notification_settings import NotificationSettings
 
 
@@ -14,10 +16,8 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=75)
     last_name = models.CharField(max_length=75)
     email = models.EmailField(max_length=75, unique=True)
-    phone_number = PhoneNumberField(
-        null=True, blank=True, unique=True, default=None)
-    profile_photo = models.ImageField(
-        upload_to='profile_photo', blank=True, null=True)
+    phone_number = PhoneNumberField(null=True, blank=True, unique=True, default=None)
+    profile_photo = models.ImageField(upload_to='profile_photo', blank=True, null=True)
 
     def __str__(self):
         return self.username

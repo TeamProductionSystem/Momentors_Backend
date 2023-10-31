@@ -4,4 +4,9 @@ exclude =
     *migrations*
     ./config/settings.py
     ./team_production_system/management/commands/add_superuser.py
-
+dictionaries = en_US,python,technical,django
+; The bugbear plugin allows for a 10% safety net, so max-line-length is effectively 88
+; This is due to ignoring E501 and adding B950
+max-line-length = 80
+extend-ignore = E501
+extend-select = B950

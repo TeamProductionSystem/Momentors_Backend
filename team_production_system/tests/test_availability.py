@@ -1,10 +1,12 @@
 # flake8: noqa
 
+import unittest
+from datetime import timedelta
+
 from django.test import TestCase
 from django.utils import timezone
-from datetime import timedelta
-from ..models import CustomUser, Mentor, Availability
-import unittest
+
+from ..models import Availability, CustomUser, Mentor
 
 
 @unittest.skip("Test file is not ready yet")
@@ -12,19 +14,15 @@ class AvailabilityTestCase(TestCase):
     def setUp(self):
         # Set up a mentor and an availability for testing
         self.mentor_user = CustomUser.objects.create_user(
-            username='mentor_user',
-            email='mentor_user@example.com',
-            password='password'
+            username='mentor_user', email='mentor_user@example.com', password='password'
         )
         self.mentor = Mentor.objects.create(
-            user=self.mentor_user,
-            about_me='I am a mentor',
-            skills=['Python']
+            user=self.mentor_user, about_me='I am a mentor', skills=['Python']
         )
         self.availability = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now(),
-            end_time=timezone.now() + timedelta(hours=1)
+            end_time=timezone.now() + timedelta(hours=1),
         )
 
     def test_is_available(self):
@@ -44,9 +42,7 @@ class AvailabilityTestCase(TestCase):
         slot_start_time = timezone.now() + timedelta(days=2)
         slot_end_time = slot_start_time + timedelta(hours=1)
         availability = Availability.objects.create(
-            mentor=self.mentor,
-            start_time=slot_start_time,
-            end_time=slot_end_time
+            mentor=self.mentor, start_time=slot_start_time, end_time=slot_end_time
         )
         availabilities = self.availability.get_next_seven_days_availability()
         self.assertEqual(len(availabilities[2][1]), 1)
@@ -63,6 +59,6 @@ class AvailabilityTestCase(TestCase):
             mentor_availability=self.availability,
             mentee=self.mentee,
             start_time=start_time,
-            session_length=60
+            session_length=60,
         )
         self.assertFalse(self.availability.is_slot_available(start_time, end_time))

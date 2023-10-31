@@ -1,7 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from team_production_system.serializers import MentorProfileSerializer
+
 from team_production_system.models import Mentor
+from team_production_system.serializers import MentorProfileSerializer
 
 
 # View to allow mentors to create and view the about me/skills.

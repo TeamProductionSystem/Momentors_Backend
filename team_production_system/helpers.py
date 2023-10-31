@@ -2,12 +2,14 @@
 # Purpose: Helper functions for the team_production_system app.
 
 from datetime import timedelta
+
 from django.utils import timezone
-from team_production_system.models import Availability
 from django.utils.dateparse import parse_datetime
 
+from team_production_system.models import Availability
 
-# Create a list of Availability objects in 30 mins chunks for a time range
+
+# Create a list of Availability objects in 30 minutes chunks for a time range
 def create_30_min_availabilities(start_time_str, end_time_str, mentor):
     chunk_size = timedelta(minutes=30)
     start_time = parse_datetime(start_time_str)
@@ -18,14 +20,16 @@ def create_30_min_availabilities(start_time_str, end_time_str, mentor):
         end_time_new = start_time + chunk_size
         if end_time_new > end_time:
             break
+
         availability = {
             'start_time': start_time,
             'end_time': end_time_new,
             'mentor': mentor.user.pk,
-            'status': 'Open'
+            'status': 'Open',
         }
         availabilities.append(availability)
         start_time += chunk_size
+
     return availabilities
 
 
@@ -37,9 +41,7 @@ def is_overlapping_availabilities(mentor, data):
     start_time = data['start_time']
     end_time = data['end_time']
     overlapping_availabilities = Availability.objects.filter(
-        mentor=mentor,
-        start_time__lt=end_time,
-        end_time__gt=start_time
+        mentor=mentor, start_time__lt=end_time, end_time__gt=start_time
     )
     return overlapping_availabilities.exists()
 

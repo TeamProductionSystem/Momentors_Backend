@@ -1,31 +1,29 @@
+from datetime import timedelta
+from unittest.mock import patch
+
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from datetime import timedelta
 from rest_framework import status
 from rest_framework.test import APIClient
-from django.test import TestCase
-from ....models import Mentor, Availability, CustomUser
-from ....serializers import (
-    AvailabilitySerializer,
-    AvailabilitySerializerV2
-)
-from unittest.mock import patch
+
+from ....models import Availability, CustomUser, Mentor
+from ....serializers import AvailabilitySerializer, AvailabilitySerializerV2
 
 
 class AvailabilityListCreateViewTestCase(TestCase):
     def setUp(self):
         # Create a Mentor instance for the test
         self.user = CustomUser.objects.create_user(
-            username='testuser',
-            email='testuser@fake.com',
-            password='testpass')
+            username='testuser', email='testuser@fake.com', password='testpass'
+        )
         self.mentor = Mentor.objects.create(user=self.user)
 
         # Create an Availability instance for the test
         self.availability = Availability.objects.create(
             mentor=self.mentor,
             start_time=timezone.now() + timezone.timedelta(hours=1),
-            end_time=timezone.now() + timezone.timedelta(hours=2)
+            end_time=timezone.now() + timezone.timedelta(hours=2),
         )
         self.url = reverse('availability')
 
@@ -41,8 +39,10 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.client.force_authenticate(user=self.user)
 
         # Set up the mock timezone to return a fixed datetime
-        mock_timezone.now.return_value = timezone.datetime(2022, 1, 1,
-                                                           tzinfo=timezone.utc)
+        mock_timezone.now.return_value = timezone.datetime(
+            2022, 1, 1, tzinfo=timezone.utc
+        )
+
         # Make a GET request to the AvailabilityList view
         response = self.client.get('/availability/', format='json')
         # Check that the response status code is 200 OK
@@ -50,9 +50,10 @@ class AvailabilityListCreateViewTestCase(TestCase):
 
         # Check that the response data contains the expected Availability
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['start_time'],
-                         self.availability.start_time.isoformat().replace(
-            '+00:00', 'Z'))
+        self.assertEqual(
+            response.data[0]['start_time'],
+            self.availability.start_time.isoformat().replace('+00:00', 'Z'),
+        )
 
     def test_create_availability_v1(self):
         """
@@ -67,7 +68,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': timezone.now() + timezone.timedelta(hours=3),
-            'end_time': timezone.now() + timezone.timedelta(hours=4)
+            'end_time': timezone.now() + timezone.timedelta(hours=4),
         }
 
         response = client.post(self.url, data, format='json')
@@ -78,8 +79,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         # Check that the response data is the new Availability
         availability = Availability.objects.last()
         serializer = AvailabilitySerializer(availability)
-        self.assertEqual(response.data['start_time'],
-                         serializer.data['start_time'])
+        self.assertEqual(response.data['start_time'], serializer.data['start_time'])
 
     def test_create_availability_v1_with_invalid_data(self):
         """
@@ -94,7 +94,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         data = {
             'mentor': self.mentor.pk,
             'start_time': timezone.now() + timezone.timedelta(hours=2),
-            'end_time': timezone.now() + timezone.timedelta(hours=1)
+            'end_time': timezone.now() + timezone.timedelta(hours=1),
         }
 
         response = client.post(self.url, data, format='json')
@@ -103,8 +103,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check that the response data contains an error message
-        self.assertEqual(str(response.data[0]),
-                         'End time must be after start time.')
+        self.assertEqual(str(response.data[0]), 'End time must be after start time.')
 
     def test_create_availability_v2(self):
         self.client = APIClient()
@@ -122,8 +121,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Availability.objects.count(), 3)
         availability = Availability.objects.last()
-        self.assertEqual(
-            availability.start_time, end_time - timedelta(minutes=30))
+        self.assertEqual(availability.start_time, end_time - timedelta(minutes=30))
         self.assertEqual(availability.end_time, end_time)
         self.assertEqual(availability.mentor, self.mentor)
 
@@ -134,7 +132,8 @@ class AvailabilityListCreateViewTestCase(TestCase):
         start_time = timezone.now() + timedelta(hours=7)
         end_time = start_time + timedelta(hours=8)
         Availability.objects.create(
-            mentor=self.mentor, start_time=start_time, end_time=end_time)
+            mentor=self.mentor, start_time=start_time, end_time=end_time
+        )
         data = {
             'start_time': start_time,
             'end_time': end_time,
@@ -175,8 +174,7 @@ class AvailabilityListCreateViewTestCase(TestCase):
         self.assertEqual(len(response.data), 2)
         availability_1 = Availability.objects.get(pk=response.data[0]['pk'])
         availability_2 = Availability.objects.get(pk=response.data[1]['pk'])
-        self.assertEqual(availability_1.end_time,
-                         start_time + timedelta(minutes=30))
+        self.assertEqual(availability_1.end_time, start_time + timedelta(minutes=30))
         self.assertNotEqual(availability_2.end_time, end_time)
         self.assertEqual(availability_1.mentor, self.mentor)
 
