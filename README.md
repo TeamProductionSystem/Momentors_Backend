@@ -25,107 +25,132 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 ## Features
 
 - Users can setup profiles as a mentor or mentee.
-- Mentors can set their skill set and avalibilty.
-- Mentees can schedule sessions with the menots, filtered by skills and avalibilty
+- Mentors can set their skill set and availabilty.
+- Mentees can schedule sessions with the mentors, filtered by skills and availabilty
 - Mentors can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
-# Run Locally
+# Running Locally
+
+## Local Setup
 
 Clone the project:
 
 ```bash
-git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
+$ git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
 ```
 
 Navigate to the project directory:
 
 ```bash
-cd Team_Production_System_BE
+$ cd Team_Production_System_BE
 ```
 
 Set up a virtual environment for the project using pipenv. If you don't have pipenv installed, you can install it using pip:
 
 ```bash
-pip install pipenv
+$ pip install pipenv
 ```
 
 Then, activate the virtual environment by running:
 
 ```bash
-pipenv shell
+$ pipenv shell
 ```
 
 Install the project dependencies:
 
 ```bash
-pipenv install
+$ pipenv install
 ```
+
+## Running without Containers
 
 Set up the database by running the migrations:
 
 ```bash
-python manage.py migrate
+$ python manage.py migrate
 ```
+
+💡**Note:** If this command throws an error, you might not have
+[setup your database](#setting-up-a-postgresql-database),
+or [configured your DATABASE_URL env variable properly](#environment-variables).
 
 Start the development server:
 
 ```bash
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 The app should now be running at http://localhost:8000/
 
-## Run Celery and Redis locally
+### Run Celery and Redis locally
 
-Only needed if you want 15/60 minute reminders of scheduled sessions.
+These servers are only needed if you want 15/60 minute reminders of scheduled sessions.
+Run each of the following commands in its own terminal window at the project root.
 
 Start the Redis server:
 
 ```bash
-redis-server
+$ redis-server
 ```
 
 Start the Celery server:
 
 ```bash
-celery -A config.celery worker --loglevel=info
+$ celery -A config.celery worker --loglevel=info
 ```
 
 Start the Celery Beat server:
 
 ```bash
-celery -A config.celery beat -l debug
+$ celery -A config.celery beat -l debug
 ```
 
 ## Run Locally via Docker Containers
 
-**Note:** Docker and Docker Desktop are required to be installed on your machine for this method.
-You will also need to have your .env file set up.
+### Setup
+
+Install Docker Desktop. This will also install the Docker engine and the Docker CLI.
+You can find installation instructions on the Docker website for 
+[Mac](https://docs.docker.com/desktop/install/mac-install/) and 
+[Windows](https://docs.docker.com/desktop/install/windows-install/).
+
+Setup your Environment Variables. You can find instructions [here](#environment-variables).
 
 Create or update `requirements.txt` with any new plugins from Pipfile:
 
 ```bash
-pipenv requirements > requirements.txt
+$ pipenv requirements > requirements.txt
 ```
 
-**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
+💡**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
 
 ```bash
-pip install --user --upgrade pipenv
+$ pip install --user --upgrade pipenv
 ```
 
-Build docker images:
+### Building Docker Image 
+
+Run the following command:
 
 ```bash
-docker compose build
+$ docker compose build
 ```
 
-Spin up docker containers:
+If you haven't built the container before, this can take over a minute.
+After that, Docker will use the cached image layers as reference for future builds.
+You can expect the build to only take seconds.
+
+If you want to build the image from scratch, add the flag `--no-cache` to the above command.
+
+### Running Docker Containers
+
+Run the following command:
 
 ```bash
-docker compose up
+$ docker compose up
 ```
 
 The app should now be running at http://localhost:8000/
@@ -146,10 +171,15 @@ reload, just as if it was running in your local environment.
 Certain file changes, such as to a model, won't trigger this behavior.
 In these cases, stop then restart the containers.
 
-To stop running the containers, hit Ctrl+C, then spin down the containers:
+### Stopping Docker Containers
+
+To stop running the containers, hit `Ctrl+C`. The container instances will not be deleted.
+If you spin them up again, those same instances will be running.
+
+If you want to delete the container instances, run the following command:
 
 ```bash
-docker compose down
+$ docker compose down
 ```
 
 The database is persistant. If you make changes to a model, run makemigrations
@@ -159,15 +189,14 @@ Follow these 2 steps once the containers are no longer running:
 - Remove the persistant volume:
 
 ```bash
-docker volume rm team_production_system_be_postgres_data
-
-```
+$ docker volume rm team_production_system_be_postgres_data
+``` 
 
 - Rebuild the docker images without the cached data:
 
 ```bash
-docker compose build --no-cache
-````
+$ docker compose build --no-cache
+```
 
 The next time you spin up the docker containers, the database will be empty again.
 
@@ -180,21 +209,30 @@ The next time you spin up the docker containers, the database will be empty agai
     For example:
 
 ```
-DATABASE_PASSWORD=mentors
-DATABASE_NAME=mentors
-DATABASE_USER=mentors
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
+DATABASE_URL=postgres://mentors:mentors@localhost:5432/mentors
+
 SECRET_KEY=my_secret_key
 DEBUG=True
+
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_PASSWORD=admin_password
 DJANGO_SUPERUSER_EMAIL=admin@example.com
-CELERY_BROKER_URL = local_redis_url
-CELERY_RESULT_BACKEND = local_redis_url
+
+CELERY_BROKER_URL=local_redis_url
+CELERY_RESULT_BACKEND=local_redis_url
+
+AWS_ACCESS_KEY_ID=from-your-aws-account
+AWS_SECRET_ACCESS_KEY=also_from-your-aws-account
+AWS_STORAGE_BUCKET_NAME=your-aws-s3-bucket
+
+EMAIL_HOST=usually-gmail
+EMAIL_HOST_USER=example@fake.com
+EMAIL_HOST_PASSWORD=do-not-share
+
+SENTRY_DSN=not-necessary-for-running-locally
 ```
 
-- DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port.
+- DATABASE_URL: This should be set to the URL of your database. Depending on your database type, this may include a username, password, host, and port. When using a local PostgreSQL database, it should take the form `postgres://<username>:<password>@localhost:5432/<db-name>`
 
 - SECRET_KEY: This should be set to a secret key that is used for cryptographic signing in Django. It is important that this value is kept secret and is not shared publicly.
 
@@ -210,6 +248,20 @@ CELERY_RESULT_BACKEND = local_redis_url
 
 - CELERY_RESULT_BACKEND: This should be set to your local redis url.
 
+- AWS_ACCESS_KEY: This should be set to your AWS account.
+
+- AWS_SECRET_ACCESS_KEY: This should be set to your AWS account.
+
+- AWS_STORAGE_BUCKET_NAME: This should be set to your AWS S3 instance.
+
+- EMAIL_HOST: This should be set to the email account you want to use.
+
+- EMAIL_HOST_USER: This should be set to the email account you want to use.
+
+- EMAIL_HOST_PASSWORD: This should be set to the email account you want to use.
+
+- SENTRY_DSN: This should be set to your Sentry account.
+
 3. Save the .env file.
 
 # Testing
@@ -217,19 +269,31 @@ CELERY_RESULT_BACKEND = local_redis_url
 For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
 
 To run tests:
-`python manage.py test`
 
-To skip a test that isn't finished, add the following before the test class:
+```bash
+$ python manage.py test
+```
+
+💡**Note:** To skip a test that isn't finished, add the following before the test class:
 `@unittest.skip("Test file is not ready yet")`
 
 To run coverage for test:
-`coverage run manage.py test`
+
+```bash
+$ coverage run manage.py test
+```
 
 After you run tests you can get the report in command-line by running:
-`coverage report`
+
+```bash
+$ coverage report
+```
 
 For an interactive html report, run:
-`coverage html`
+
+```bash
+$ coverage html
+```
 
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
 
@@ -291,6 +355,32 @@ Commit messages should be in the following format:
 
 **Description:** A concise description of the changes. Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
+## Setting Up a PostgreSQL Database
+
+💡**Note:** This guide assumes you are using a macOS. If you are using a different
+operating system, only the installation step should be different. Here are guides
+for [Windows](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/)
+and [Linux](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql-linux/).
+
+Install PostgreSQL on your machine, then run it as a background service:
+
+```bash
+$ brew install postgresql@15
+$ brew services start postgresql@15
+```
+
+Next, create a user:
+
+```bash
+$ createuser -d <username>
+```
+
+Then, create a database:
+
+```bash
+$ createdb -U <username> <dbname>
+```
+
 # API Reference
 
 API URL - https://team-production-system.onrender.com
@@ -309,7 +399,7 @@ API URL - https://team-production-system.onrender.com
 ## User Create
 
 - Create a new user
-- **Note: the username will automatically be converted to all lowercase letters**
+- 💡**Note: the username will automatically be converted to all lowercase letters**
 
 ```http
   POST https://team-production-system.onrender.com/auth/users/
@@ -485,7 +575,7 @@ Host: https://team-production-system.onrender.com
 ## Edit User Profile (User Authentication **Required**)
 
 - Update the users profile information.
-- **Note: This endpoint has multipart/form-data content type.**
+- 💡**Note: This endpoint has multipart/form-data content type.**
 
 ```http
 PATCH - https://team-production-system.onrender.com/myprofile/
