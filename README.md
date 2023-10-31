@@ -103,7 +103,7 @@ celery -A config.celery beat -l debug
 **Note:** Docker and Docker Desktop are required to be installed on your machine for this method.
 You will also need to have your .env file set up.
 
-Update `requirements.txt` with any newly added installs:
+Create or update `requirements.txt` with any new plugins from Pipfile:
 
 ```bash
 pipenv requirements > requirements.txt
