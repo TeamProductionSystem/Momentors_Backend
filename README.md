@@ -25,12 +25,14 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 ## Features
 
 - Users can setup profiles as a mentor or mentee.
-- Mentors can set their skill set and avalibilty.
-- Mentees can schedule sessions with the menots, filtered by skills and avalibilty
+- Mentors can set their skill set and availabilty.
+- Mentees can schedule sessions with the mentors, filtered by skills and availabilty
 - Mentors can confirm sessions
 - Both mentor and mentee can cancel a session prior to session start time.
 
-# Run Locally
+# Running Locally
+
+## Local Setup
 
 Clone the project:
 
@@ -62,11 +64,17 @@ Install the project dependencies:
 $ pipenv install
 ```
 
+## Running without Containers
+
 Set up the database by running the migrations:
 
 ```bash
 $ python manage.py migrate
 ```
+
+💡**Note:** If this command throws an error, you might not have
+[setup your database](#setting-up-a-postgresql-database),
+or [configured your DATABASE_URL env variable properly](#environment-variables).
 
 Start the development server:
 
@@ -76,9 +84,10 @@ $ python manage.py runserver
 
 The app should now be running at http://localhost:8000/
 
-## Run Celery and Redis locally
+### Run Celery and Redis locally
 
-Only needed if you want 15/60 minute reminders of scheduled sessions.
+These servers are only needed if you want 15/60 minute reminders of scheduled sessions.
+Run each of the following commands in its own terminal window at the project root.
 
 Start the Redis server:
 
@@ -100,29 +109,45 @@ $ celery -A config.celery_settings beat -l debug
 
 ## Run Locally via Docker Containers
 
-**Note:** Docker and Docker Desktop are required to be installed on your machine for this method.
-You will also need to have your .env file set up.
+### Setup
 
-Update `requirements.txt` with any newly added installs:
+Install Docker Desktop. This will also install the Docker engine and the Docker CLI.
+You can find installation instructions on the Docker website for 
+[Mac](https://docs.docker.com/desktop/install/mac-install/) and 
+[Windows](https://docs.docker.com/desktop/install/windows-install/).
+
+Setup your Environment Variables. You can find instructions [here](#environment-variables).
+
+Create or update `requirements.txt` with any new plugins from Pipfile:
 
 ```bash
 $ pipenv requirements > requirements.txt
 ```
 
-**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
+💡**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
 
 ```bash
 $ pip install --user --upgrade pipenv
 ```
 
-Build docker images:
+### Building Docker Image 
+
+Run the following command:
 
 ```bash
 $ docker compose build
 ```
 
-Spin up docker containers:
+If you haven't built the container before, this can take over a minute.
+After that, Docker will use the cached image layers as reference for future builds.
+You can expect the build to only take seconds.
+
+If you want to build the image from scratch, add the flag `--no-cache` to the above command.
+
+### Running Docker Containers
+
+Run the following command:
 
 ```bash
 $ docker compose up
@@ -146,7 +171,12 @@ reload, just as if it was running in your local environment.
 Certain file changes, such as to a model, won't trigger this behavior.
 In these cases, stop then restart the containers.
 
-To stop running the containers, hit Ctrl+C, then spin down the containers:
+### Stopping Docker Containers
+
+To stop running the containers, hit `Ctrl+C`. The container instances will not be deleted.
+If you spin them up again, those same instances will be running.
+
+If you want to delete the container instances, run the following command:
 
 ```bash
 $ docker compose down
@@ -183,11 +213,23 @@ ENVIRONMENT=dev
 DATABASE_URL=postgres://mentors:mentors@localhost:5432/mentors
 SECRET_KEY=my_secret_key
 DEBUG=True
+
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_PASSWORD=admin_password
 DJANGO_SUPERUSER_EMAIL=admin@example.com
-CELERY_BROKER_URL = local_redis_url
-CELERY_RESULT_BACKEND = local_redis_url
+
+CELERY_BROKER_URL=local_redis_url
+CELERY_RESULT_BACKEND=local_redis_url
+
+AWS_ACCESS_KEY_ID=from-your-aws-account
+AWS_SECRET_ACCESS_KEY=also_from-your-aws-account
+AWS_STORAGE_BUCKET_NAME=your-aws-s3-bucket
+
+EMAIL_HOST=usually-gmail
+EMAIL_HOST_USER=example@fake.com
+EMAIL_HOST_PASSWORD=do-not-share
+
+SENTRY_DSN=not-necessary-for-running-locally
 ```
 
 - ENVIRONMENT: This should be either `dev` or `prod`, depending on what environment the app is running in.
@@ -209,6 +251,20 @@ As long as your are running locally, use the value `dev`.
 
 - CELERY_RESULT_BACKEND: This should be set to your local redis url.
 
+- AWS_ACCESS_KEY: This should be set to your AWS account.
+
+- AWS_SECRET_ACCESS_KEY: This should be set to your AWS account.
+
+- AWS_STORAGE_BUCKET_NAME: This should be set to your AWS S3 instance.
+
+- EMAIL_HOST: This should be set to the email account you want to use.
+
+- EMAIL_HOST_USER: This should be set to the email account you want to use.
+
+- EMAIL_HOST_PASSWORD: This should be set to the email account you want to use.
+
+- SENTRY_DSN: This should be set to your Sentry account.
+
 3. Save the .env file.
 
 # Testing
@@ -216,11 +272,12 @@ As long as your are running locally, use the value `dev`.
 For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
 
 To run tests:
+
 ```bash
 $ python manage.py test
 ```
 
-To skip a test that isn't finished, add the following before the test class:
+💡**Note:** To skip a test that isn't finished, add the following before the test class:
 `@unittest.skip("Test file is not ready yet")`
 
 To run coverage for test:
@@ -254,10 +311,20 @@ Each error will show the file name and line to find the error. The command can b
 
 # Submitting Code
 
-We use a pre-commit hook to lint code and branch names, and automatically format
-code using black and isort.
-We also use a commit-msg hook to lint the commit message.
-These checks will run whenever you attempt to make a commit.
+We use several [git hooks](https://git-scm.com/docs/githooks) to ensure code quality
+and consistency. These are run using the [pre-commit](https://pre-commit.com/)
+Python package.
+
+Here are the processes we run for each hook:
+- **[Pre-Commit](https://git-scm.com/docs/githooks#_pre_commit):**
+	- linting code with Flake8
+	- autoformatting code with isort and black
+- **[Commit-Msg](https://git-scm.com/docs/githooks#_commit_msg):**
+	- linting commit message
+- **[Pre-Push](https://git-scm.com/docs/githooks#_pre_push):**
+	- linting branch name
+	- running all tests
+
 Below, we go over how to set up and use these hooks, the linting plugins used,
 and the schemas for Branch Names and Commit Messages.
 
@@ -274,15 +341,14 @@ $ pre-commit install --hook-type commit-msg
 pre-commit installed at .git/hooks/commit-msg
 ```
 
-To check your code before making a commit, run the following command.
-The output assumes no changes are needed:
+To run the pre-commit checks before making a commit, run the following command.
+The output underneath assumes no changes are needed:
 
 ```bash
 $ pre-commit run --all-files
 isort....................................................................Passed
 black....................................................................Passed
 flake8...................................................................Passed
-Branch Name Lint.........................................................Passed
 ```
 
 If isort or black catch any errors, they will automatically alter the files to fix them.
@@ -309,7 +375,7 @@ The flake8 plugins used are listed below, along with their error code prefix:
 	- flake8-comprehensions (C): helps you write better list/set/dict comprehensions
 	- flake8-quotes (Q): extension for checking quotes in Python
 
-**Note:** If the spellcheck plugin gets caught on a name that you did not set,
+💡**Note:** If the spellcheck plugin gets caught on a name that you did not set,
 add it to `whitelist.txt`.
 **DO NOT ADD NAMES THAT YOU CREATE!!!**
 
@@ -332,9 +398,6 @@ Branch names should be in the following format:
 **Description:** A short description of the branch. This should be in lowercase and use dashes instead of spaces.
 
 **Example:** `feat/issue-66/remove-jedi`
-
-**NOTE:** The linter for this schema prevents you from committing changes during a rebase.
-In this case, use the `--no-verify` flag to make your commit.
 
 ## Commit Message Schema
 
@@ -363,6 +426,32 @@ For example, auth for authentication-related changes or header for changes to a 
 **Description:** A concise description of the changes.
 Start with a lowercase verb indicating what was done (e.g., add, update, remove, fix).
 
+## Setting Up a PostgreSQL Database
+
+💡**Note:** This guide assumes you are using a macOS. If you are using a different
+operating system, only the installation step should be different. Here are guides
+for [Windows](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/)
+and [Linux](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql-linux/).
+
+Install PostgreSQL on your machine, then run it as a background service:
+
+```bash
+$ brew install postgresql@15
+$ brew services start postgresql@15
+```
+
+Next, create a user:
+
+```bash
+$ createuser -d <username>
+```
+
+Then, create a database:
+
+```bash
+$ createdb -U <username> <dbname>
+```
+
 # API Reference
 
 API URL - https://team-production-system.onrender.com
@@ -381,7 +470,7 @@ API URL - https://team-production-system.onrender.com
 ## User Create
 
 - Create a new user
-- **Note: the username will automatically be converted to all lowercase letters**
+- 💡**Note: the username will automatically be converted to all lowercase letters**
 
 ```http
   POST https://team-production-system.onrender.com/auth/users/
@@ -557,7 +646,7 @@ Host: https://team-production-system.onrender.com
 ## Edit User Profile (User Authentication **Required**)
 
 - Update the users profile information.
-- **Note: This endpoint has multipart/form-data content type.**
+- 💡**Note: This endpoint has multipart/form-data content type.**
 
 ```http
 PATCH - https://team-production-system.onrender.com/myprofile/

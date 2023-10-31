@@ -100,9 +100,8 @@ class AvailabilitySerializerV2TestCase(TestCase):
     # Test that the serializer contains the expected fields
     def test_contains_expected_fields(self):
         data = self.serializer.data
-        self.assertEqual(
-            set(data.keys()), set('pk', 'mentor', 'start_time', 'end_time', 'status')
-        )
+        expected_keys = {'pk', 'mentor', 'start_time', 'end_time', 'status'}
+        self.assertEqual(set(data.keys()), expected_keys)
 
     def test_create(self):
         pass
