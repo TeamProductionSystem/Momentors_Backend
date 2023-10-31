@@ -118,7 +118,7 @@ You can find installation instructions on the Docker website for
 
 Setup your Environment Variables. You can find instructions [here](#environment-variables).
 
-Update `requirements.txt` with any newly added installs:
+Create or update `requirements.txt` with any new plugins from Pipfile:
 
 ```bash
 $ pipenv requirements > requirements.txt
