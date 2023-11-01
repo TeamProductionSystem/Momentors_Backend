@@ -178,7 +178,6 @@ if env('RENDER'):
         },
     }
 
-
 AUTH_USER_MODEL = 'team_production_system.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
@@ -203,6 +202,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1', 'v2'],
 }
 
 DOMAIN = 'momentors.dev'
