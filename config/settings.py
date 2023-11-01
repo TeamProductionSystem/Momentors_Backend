@@ -43,6 +43,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
+if DEBUG:
+  ALLOWED_HOSTS.append('127.0.0.1')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -147,9 +149,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
