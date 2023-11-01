@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import (
     Mentor,
     Mentee,
@@ -18,7 +19,7 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(UserAdmin)
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, UserAdmin)
 admin.site.register(Mentor)
 admin.site.register(Mentee)
 admin.site.register(Session)
