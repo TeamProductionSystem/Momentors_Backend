@@ -5,6 +5,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from django.conf import settings
+from team_production_system.serializers import CustomUserSerializer
 from team_production_system.models import CustomUser
 from team_production_system.serializers import CustomUserSerializer
 
@@ -59,7 +61,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
                 s3.delete_object(
                     Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=user.profile_photo.name
                 )
-
+                # remove the file from storage
+                user.profile_photo.storage.delete(user.profile_photo.name)
             user.profile_photo = request.FILES['profile_photo']
 
         user.save()
