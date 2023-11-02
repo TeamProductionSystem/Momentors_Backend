@@ -1,11 +1,9 @@
-from rest_framework import serializers
 from django.utils import timezone
+from rest_framework import serializers
+
+from team_production_system.models import Availability, CustomUser, Mentor
+
 from .availability import AvailabilitySerializer
-from team_production_system.models import (
-    CustomUser,
-    Mentor,
-    Availability,
-    )
 
 # Serializer to show a list of all users flagged as a mentor
 
@@ -18,9 +16,18 @@ class MentorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('pk', 'username', 'first_name',
-                  'last_name', 'profile_photo', 'is_mentor', 'about_me',
-                  'skills', 'availabilities', 'team_number')
+        fields = (
+            'pk',
+            'username',
+            'first_name',
+            'last_name',
+            'profile_photo',
+            'is_mentor',
+            'about_me',
+            'skills',
+            'availabilities',
+            'team_number',
+        )
 
     def get_about_me(self, obj):
         try:
@@ -39,9 +46,9 @@ class MentorListSerializer(serializers.ModelSerializer):
     def get_availabilities(self, obj):
         try:
             availabilities = Availability.objects.filter(
-                mentor=obj.pk, end_time__gte=timezone.now())
-            serializer = AvailabilitySerializer(
-                instance=availabilities, many=True)
+                mentor=obj.pk, end_time__gte=timezone.now()
+            )
+            serializer = AvailabilitySerializer(instance=availabilities, many=True)
             return serializer.data
         except Mentor.DoesNotExist:
             return None

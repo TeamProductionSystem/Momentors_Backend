@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('team_production_system', '0010_alter_mentor_skills'),
     ]

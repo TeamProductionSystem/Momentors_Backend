@@ -1,7 +1,8 @@
 from rest_framework import generics
+
 from team_production_system.custom_permissions import IsMentorMentee
-from team_production_system.serializers import SessionSerializer
 from team_production_system.models import Session
+from team_production_system.serializers import SessionSerializer
 
 
 class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -20,14 +21,18 @@ class SessionRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             session.save()
 
             # If mentee cancels session, check mentor notification
-            if self.request.user.is_mentee and \
-                    session.mentor.user.notification_settings.session_canceled:
+            if (
+                self.request.user.is_mentee
+                and session.mentor.user.notification_settings.session_canceled
+            ):
                 session.mentor_cancel_notify()
 
             # If mentor cancels session, check mentee notification
 
-            elif self.request.user.is_mentor and \
-                    session.mentee.user.notification_settings.session_canceled:
+            elif (
+                self.request.user.is_mentor
+                and session.mentee.user.notification_settings.session_canceled
+            ):
                 session.mentee_cancel_notify()
 
         # Notify mentee when a mentor confirms session request

@@ -5,9 +5,10 @@ from django.db import models
 # they have a session requested, confirmed, or canceled.
 class NotificationSettings(models.Model):
     user = models.OneToOneField(
-        "team_production_system.CustomUser",
+        'team_production_system.CustomUser',
         on_delete=models.CASCADE,
-        related_name='notification_settings')
+        related_name='notification_settings',
+    )
     session_requested = models.BooleanField(default=False)
     session_confirmed = models.BooleanField(default=False)
     session_canceled = models.BooleanField(default=False)

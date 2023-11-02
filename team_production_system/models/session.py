@@ -1,23 +1,28 @@
-from django.db import models
+import secrets
+from datetime import timedelta
+
+import pytz
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import models
+
+from .availability import Availability
 from .mentee import Mentee
 from .mentor import Mentor
-from .availability import Availability
-from datetime import timedelta
-import secrets
-import pytz
 
 
 # The session model allows the mentee to setup a session and
 # allows both mentee and mentor see their sessions they have scheduled
 class Session(models.Model):
-    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE,
-                               related_name='mentor_session')
+    mentor = models.ForeignKey(
+        Mentor, on_delete=models.CASCADE, related_name='mentor_session'
+    )
     mentor_availability = models.ForeignKey(
-        Availability, on_delete=models.CASCADE, related_name='mentor_session')
+        Availability, on_delete=models.CASCADE, related_name='mentor_session'
+    )
     mentee = models.ForeignKey(
-        Mentee, on_delete=models.CASCADE, related_name='mentee_session')
+        Mentee, on_delete=models.CASCADE, related_name='mentee_session'
+    )
     start_time = models.DateTimeField()
     project = models.CharField(max_length=500)
     help_text = models.TextField(max_length=500)
@@ -27,17 +32,12 @@ class Session(models.Model):
         ('Pending', 'Pending'),
         ('Confirmed', 'Confirmed'),
         ('Canceled', 'Canceled'),
-        ('Completed', 'Completed')
+        ('Completed', 'Completed'),
     ]
     # The mentee will be able to schedule a 30 minute or 60 minute session.
-    status = models.CharField(
-        max_length=10, choices=status_choices, default='Pending')
-    session_length_choices = [
-        (30, '30 minutes'),
-        (60, '60 minutes')
-    ]
-    session_length = models.IntegerField(
-        choices=session_length_choices, default=30)
+    status = models.CharField(max_length=10, choices=status_choices, default='Pending')
+    session_length_choices = [(30, '30 minutes'), (60, '60 minutes')]
+    session_length = models.IntegerField(choices=session_length_choices, default=30)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -46,8 +46,8 @@ class Session(models.Model):
 
     def __str__(self):
         return (
-            f"{self.mentor_availability.mentor.user.username} "
-            f"session with {self.mentee.user.username} is ({self.status})"
+            f'{self.mentor_availability.mentor.user.username} '
+            f'session with {self.mentee.user.username} is ({self.status})'
         )
 
     # Notify a mentor that a mentee has requested a session
@@ -114,7 +114,7 @@ class Session(models.Model):
                 f'Here is the link to your session: {meeting_link}'
             ),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentee.user.email]
+            recipient_list=[self.mentee.user.email],
         )
 
     # Notify the mentor when the requested session has been confirmed
@@ -140,7 +140,7 @@ class Session(models.Model):
                 f'Here is the link to your session: {meeting_link}'
             ),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.mentor.user.email]
+            recipient_list=[self.mentor.user.email],
         )
 
     # Notify a mentor that a mentee has canceled a scheduled session
