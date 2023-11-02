@@ -37,31 +37,31 @@ Please adhere to this project's [code of conduct](https://github.com/TeamProduct
 Clone the project:
 
 ```bash
-$ git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
+git clone https://github.com/TeamProductionSystem/Team_Production_System_BE.git
 ```
 
 Navigate to the project directory:
 
 ```bash
-$ cd Team_Production_System_BE
+cd Team_Production_System_BE
 ```
 
 Set up a virtual environment for the project using pipenv. If you don't have pipenv installed, you can install it using pip:
 
 ```bash
-$ pip install pipenv
+pip install pipenv
 ```
 
 Then, activate the virtual environment by running:
 
 ```bash
-$ pipenv shell
+pipenv shell
 ```
 
 Install the project dependencies:
 
 ```bash
-$ pipenv install
+pipenv install
 ```
 
 ## Running without Containers
@@ -69,7 +69,7 @@ $ pipenv install
 Set up the database by running the migrations:
 
 ```bash
-$ python manage.py migrate
+python manage.py migrate
 ```
 
 💡**Note:** If this command throws an error, you might not have
@@ -79,7 +79,7 @@ or [configured your DATABASE_URL env variable properly](#environment-variables).
 Start the development server:
 
 ```bash
-$ python manage.py runserver
+python manage.py runserver
 ```
 
 The app should now be running at http://localhost:8000/
@@ -92,19 +92,19 @@ Run each of the following commands in its own terminal window at the project roo
 Start the Redis server:
 
 ```bash
-$ redis-server
+redis-server
 ```
 
 Start the Celery server:
 
 ```bash
-$ celery -A config.celery_settings worker --loglevel=info
+celery -A config.celery_settings worker --loglevel=info
 ```
 
 Start the Celery Beat server:
 
 ```bash
-$ celery -A config.celery_settings beat -l debug
+celery -A config.celery_settings beat -l debug
 ```
 
 ## Run Locally via Docker Containers
@@ -121,14 +121,14 @@ Setup your Environment Variables. You can find instructions [here](#environment-
 Create or update `requirements.txt` with any new plugins from Pipfile:
 
 ```bash
-$ pipenv requirements > requirements.txt
+pipenv requirements > requirements.txt
 ```
 
 💡**Note:** If this step deletes everything in the requirements.txt file, your pipenv is out of date.
 You can update it with the following command:
 
 ```bash
-$ pip install --user --upgrade pipenv
+pip install --user --upgrade pipenv
 ```
 
 ### Building Docker Image 
@@ -136,7 +136,7 @@ $ pip install --user --upgrade pipenv
 Run the following command:
 
 ```bash
-$ docker compose build
+docker compose build
 ```
 
 If you haven't built the container before, this can take over a minute.
@@ -150,7 +150,7 @@ If you want to build the image from scratch, add the flag `--no-cache` to the ab
 Run the following command:
 
 ```bash
-$ docker compose up
+docker compose up
 ```
 
 The app should now be running at http://localhost:8000/
@@ -179,7 +179,7 @@ If you spin them up again, those same instances will be running.
 If you want to delete the container instances, run the following command:
 
 ```bash
-$ docker compose down
+docker compose down
 ```
 
 The database is persistant. If you make changes to a model, run makemigrations
@@ -189,13 +189,13 @@ Follow these 2 steps once the containers are no longer running:
 - Remove the persistant volume:
 
 ```bash
-$ docker volume rm team_production_system_be_postgres_data
+docker volume rm team_production_system_be_postgres_data
 ```
 
 - Rebuild the docker images without the cached data:
 
 ```bash
-$ docker compose build --no-cache
+docker compose build --no-cache
 ```
 
 The next time you spin up the docker containers, the database will be empty again.
@@ -274,7 +274,7 @@ For testing this app, we are using [Django Test Case](https://docs.djangoproject
 To run tests:
 
 ```bash
-$ python manage.py test
+python manage.py test
 ```
 
 💡**Note:** To skip a test that isn't finished, add the following before the test class:
@@ -282,17 +282,17 @@ $ python manage.py test
 
 To run coverage for test:
 ```bash
-$ coverage run manage.py test
+coverage run manage.py test
 ```
 
 After you run tests you can get the report in command-line by running:
 ```bash
-$ coverage report
+coverage report
 ```
 
 For an interactive html report, run:
 ```bash
-$ coverage html
+coverage html
 ```
 
 Then in the `htmlcov` folder of the project, open the file `index.html` in a browser. Here you can see an indepth analysis of coverage and what lines need testing. Click available links to view specific file coverage data.
@@ -334,18 +334,22 @@ dependencies.
 Below are the commands and expected outputs:
 
 ```bash
-$ pre-commit install
+pre-commit install
 pre-commit installed at .git/hooks/pre-commit
 
-$ pre-commit install --hook-type commit-msg
+pre-commit install --hook-type commit-msg
 pre-commit installed at .git/hooks/commit-msg
 ```
 
 To run the pre-commit checks before making a commit, run the following command.
-The output underneath assumes no changes are needed:
 
 ```bash
-$ pre-commit run --all-files
+pre-commit run --all-files
+```
+
+If no files need changes, the output should look like this:
+
+```bash
 isort....................................................................Passed
 black....................................................................Passed
 flake8...................................................................Passed
@@ -436,20 +440,20 @@ and [Linux](https://www.postgresqltutorial.com/postgresql-getting-started/instal
 Install PostgreSQL on your machine, then run it as a background service:
 
 ```bash
-$ brew install postgresql@15
-$ brew services start postgresql@15
+brew install postgresql@15
+brew services start postgresql@15
 ```
 
 Next, create a user:
 
 ```bash
-$ createuser -d <username>
+createuser -d <username>
 ```
 
 Then, create a database:
 
 ```bash
-$ createdb -U <username> <dbname>
+createdb -U <username> <dbname>
 ```
 
 # API Reference
