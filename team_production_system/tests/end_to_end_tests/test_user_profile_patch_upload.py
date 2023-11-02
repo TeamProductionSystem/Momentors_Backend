@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+
 from team_production_system.models import CustomUser
 
 
@@ -10,9 +11,7 @@ class UserProfilePatchTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create(
-          username="baby_yoda",
-          email="grogu@mandalor.edu",
-          password="badpassword"
+            username='baby_yoda', email='grogu@mandalor.edu', password='badpassword'
         )
 
     def test_new_user_gets_random_photo_assigned(self):
@@ -22,14 +21,12 @@ class UserProfilePatchTestCase(TestCase):
     def test_profile_photo_uploaded_first_time(self):
         # mock photo file
         photo = SimpleUploadedFile(
-          "photo.jpg",
-          b"this is a photo",
-          content_type="image/jpeg"
+            'photo.jpg', b'this is a photo', content_type='image/jpeg'
         )
         # Make a PATCH request to update the user profile with the new photo
-        url = reverse("my-profile")
+        url = reverse('my-profile')
         self.client.force_authenticate(user=self.user)
-        response = self.client.patch(url, {"profile_photo": photo})
+        response = self.client.patch(url, {'profile_photo': photo})
 
         # Check that the response status code is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -43,15 +40,13 @@ class UserProfilePatchTestCase(TestCase):
         old_photo_name = self.user.profile_photo.name
         # Create a new profile photo file
         new_photo = SimpleUploadedFile(
-          "new_photo.jpg",
-          b"this is a new photo",
-          content_type="image/jpeg"
+            'new_photo.jpg', b'this is a new photo', content_type='image/jpeg'
         )
 
         # Make a PATCH request to update the user profile with the new photo
-        url = reverse("my-profile")
+        url = reverse('my-profile')
         self.client.force_authenticate(user=self.user)
-        response = self.client.patch(url, {"profile_photo": new_photo})
+        response = self.client.patch(url, {'profile_photo': new_photo})
 
         # Check that the response status code is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
