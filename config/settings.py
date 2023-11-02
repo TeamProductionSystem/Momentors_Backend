@@ -44,7 +44,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = []
 
 if DEBUG:
-  ALLOWED_HOSTS.append('127.0.0.1')
+    ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
