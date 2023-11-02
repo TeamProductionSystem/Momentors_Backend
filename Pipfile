@@ -24,9 +24,9 @@ sentry-sdk = {extras = ["django"], version = "*"}
 pytz = "*"
 redis = "*"
 coverage = "*"
-celery = "*"
 django-celery-beat = "*"
 pre-commit = "*"
+celery = "*"
 
 [dev-packages]
 flake8 = "*"
