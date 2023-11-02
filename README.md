@@ -1,6 +1,6 @@
-# Momentors (Team Production System)
+# Team Production System
 
-Momentors (Team Production System) is an app for mentees to schedule one-on-one sessions with mentors.
+Team Production System is an app for mentees to schedule one-on-one sessions with mentors.
 
 ## Quick links:
 
