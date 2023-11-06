@@ -1,8 +1,9 @@
 from rest_framework import generics, status
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from team_production_system.serializers import MentorProfileSerializer
+from rest_framework.response import Response
+
 from team_production_system.models import Mentor
+from team_production_system.serializers import MentorProfileSerializer
 
 
 class MentorFilteredList(generics.ListAPIView):
@@ -15,8 +16,9 @@ class MentorFilteredList(generics.ListAPIView):
             queryset = queryset.filter(skills__icontains=skill)
 
         if not queryset.exists():
-            return Response({"message": "No mentors found."},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'message': 'No mentors found.'}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = MentorProfileSerializer(queryset, many=True)
         return Response(serializer.data)

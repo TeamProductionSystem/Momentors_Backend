@@ -1,7 +1,9 @@
-from django.test import TestCase
-from django.utils import timezone
 from datetime import timedelta
 from unittest.mock import MagicMock
+
+from django.test import TestCase
+from django.utils import timezone
+
 from ....models import Session
 from ....tasks import notify
 

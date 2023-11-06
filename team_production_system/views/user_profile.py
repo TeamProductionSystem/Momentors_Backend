@@ -1,11 +1,10 @@
 from rest_framework import generics, status
-from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
-from django.conf import settings
-import boto3
-from team_production_system.serializers import CustomUserSerializer
+from rest_framework.response import Response
+
 from team_production_system.models import CustomUser
+from team_production_system.serializers import CustomUserSerializer
 
 # View to update the user profile information
 
@@ -18,23 +17,35 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         user = self.request.user
         if not user.is_authenticated:
-            return Response({'error': 'User is not authenticated.'},
-                            status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {'error': 'User is not authenticated.'},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
         try:
             return user
         except CustomUser.DoesNotExist:
-            return Response({'error': 'User not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception:
-            return Response({
-                'error': 'An unexpected error occurred.'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An unexpected error occurred.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     def patch(self, request, *args, **kwargs):
         user = self.request.user
 
-        fields = ['first_name', 'last_name', 'email',
-                  'phone_number', 'is_mentor', 'is_mentee', 'is_active']
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone_number',
+            'is_mentor',
+            'is_mentee',
+            'is_active',
+        ]
 
         for field in fields:
             if field in request.data:
@@ -42,10 +53,8 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 
         if 'profile_photo' in request.FILES:
             if user.profile_photo:
-                s3 = boto3.client('s3')
-                s3.delete_object(
-                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                    Key=user.profile_photo.name)
+                # remove the file from storage
+                user.profile_photo.storage.delete(user.profile_photo.name)
 
             user.profile_photo = request.FILES['profile_photo']
 

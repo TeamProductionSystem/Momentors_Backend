@@ -10,18 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import environ
 from pathlib import Path
-from corsheaders.defaults import default_headers
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+import environ
+import sentry_sdk
+from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     USE_S3=(bool, False),
-    RENDER=(bool, False)
+    RENDER=(bool, False),
 )
 
 
@@ -43,6 +43,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
+if DEBUG:
+    ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,8 +69,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -100,9 +102,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': env.db()
-}
+DATABASES = {'default': env.db()}
 
 
 # Password validation
@@ -148,9 +148,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -159,8 +156,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if env("RENDER"):
     ALLOWED_HOSTS.append(env("RENDER_EXTERNAL_HOSTNAME"))
     DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME")
-    DJANGO_SUPERUSER_PASSWORD = env(
-        "DJANGO_SUPERUSER_PASSWORD")
+    DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD")
     DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
@@ -169,9 +165,15 @@ if env("RENDER"):
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+    STORAGES = {
+        'default': {'BACKEND': 'storages.backends.s3.S3Storage'},
+        'staticfiles': {
+            'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+        },
+    }
 
 AUTH_USER_MODEL = 'team_production_system.CustomUser'
 
@@ -184,9 +186,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
     "https://momentors.dev",
-
-
-
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
@@ -197,6 +196,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1', 'v2'],
 }
 
 DOMAIN = 'momentors.dev'
@@ -208,13 +210,6 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 }
-
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_FILE_OVERWRITE = False
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')
@@ -228,7 +223,6 @@ sentry_sdk.init(
     integrations=[
         DjangoIntegration(),
     ],
-
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     # We recommend adjusting this value in production.

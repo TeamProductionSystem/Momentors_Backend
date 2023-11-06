@@ -1,12 +1,12 @@
 from django.db import models
-from .custom_user import CustomUser
 from multiselectfield import MultiSelectField
+
+from .custom_user import CustomUser
 
 
 # The mentor model that allows the mentor to select skills
 # they know and information about them
 class Mentor(models.Model):
-
     SKILLS_CHOICES = [
         ('AI', 'AI'),
         ('AWS S3', 'AWS S3'),
@@ -33,12 +33,12 @@ class Mentor(models.Model):
         ('Vue.js', 'Vue.js'),
     ]
 
-    user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     about_me = models.TextField(max_length=1000, default='')
     team_number = models.IntegerField(default=0)
-    skills = MultiSelectField(choices=SKILLS_CHOICES,
-                              max_choices=19, max_length=157, default='HTML')
+    skills = MultiSelectField(
+        choices=SKILLS_CHOICES, max_choices=19, max_length=157, default='HTML'
+    )
 
     def __str__(self):
         return self.user.username
