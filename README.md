@@ -271,7 +271,7 @@ As long as your are running locally, use the value `dev`.
 
 ## Adding Packages
 
-(Pipenv)[https://pipenv.pypa.io/en/latest/] is a packaging tool for Python that solves some common problems associated with the typical development workflow using pip, virtualenv, and the requirements.txt. In addition to addressing some common issues, it consolidates and simplifies the development process to a single command line tool.
+[Pipenv](https://pipenv.pypa.io/en/latest/) is a packaging tool for Python that solves some common problems associated with the typical development workflow using pip, virtualenv, and the requirements.txt. In addition to addressing some common issues, it consolidates and simplifies the development process to a single command line tool.
 
 When installing new packages, you first need to assess if they are needed for production and development or only development.
 
