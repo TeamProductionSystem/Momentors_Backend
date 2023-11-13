@@ -359,11 +359,18 @@ Below are the commands and expected outputs:
 
 ```bash
 pre-commit install
-pre-commit installed at .git/hooks/pre-commit
-
-pre-commit install --hook-type commit-msg
-pre-commit installed at .git/hooks/commit-msg
 ```
+`pre-commit installed at .git/hooks/pre-commit`
+
+```bash
+pre-commit install --hook-type commit-msg
+```
+`pre-commit installed at .git/hooks/commit-msg`
+
+```bash
+pre-commit install --hook-type pre-push
+```
+`pre-commit installed at .git/hooks/pre-push`
 
 To run the pre-commit checks before making a commit, run the following command.
 
@@ -373,11 +380,9 @@ pre-commit run --all-files
 
 If no files need changes, the output should look like this:
 
-```bash
-isort....................................................................Passed
-black....................................................................Passed
-flake8...................................................................Passed
-```
+`isort....................................................................Passed` 
+`black....................................................................Passed` 
+`flake8...................................................................Passed` 
 
 If isort or black catch any errors, they will automatically alter the files to fix them.
 This will prevent making a commit, and you will need to stage the new changes.
