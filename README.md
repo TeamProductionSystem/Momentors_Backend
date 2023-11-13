@@ -9,6 +9,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Running Celery and Redis Locally](#run-celery-and-redis-locally)
 - [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
+- [Adding Packages](#adding-packages)
 - [Testing](#testing)
 - [Linting](#linting)
 - [Submitting Code](#submitting-code)
@@ -266,6 +267,29 @@ As long as your are running locally, use the value `dev`.
 - SENTRY_DSN: This should be set to your Sentry account.
 
 3. Save the .env file.
+
+
+## Adding Packages
+
+[Pipenv](https://pipenv.pypa.io/en/latest/) is a packaging tool for Python that solves some common problems associated with the typical development workflow using pip, virtualenv, and the requirements.txt. In addition to addressing some common issues, it consolidates and simplifies the development process to a single command line tool.
+
+When installing new packages, you first need to assess if they are needed for production and development or only development.
+
+For packages needed for both prod and dev, please run installation as follows:
+
+```bash
+pipenv install <package-name>
+```
+
+If the package is only needed for development, please run installation as follows:
+
+```bash
+pipenv install <package-name> --dev
+```
+Providing the --dev argument will put the dependency in a special [dev-packages] location in the Pipfile. These development packages only get installed if you specify the --dev argument with pipenv install.
+
+If you update the Pipfile and are using Docker locally for development, please make sure to spin down your docker containers,  copy over the Pipfile information to requirements.txt and then rebuild your containers. See [Run Locally via Docker Containers](#run-locally-via-docker-containers) for instructions.
+
 
 # Testing
 

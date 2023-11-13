@@ -23,10 +23,8 @@ boto3 = "*"
 sentry-sdk = {extras = ["django"], version = "*"}
 pytz = "*"
 redis = "*"
-coverage = "*"
-django-celery-beat = "*"
-pre-commit = "*"
 celery = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 flake8 = "*"
@@ -41,6 +39,8 @@ flake8-secure-coding-standard = "*"
 isort = "*"
 flake8-comprehensions = "*"
 flake8-quotes = "*"
+pre-commit = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.10"
