@@ -40,7 +40,7 @@ repos:
         stages: [pre-push]
     -   id: django-test
         name: 'Checking Tests'
-        entry: python manage.py test
+        entry: pipenv run python manage.py test
         always_run: true
         pass_filenames: false
         language: system
