@@ -15,6 +15,7 @@ class ArchiveSessionView(generics.ListAPIView):
     def get_queryset(self):
         # Get sessions for the logged in user
         return Session.objects.filter(
-            Q(mentor__user=self.request.user) | Q(mentee__user=self.request.user),
-            end_time__lt=timezone.now(),
+            Q(mentor__user=self.request.user) | Q(
+                mentee__user=self.request.user),
+            start_time__lt=timezone.now(),
         )
