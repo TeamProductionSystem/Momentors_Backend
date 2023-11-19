@@ -9,6 +9,7 @@ Team Production System is an app for mentees to schedule one-on-one sessions wit
 - [Running Celery and Redis Locally](#run-celery-and-redis-locally)
 - [Run Locally via Docker Containers](#run-locally-via-docker-containers)
 - [Environment Variables](#environment-variables)
+- [Adding Packages](#adding-packages)
 - [Testing](#testing)
 - [Linting](#linting)
 - [Submitting Code](#submitting-code)
@@ -267,6 +268,29 @@ As long as your are running locally, use the value `dev`.
 
 3. Save the .env file.
 
+
+## Adding Packages
+
+[Pipenv](https://pipenv.pypa.io/en/latest/) is a packaging tool for Python that solves some common problems associated with the typical development workflow using pip, virtualenv, and the requirements.txt. In addition to addressing some common issues, it consolidates and simplifies the development process to a single command line tool.
+
+When installing new packages, you first need to assess if they are needed for production and development or only development.
+
+For packages needed for both prod and dev, please run installation as follows:
+
+```bash
+pipenv install <package-name>
+```
+
+If the package is only needed for development, please run installation as follows:
+
+```bash
+pipenv install <package-name> --dev
+```
+Providing the --dev argument will put the dependency in a special [dev-packages] location in the Pipfile. These development packages only get installed if you specify the --dev argument with pipenv install.
+
+If you update the Pipfile and are using Docker locally for development, please make sure to spin down your docker containers,  copy over the Pipfile information to requirements.txt and then rebuild your containers. See [Run Locally via Docker Containers](#run-locally-via-docker-containers) for instructions.
+
+
 # Testing
 
 For testing this app, we are using [Django Test Case](https://docs.djangoproject.com/en/4.2/topics/testing/overview/) and [Django REST Framework API Test Case](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) along with [coverage.py](https://coverage.readthedocs.io/en/7.2.7/index.html) for test coverage reporting.
@@ -335,11 +359,18 @@ Below are the commands and expected outputs:
 
 ```bash
 pre-commit install
-pre-commit installed at .git/hooks/pre-commit
-
-pre-commit install --hook-type commit-msg
-pre-commit installed at .git/hooks/commit-msg
 ```
+`pre-commit installed at .git/hooks/pre-commit`
+
+```bash
+pre-commit install --hook-type commit-msg
+```
+`pre-commit installed at .git/hooks/commit-msg`
+
+```bash
+pre-commit install --hook-type pre-push
+```
+`pre-commit installed at .git/hooks/pre-push`
 
 To run the pre-commit checks before making a commit, run the following command.
 
@@ -349,11 +380,9 @@ pre-commit run --all-files
 
 If no files need changes, the output should look like this:
 
-```bash
-isort....................................................................Passed
-black....................................................................Passed
-flake8...................................................................Passed
-```
+`isort....................................................................Passed` 
+`black....................................................................Passed` 
+`flake8...................................................................Passed` 
 
 If isort or black catch any errors, they will automatically alter the files to fix them.
 This will prevent making a commit, and you will need to stage the new changes.
