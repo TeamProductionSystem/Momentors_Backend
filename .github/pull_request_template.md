@@ -2,10 +2,9 @@
 
 ### **1. Targeted Issue** ###
 
-*(The first step to a good solution is knowing the problem. Please link the issue here.)*
+*(The first step to a good solution is knowing the problem. Please link the issue here. Make sure to say 'fixes' before the linked issue)*
 
-Issue #... or
-Ticket #...
+This PR fixes Issue #...
 
 
 ### **2. Overview of Solution** ###
