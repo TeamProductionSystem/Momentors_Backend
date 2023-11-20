@@ -17,6 +17,7 @@ class Session(models.Model):
     mentor = models.ForeignKey(
         Mentor, on_delete=models.CASCADE, related_name='mentor_session'
     )
+    # TODO: Change to mentor_availability to take in more than one availability
     mentor_availability = models.ForeignKey(
         Availability, on_delete=models.CASCADE, related_name='mentor_session'
     )
